@@ -1,5 +1,4 @@
-# YOLOv5_NCNN
-🍅 移动端目标检测，支持iOS、Android，使用NCNN框架。
+## :rocket: 编码不易，点个star！ ##
 
 ## iOS:
 - Xcode 11.5
@@ -11,7 +10,9 @@
 - win10 1909
 - meizu 16x 8.1.0
 
-安卓请自行确认相关权限是否允许，代码中没有做过多的处理。
+部分代码来自：sunnyden/YOLOV5_NCNN_Android 的开源项目。
+
+如有bug欢迎提issues。安卓请自行确认相关权限是否允许，代码中没有做过多的处理。
 
 :art: 截图<br/>
 <div>
