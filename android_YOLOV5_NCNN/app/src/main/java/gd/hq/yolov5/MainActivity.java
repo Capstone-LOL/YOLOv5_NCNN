@@ -241,7 +241,7 @@ public class MainActivity extends AppCompatActivity {
                     for (Box box : result) {
                         boxPaint.setColor(box.getColor());
                         boxPaint.setStyle(Paint.Style.FILL);
-                        canvas.drawText(box.getLabel(), box.x0 + 3, box.y0 + 40 * mutableBitmap.getWidth() / 1000, boxPaint);
+                        canvas.drawText(box.getLabel() + String.format(Locale.CHINESE, " %.3f", box.getScore()), box.x0 + 3, box.y0 + 40 * mutableBitmap.getWidth() / 1000, boxPaint);
                         boxPaint.setStyle(Paint.Style.STROKE);
                         canvas.drawRect(box.getRect(), boxPaint);
                     }
@@ -327,7 +327,7 @@ public class MainActivity extends AppCompatActivity {
         for (Box box : result) {
             boxPaint.setColor(box.getColor());
             boxPaint.setStyle(Paint.Style.FILL);
-            canvas.drawText(box.getLabel(), box.x0 + 3, box.y0 + 17, boxPaint);
+            canvas.drawText(box.getLabel() + String.format(Locale.CHINESE, " %.3f", box.getScore()), box.x0 + 3, box.y0 + 17, boxPaint);
             boxPaint.setStyle(Paint.Style.STROKE);
             canvas.drawRect(box.getRect(), boxPaint);
         }
