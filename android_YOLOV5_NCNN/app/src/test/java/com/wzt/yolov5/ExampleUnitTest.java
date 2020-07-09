@@ -1,4 +1,4 @@
-package gd.hq.yolov5;
+package com.wzt.yolov5;
 
 import org.junit.Test;
 

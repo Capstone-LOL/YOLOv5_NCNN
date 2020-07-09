@@ -20,7 +20,7 @@ JNIEXPORT void JNI_OnUnload(JavaVM* vm, void* reserved)
 }
 
 extern "C" JNIEXPORT void JNICALL
-Java_gd_hq_yolov5_YOLOv5_init(JNIEnv* env, jclass, jobject assetManager) {
+Java_com_wzt_yolov5_YOLOv5_init(JNIEnv* env, jclass, jobject assetManager) {
     if(YoloV5::detector == nullptr){
         AAssetManager* mgr = AAssetManager_fromJava(env, assetManager);
         YoloV5::detector = new YoloV5(mgr,"yolov5.param","yolov5.bin");
@@ -28,10 +28,10 @@ Java_gd_hq_yolov5_YOLOv5_init(JNIEnv* env, jclass, jobject assetManager) {
 }
 
 extern "C" JNIEXPORT jobjectArray JNICALL
-Java_gd_hq_yolov5_YOLOv5_detect(JNIEnv* env, jclass, jobject image, jdouble threshold, jdouble nms_threshold) {
+Java_com_wzt_yolov5_YOLOv5_detect(JNIEnv* env, jclass, jobject image, jdouble threshold, jdouble nms_threshold) {
     auto result = YoloV5::detector->detect(env,image,threshold,nms_threshold);
 
-    auto box_cls = env->FindClass("gd/hq/yolov5/Box");
+    auto box_cls = env->FindClass("com/wzt/yolov5/Box");
     auto cid = env->GetMethodID(box_cls, "<init>", "(FFFFIF)V");
     jobjectArray ret = env->NewObjectArray( result.size(), box_cls, nullptr);
     int i = 0;

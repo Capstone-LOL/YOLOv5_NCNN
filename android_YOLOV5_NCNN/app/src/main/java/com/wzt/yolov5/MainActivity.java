@@ -1,4 +1,4 @@
-package gd.hq.yolov5;
+package com.wzt.yolov5;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -29,9 +29,6 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.text.PrecomputedText;
-import android.util.Log;
-import android.util.Rational;
 import android.util.Size;
 import android.view.TextureView;
 import android.view.View;

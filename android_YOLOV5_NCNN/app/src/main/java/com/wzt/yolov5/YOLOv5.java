@@ -1,4 +1,4 @@
-package gd.hq.yolov5;
+package com.wzt.yolov5;
 
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
