@@ -9,10 +9,6 @@ Currently NCNN does not support Slice operations with steps, therefore I removed
 and replaced the input with a downscaled image and stacked it to match the channel number. This
 may slightly reduce the accuracy.
 
-# Screenshot 
-
-![](imgs/screenshot.png)
-
 # Credits 
 
 * [YOLOv5 by Ultralytics](https://github.com/ultralytics/yolov5) 
