@@ -15,7 +15,9 @@
 部分代码参考自：sunnyden 的开源项目。
 
 安卓请自行确认相关权限是否允许，代码中没有做过多的处理。
+
 YOLOv5:mainactivity->USE_YOLOV5 = true;
+
 YOLOv4-tiny:mainactivity->USE_YOLOV5 = false;
 
 :art: 截图<br/>
