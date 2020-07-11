@@ -1,6 +1,6 @@
 ## :rocket: 编码不易，点个star！ ##
 
-### 移动端目标检测，当前项目使用的是YOLOv5的5s模型，摄像头实时捕获视频流进行检测。
+### 移动端目标检测，项目支持YOLOv5s与YOLOv4-tiny模型，摄像头实时捕获视频流进行检测。
 
 ## iOS:
 - Xcode 11.5
@@ -14,7 +14,9 @@
 
 部分代码参考自：sunnyden 的开源项目。
 
-如有bug欢迎提issues。安卓请自行确认相关权限是否允许，代码中没有做过多的处理。
+安卓请自行确认相关权限是否允许，代码中没有做过多的处理。
+YOLOv5:mainactivity->USE_YOLOV5 = true;
+YOLOv4-tiny:mainactivity->USE_YOLOV5 = false;
 
 :art: 截图<br/>
 <div>
