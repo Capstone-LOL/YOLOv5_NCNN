@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5F37E19E24B97F9600BF9E94 /* yolov4-tiny-opt.param in Resources */ = {isa = PBXBuildFile; fileRef = 5F37E19C24B97F9400BF9E94 /* yolov4-tiny-opt.param */; };
+		5F37E19F24B97F9600BF9E94 /* yolov4-tiny-opt.bin in Resources */ = {isa = PBXBuildFile; fileRef = 5F37E19D24B97F9600BF9E94 /* yolov4-tiny-opt.bin */; };
+		5F37E1A224B97FD900BF9E94 /* YoloV4.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5F37E1A024B97FD900BF9E94 /* YoloV4.mm */; };
 		5F40C2AC24B1647800C84041 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F40C2AB24B1647800C84041 /* AppDelegate.m */; };
 		5F40C2B224B1647800C84041 /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5F40C2B124B1647800C84041 /* ViewController.mm */; };
 		5F40C2B724B1647C00C84041 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5F40C2B624B1647C00C84041 /* Assets.xcassets */; };
@@ -18,13 +21,16 @@
 		5F50870724B300720088E326 /* ncnn.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F50870624B300720088E326 /* ncnn.framework */; };
 		5F50870924B3007C0088E326 /* openmp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F50870824B3007C0088E326 /* openmp.framework */; };
 		5F50870C24B309F30088E326 /* YoloV5.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5F50870A24B309F30088E326 /* YoloV5.mm */; };
-		5F70617624B1B066007ED9A1 /* demo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5F70617524B1B065007ED9A1 /* demo.jpg */; };
 		5FD3E2CB24B3FDF70049450B /* 000000000650.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5FD3E2CA24B3FDF70049450B /* 000000000650.jpg */; };
 		5FD3E2D924B417AA0049450B /* ELCameraControlCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 5FD3E2D524B417AA0049450B /* ELCameraControlCapture.m */; };
 		5FD3E2DA24B417AA0049450B /* ELCameraBaseCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 5FD3E2D824B417AA0049450B /* ELCameraBaseCapture.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5F37E19C24B97F9400BF9E94 /* yolov4-tiny-opt.param */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "yolov4-tiny-opt.param"; sourceTree = "<group>"; };
+		5F37E19D24B97F9600BF9E94 /* yolov4-tiny-opt.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = "yolov4-tiny-opt.bin"; sourceTree = "<group>"; };
+		5F37E1A024B97FD900BF9E94 /* YoloV4.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = YoloV4.mm; sourceTree = "<group>"; };
+		5F37E1A124B97FD900BF9E94 /* YoloV4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YoloV4.h; sourceTree = "<group>"; };
 		5F40C2A724B1647800C84041 /* YOLONCNN.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YOLONCNN.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5F40C2AA24B1647800C84041 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		5F40C2AB24B1647800C84041 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -41,7 +47,6 @@
 		5F50870824B3007C0088E326 /* openmp.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = openmp.framework; sourceTree = "<group>"; };
 		5F50870A24B309F30088E326 /* YoloV5.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = YoloV5.mm; sourceTree = "<group>"; };
 		5F50870B24B309F30088E326 /* YoloV5.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YoloV5.h; sourceTree = "<group>"; };
-		5F70617524B1B065007ED9A1 /* demo.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = demo.jpg; sourceTree = "<group>"; };
 		5FD3E2CA24B3FDF70049450B /* 000000000650.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 000000000650.jpg; sourceTree = "<group>"; };
 		5FD3E2D524B417AA0049450B /* ELCameraControlCapture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ELCameraControlCapture.m; sourceTree = "<group>"; };
 		5FD3E2D624B417AA0049450B /* ELCameraControlCapture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ELCameraControlCapture.h; sourceTree = "<group>"; };
@@ -95,6 +100,8 @@
 				5F40C2DA24B171A100C84041 /* res */,
 				5F50870A24B309F30088E326 /* YoloV5.mm */,
 				5F50870B24B309F30088E326 /* YoloV5.h */,
+				5F37E1A024B97FD900BF9E94 /* YoloV4.mm */,
+				5F37E1A124B97FD900BF9E94 /* YoloV4.h */,
 			);
 			path = YOLOv5NCNN;
 			sourceTree = "<group>";
@@ -111,10 +118,11 @@
 		5F40C2DA24B171A100C84041 /* res */ = {
 			isa = PBXGroup;
 			children = (
+				5F37E19D24B97F9600BF9E94 /* yolov4-tiny-opt.bin */,
+				5F37E19C24B97F9400BF9E94 /* yolov4-tiny-opt.param */,
 				5F40C2E324B18C5700C84041 /* yolov5.bin */,
 				5F40C2E424B18C5700C84041 /* yolov5.param */,
 				5FD3E2CA24B3FDF70049450B /* 000000000650.jpg */,
-				5F70617524B1B065007ED9A1 /* demo.jpg */,
 			);
 			path = res;
 			sourceTree = "<group>";
@@ -188,8 +196,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				5F40C2D924B16B0B00C84041 /* Main.storyboard in Resources */,
+				5F37E19F24B97F9600BF9E94 /* yolov4-tiny-opt.bin in Resources */,
 				5F40C2BA24B1647C00C84041 /* LaunchScreen.storyboard in Resources */,
-				5F70617624B1B066007ED9A1 /* demo.jpg in Resources */,
+				5F37E19E24B97F9600BF9E94 /* yolov4-tiny-opt.param in Resources */,
 				5F40C2B724B1647C00C84041 /* Assets.xcassets in Resources */,
 				5F40C2E624B18C5700C84041 /* yolov5.param in Resources */,
 				5F40C2E524B18C5700C84041 /* yolov5.bin in Resources */,
@@ -207,6 +216,7 @@
 				5FD3E2DA24B417AA0049450B /* ELCameraBaseCapture.m in Sources */,
 				5FD3E2D924B417AA0049450B /* ELCameraControlCapture.m in Sources */,
 				5F40C2B224B1647800C84041 /* ViewController.mm in Sources */,
+				5F37E1A224B97FD900BF9E94 /* YoloV4.mm in Sources */,
 				5F40C2AC24B1647800C84041 /* AppDelegate.m in Sources */,
 				5F50870C24B309F30088E326 /* YoloV5.mm in Sources */,
 				5F40C2BD24B1647D00C84041 /* main.m in Sources */,

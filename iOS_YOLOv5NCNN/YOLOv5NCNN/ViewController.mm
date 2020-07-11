@@ -16,6 +16,7 @@
 #include <ncnn/ncnn/net.h>  // 新版本
 //#include <ncnn/net.h>  // 旧版本
 #include "YoloV5.h"
+#include "YoloV4.h"
 
 #import <AVFoundation/AVFoundation.h>
 #import <AVFoundation/AVMediaFormat.h>
@@ -38,7 +39,10 @@
 @property (strong, nonatomic) AVCaptureVideoPreviewLayer *preLayer;
 
 @property YoloV5 *yolo;
+@property YoloV4 *yolov4;
 @property (assign, atomic) Boolean isDetecting;
+
+@property (assign, nonatomic) Boolean USE_YOLOV5;  // YES:YOLOv5  NO:YOLOv4-tiny
 
 
 @end
@@ -56,6 +60,7 @@
         // 有权限
     }
     self.isDetecting = NO;
+    self.USE_YOLOV5 = YES;  // YES:YOLOv5  NO:YOLOv4-tiny
     [self initView];
     [self setCameraUI];
 }
@@ -152,7 +157,10 @@
     self.imageView.image = [UIImage imageNamed:@"000000000650.jpg"];
     [self.nmsSlider addTarget:self action:@selector(nmsChange:forEvent:) forControlEvents:UIControlEventValueChanged];
     [self.thresholdSlider addTarget:self action:@selector(nmsChange:forEvent:) forControlEvents:UIControlEventValueChanged];
-    
+    if (!self.USE_YOLOV5) {
+        self.nmsSlider.enabled = NO;
+        self.thresholdSlider.enabled = NO;
+    }
 }
 
 - (void)nmsChange:(UISlider *)slider forEvent:(UIEvent *)event {
@@ -191,39 +199,74 @@
     // load image
     UIImage* image = [UIImage imageNamed:@"000000000650.jpg"];
     self.imageView.image = image;
-    YoloV5 *yolo = new YoloV5("", "");
-    std::vector<BoxInfo> result = yolo->dectect(image, self.threshold, self.nms_threshold);
-    printf("result size:%lu", result.size());
-    NSString *detect_result = @"";
-    for (int i = 0; i < result.size(); i++) {
-        BoxInfo boxInfo = result[i];
-        detect_result = [NSString stringWithFormat:@"%@\n%s %.3f", detect_result, yolo->labels[boxInfo.label].c_str(), boxInfo.score];
+    if (self.USE_YOLOV5) {
+        YoloV5 *yolo = new YoloV5("", "");
+        std::vector<BoxInfo> result = yolo->dectect(image, self.threshold, self.nms_threshold);
+        printf("result size:%lu", result.size());
+        NSString *detect_result = @"";
+        for (int i = 0; i < result.size(); i++) {
+            BoxInfo boxInfo = result[i];
+            detect_result = [NSString stringWithFormat:@"%@\n%s %.3f", detect_result, yolo->labels[boxInfo.label].c_str(), boxInfo.score];
+        }
+        delete yolo;
+        self.resultLabel.text = detect_result;
+        self.imageView.image = [self drawBox:self.imageView image:image boxs:result];
+    } else {
+        YoloV4 *yolo = new YoloV4("", "");
+        std::vector<BoxInfo> result = yolo->detectv4(image, self.threshold, self.nms_threshold);
+        printf("result size:%lu", result.size());
+        NSString *detect_result = @"";
+        for (int i = 0; i < result.size(); i++) {
+            BoxInfo boxInfo = result[i];
+            detect_result = [NSString stringWithFormat:@"%@\n%s %.3f", detect_result, yolo->labels[boxInfo.label].c_str(), boxInfo.score];
+        }
+        delete yolo;
+        self.resultLabel.text = detect_result;
+        self.imageView.image = [self drawBox:self.imageView image:image boxs:result];
     }
-    delete yolo;
-    self.resultLabel.text = detect_result;
-    self.imageView.image = [self drawBox:self.imageView image:image boxs:result];
 }
 
 - (void)detectImage:(UIImage *)image {
-    if (!self.yolo) {
+    if (!self.yolo && self.USE_YOLOV5) {
         NSLog(@"new YoloV5");
         self.yolo = new YoloV5("", "");
+    } else if (!self.yolov4) {
+        NSLog(@"new YoloV4");
+        self.yolov4 = new YoloV4("", "");
     }
-    NSDate *start = [NSDate date];
-    std::vector<BoxInfo> result = self.yolo->dectect(image, self.threshold, self.nms_threshold);
-    NSString *detect_result = @"";
-    for (int i = 0; i < result.size(); i++) {
-        BoxInfo boxInfo = result[i];
-        detect_result = [NSString stringWithFormat:@"%@\n%s %.3f", detect_result, self.yolo->labels[boxInfo.label].c_str(), boxInfo.score];
+    if (self.USE_YOLOV5) {
+        NSDate *start = [NSDate date];
+        std::vector<BoxInfo> result = self.yolo->dectect(image, self.threshold, self.nms_threshold);
+        NSString *detect_result = @"";
+        for (int i = 0; i < result.size(); i++) {
+            BoxInfo boxInfo = result[i];
+            detect_result = [NSString stringWithFormat:@"%@\n%s %.3f", detect_result, self.yolo->labels[boxInfo.label].c_str(), boxInfo.score];
+        }
+//        delete self.yolo;
+        __weak typeof(self) weakSelf = self;
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            long dur = [[NSDate date] timeIntervalSince1970]*1000 - start.timeIntervalSince1970*1000;
+            NSString *info = [NSString stringWithFormat:@"YOLOv5s\nSize:%dx%d\nTime:%.3fs\nFPS:%.2f", int(image.size.width), int(image.size.height), dur / 1000.0, 1.0 / (dur / 1000.0)];
+            weakSelf.resultLabel.text = info;
+            weakSelf.imageView.image = [weakSelf drawBox:weakSelf.imageView image:image boxs:result];
+        });
+    } else {
+        NSDate *start = [NSDate date];
+        std::vector<BoxInfo> result = self.yolov4->detectv4(image, self.threshold, self.nms_threshold);
+        NSString *detect_result = @"";
+        for (int i = 0; i < result.size(); i++) {
+            BoxInfo boxInfo = result[i];
+            detect_result = [NSString stringWithFormat:@"%@\n%s %.3f", detect_result, self.yolov4->labels[boxInfo.label].c_str(), boxInfo.score];
+        }
+//        delete self.yolov4;
+        __weak typeof(self) weakSelf = self;
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            long dur = [[NSDate date] timeIntervalSince1970]*1000 - start.timeIntervalSince1970*1000;
+            NSString *info = [NSString stringWithFormat:@"YOLOv4-tiny\nSize:%dx%d\nTime:%.3fs\nFPS:%.2f", int(image.size.width), int(image.size.height), dur / 1000.0, 1.0 / (dur / 1000.0)];
+            weakSelf.resultLabel.text = info;
+            weakSelf.imageView.image = [weakSelf drawBox:weakSelf.imageView image:image boxs:result];
+        });
     }
-//    delete self.yolo;
-    __weak typeof(self) weakSelf = self;
-    dispatch_sync(dispatch_get_main_queue(), ^{
-        long dur = [[NSDate date] timeIntervalSince1970]*1000 - start.timeIntervalSince1970*1000;
-        NSString *info = [NSString stringWithFormat:@"Size:%dx%d\nTime:%.3fs\nFPS:%.2f", int(image.size.width), int(image.size.height), dur / 1000.0, 1.0 / (dur / 1000.0)];
-        weakSelf.resultLabel.text = info;
-        weakSelf.imageView.image = [weakSelf drawBox:weakSelf.imageView image:image boxs:result];
-    });
     
 }
 
@@ -237,11 +280,16 @@
     NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
     for (int i = 0; i < boxs.size(); i++) {
         BoxInfo box = boxs[i];
-        srand(box.label);
+        srand(box.label + 2020);
         UIColor *color = [UIColor colorWithRed:rand()%256/255.0f green:rand()%256/255.0f blue:rand()%255/255.0f alpha:1.0f];
         CGContextAddRect(context, CGRectMake(box.x1, box.y1, box.x2 - box.x1, box.y2 - box.y1));
-        NSString *name = [NSString stringWithFormat:@"%s %.3f", self.yolo->labels[box.label].c_str(), box.score];
-        [name drawAtPoint:CGPointMake(box.x1, box.y1) withAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:35], NSParagraphStyleAttributeName:style, NSForegroundColorAttributeName:color}];
+        if (self.USE_YOLOV5) {
+            NSString *name = [NSString stringWithFormat:@"%s %.3f", self.yolo->labels[box.label].c_str(), box.score];
+            [name drawAtPoint:CGPointMake(box.x1, box.y1) withAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:35], NSParagraphStyleAttributeName:style, NSForegroundColorAttributeName:color}];
+        } else {
+            NSString *name = [NSString stringWithFormat:@"%s %.3f", self.yolov4->labels[box.label].c_str(), box.score];
+            [name drawAtPoint:CGPointMake(box.x1, box.y1) withAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:35], NSParagraphStyleAttributeName:style, NSForegroundColorAttributeName:color}];
+        }
         
         CGContextSetStrokeColorWithColor(context, [color CGColor]);
         CGContextStrokePath(context);

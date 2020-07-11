@@ -16,7 +16,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" image="demo.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="yb7-Ab-7qu">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" image="000000000650.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="yb7-Ab-7qu">
                                 <rect key="frame" x="16" y="106" width="343" height="386"/>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9Uw-oI-Rbm">
@@ -127,6 +127,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="demo.jpg" width="1080" height="1920"/>
+        <image name="000000000650.jpg" width="640" height="427"/>
     </resources>
 </document>
