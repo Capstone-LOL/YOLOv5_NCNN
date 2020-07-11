@@ -16,9 +16,13 @@
 
 安卓请自行确认相关权限是否允许，代码中没有做过多的处理。
 
-YOLOv5:mainactivity->USE_YOLOV5 = true or ViewController.mm->USE_YOLOV5 = YES;
+YOLOv5s:mainactivity->USE_YOLOV5 = true or ViewController.mm->USE_YOLOV5 = YES;
 
 YOLOv4-tiny:mainactivity->USE_YOLOV5 = false or ViewController.mm->USE_YOLOV5 = NO;
+
+YOLOv5s输入尺寸减小，解码过程使用了大量的 for 循环与 NMS 表现出来会比较慢。
+
+YOLOv4-tiny使用默认尺寸，解码过程没有大量的 for 与 NMS 所以速度会快些。
 
 :art: 截图<br/>
 <div>
