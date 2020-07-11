@@ -16,9 +16,9 @@
 
 安卓请自行确认相关权限是否允许，代码中没有做过多的处理。
 
-YOLOv5:mainactivity->USE_YOLOV5 = true;
+YOLOv5:mainactivity->USE_YOLOV5 = true or ViewController.mm->USE_YOLOV5 = YES;
 
-YOLOv4-tiny:mainactivity->USE_YOLOV5 = false;
+YOLOv4-tiny:mainactivity->USE_YOLOV5 = false or ViewController.mm->USE_YOLOV5 = NO;
 
 :art: 截图<br/>
 <div>
