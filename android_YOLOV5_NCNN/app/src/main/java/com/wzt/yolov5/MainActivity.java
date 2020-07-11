@@ -46,6 +46,8 @@ import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MainActivity extends AppCompatActivity {
+    private boolean USE_YOLOV5 = true;  // true:yolov5  false:yolov4-tiny
+
     private static final int REQUEST_CAMERA = 1;
     private static final int REQUEST_PICK_IMAGE = 2;
     private static String[] PERMISSIONS_CAMERA = {
@@ -80,12 +82,20 @@ public class MainActivity extends AppCompatActivity {
                     REQUEST_CAMERA
             );
         }
-        YOLOv5.init(getAssets());
+        if (USE_YOLOV5) {
+            YOLOv5.init(getAssets());
+        } else {
+            YOLOv4.init(getAssets());
+        }
         resultImageView = findViewById(R.id.imageView);
         thresholdTextview = findViewById(R.id.valTxtView);
         tvInfo = findViewById(R.id.tv_info);
         nmsSeekBar = findViewById(R.id.nms_seek);
         thresholdSeekBar = findViewById(R.id.threshold_seek);
+        if (!USE_YOLOV5) {
+            nmsSeekBar.setEnabled(false);
+            thresholdSeekBar.setEnabled(false);
+        }
         final String format = "Thresh: %.2f, NMS: %.2f";
         thresholdTextview.setText(String.format(Locale.ENGLISH, format, threshold, nms_threshold));
         nmsSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -227,7 +237,12 @@ public class MainActivity extends AppCompatActivity {
                     height = bitmapsrc.getHeight();
                     Bitmap bitmap = Bitmap.createBitmap(bitmapsrc, 0, 0, width, height, matrix, false);
 
-                    Box[] result = YOLOv5.detect(bitmap, threshold, nms_threshold);
+                    Box[] result = null;
+                    if (USE_YOLOV5) {
+                        result = YOLOv5.detect(bitmap, threshold, nms_threshold);
+                    } else {
+                        result = YOLOv4.detect(bitmap, threshold, nms_threshold);
+                    }
                     final Bitmap mutableBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
                     Canvas canvas = new Canvas(mutableBitmap);
                     final Paint boxPaint = new Paint();
@@ -251,8 +266,8 @@ public class MainActivity extends AppCompatActivity {
                             long dur = endTime - startTime;
                             float fps = (float) (1000.0 / dur);
                             tvInfo.setText(String.format(Locale.CHINESE,
-                                    "Size: %dx%d\nTime: %.3f s\nFPS: %.3f",
-                                    height, width, dur / 1000.0, fps));
+                                    "%s\nSize: %dx%d\nTime: %.3f s\nFPS: %.3f",
+                                    USE_YOLOV5 ? "YOLOv5s" : "YOLOv4-tiny", height, width, dur / 1000.0, fps));
                         }
                     });
                 }
@@ -314,7 +329,12 @@ public class MainActivity extends AppCompatActivity {
         }
         detectPhoto.set(true);
         Bitmap image = getPicture(data.getData());
-        Box[] result = YOLOv5.detect(image, threshold, nms_threshold);
+        Box[] result = null;
+        if (USE_YOLOV5) {
+            result = YOLOv5.detect(image, threshold, nms_threshold);
+        } else {
+            result = YOLOv4.detect(image, threshold, nms_threshold);
+        }
         Bitmap mutableBitmap = image.copy(Bitmap.Config.ARGB_8888, true);
         Canvas canvas = new Canvas(mutableBitmap);
         final Paint boxPaint = new Paint();

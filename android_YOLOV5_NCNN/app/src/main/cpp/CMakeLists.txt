@@ -22,7 +22,8 @@ add_library( # Sets the name of the library.
 
         # Provides a relative path to your source file(s).
         jni_interface.cpp
-        YoloV5.cpp)
+        YoloV5.cpp
+        YoloV4.cpp)
 
 include_directories(
         ncnn/include
