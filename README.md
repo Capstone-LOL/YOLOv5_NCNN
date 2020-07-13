@@ -24,6 +24,8 @@ YOLOv5s输入尺寸减小，解码过程使用了大量的 for 循环与 NMS 表
 
 YOLOv4-tiny使用默认尺寸，解码过程没有大量的 for 与 NMS 所以速度会快些。
 
+Note：由于手机性能、图像尺寸等因素导致FPS在不同手机上相差比较大。
+
 :art: 截图<br/>
 <div>
 <img width="288" height="512" src="https://github.com/WZTENG/YOLOv5_NCNN/blob/master/Screenshots/Android_16X.jpg"/>
