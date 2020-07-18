@@ -14,7 +14,7 @@
 
 部分代码参考自：sunnyden 的开源项目。
 
-安卓请自行确认相关权限是否允许，代码中没有做过多的处理。
+安卓已经增加权限申请，但如果还是闪退请手动确认下相关权限是否允许。
 
 YOLOv5s:mainactivity->USE_YOLOV5 = true or ViewController.mm->USE_YOLOV5 = YES;
 
