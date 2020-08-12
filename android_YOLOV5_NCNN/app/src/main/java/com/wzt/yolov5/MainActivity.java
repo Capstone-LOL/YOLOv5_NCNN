@@ -46,7 +46,7 @@ import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MainActivity extends AppCompatActivity {
-    private boolean USE_YOLOV5 = true;  // true:yolov5  false:yolov4-tiny
+    private boolean USE_YOLOV5 = false;  // true:yolov5  false:yolov4-tiny
 
     private static final int REQUEST_CAMERA = 1;
     private static final int REQUEST_PICK_IMAGE = 2;
