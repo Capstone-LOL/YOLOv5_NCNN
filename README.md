@@ -16,7 +16,7 @@
 
 安卓已经增加权限申请，但如果还是闪退请手动确认下相关权限是否允许。
 ```code
-YOLOv5s:     mainactivity->USE_YOLOV5 = true or ViewController.mm->USE_YOLOV5 = YES;
+YOLOv5s:     mainactivity->USE_YOLOV5 = true  or ViewController.mm->USE_YOLOV5 = YES;
 
 YOLOv4-tiny: mainactivity->USE_YOLOV5 = false or ViewController.mm->USE_YOLOV5 = NO;
 ```
