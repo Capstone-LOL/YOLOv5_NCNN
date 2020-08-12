@@ -15,11 +15,11 @@
 部分代码参考自：sunnyden 的开源项目。
 
 安卓已经增加权限申请，但如果还是闪退请手动确认下相关权限是否允许。
-
+```code
 YOLOv5s:mainactivity->USE_YOLOV5 = true or ViewController.mm->USE_YOLOV5 = YES;
 
 YOLOv4-tiny:mainactivity->USE_YOLOV5 = false or ViewController.mm->USE_YOLOV5 = NO;
-
+```
 YOLOv5s输入尺寸减小，解码过程使用了大量的 for 循环与 NMS 表现出来会比较慢。
 
 YOLOv4-tiny使用默认尺寸，解码过程没有大量的 for 与 NMS 所以速度会快些。
