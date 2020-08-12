@@ -60,7 +60,7 @@
         // 有权限
     }
     self.isDetecting = NO;
-    self.USE_YOLOV5 = YES;  // YES:YOLOv5  NO:YOLOv4-tiny
+    self.USE_YOLOV5 = NO;  // YES:YOLOv5  NO:YOLOv4-tiny
     [self initView];
     [self setCameraUI];
 }
