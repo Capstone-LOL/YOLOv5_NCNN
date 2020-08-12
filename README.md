@@ -16,9 +16,9 @@
 
 安卓已经增加权限申请，但如果还是闪退请手动确认下相关权限是否允许。
 ```code
-YOLOv5s:mainactivity->USE_YOLOV5 = true or ViewController.mm->USE_YOLOV5 = YES;
+YOLOv5s: mainactivity->USE_YOLOV5 = true or ViewController.mm->USE_YOLOV5 = YES;
 
-YOLOv4-tiny:mainactivity->USE_YOLOV5 = false or ViewController.mm->USE_YOLOV5 = NO;
+YOLOv4-tiny: mainactivity->USE_YOLOV5 = false or ViewController.mm->USE_YOLOV5 = NO;
 ```
 YOLOv5s输入尺寸减小，解码过程使用了大量的 for 循环与 NMS 表现出来会比较慢。
 
