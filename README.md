@@ -25,7 +25,7 @@ YOLOv3-nano: Due to time constraints, you need to modify it yourself.
 ```
 > Android
 ```
-直接在界面选择即可。
+Select the model to be tested directly on the interface.
 ```
 ## 模型速度
 * YOLOv5s输入尺寸减小，解码过程使用了大量的 for 循环与 NMS 表现出来会比较慢。
