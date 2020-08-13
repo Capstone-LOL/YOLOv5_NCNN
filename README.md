@@ -1,6 +1,6 @@
 ## :rocket: 编码不易，点个star！ ##
 
-### 移动端目标检测，项目支持YOLOv5s与YOLOv4-tiny模型，摄像头实时捕获视频流进行检测。
+### 移动端目标检测，项目支持YOLOv5s、YOLOv4-tiny与MobileNetV2-YOLOv3-nano模型，摄像头实时捕获视频流进行检测。
 
 ## iOS:
 - Xcode 11.5
@@ -21,8 +21,9 @@ YOLOv5s:     ViewController.mm->USE_YOLOV5 = YES;
 YOLOv4-tiny: ViewController.mm->USE_YOLOV5 = NO;
 ```
 > Android
+```
 直接在界面选择即可。
-
+```
 ## 模型速度
 * YOLOv5s输入尺寸减小，解码过程使用了大量的 for 循环与 NMS 表现出来会比较慢。
 * YOLOv4-tiny使用默认尺寸，解码过程没有大量的 for 与 NMS 所以速度会快些。
