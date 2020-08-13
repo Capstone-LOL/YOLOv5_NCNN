@@ -44,7 +44,7 @@ private:
     static std::vector<BoxInfo> decode_infer(ncnn::Mat &data, const cv::Size& frame_size, int net_size,int num_classes,float threshold);
 //    static void nms(std::vector<BoxInfo>& result,float nms_threshold);
     ncnn::Net* Net;
-    int input_size = 416;
+    int input_size = 640/2;
     int num_class = 80;
 public:
     static YoloV4 *detector;

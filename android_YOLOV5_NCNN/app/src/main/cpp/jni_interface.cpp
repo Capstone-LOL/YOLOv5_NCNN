@@ -51,11 +51,22 @@ Java_com_wzt_yolov5_YOLOv5_detect(JNIEnv* env, jclass, jobject image, jdouble th
  yolov4官方ncnn模型下载地址
  darknet2ncnn:https://drive.google.com/drive/folders/1YzILvh0SKQPS_lrb33dmGNq7aVTKPWS0
  ********************************************************************************************/
+
+// 20200813 增加 MobileNetV2-YOLOv3-Nano-coco
+
 extern "C" JNIEXPORT void JNICALL
-Java_com_wzt_yolov5_YOLOv4_init(JNIEnv* env, jclass, jobject assetManager) {
+Java_com_wzt_yolov5_YOLOv4_init(JNIEnv* env, jclass, jobject assetManager, jboolean v4tiny) {
+    if (YoloV4::detector != nullptr) {
+        delete YoloV4::detector;
+        YoloV4::detector = nullptr;
+    }
     if(YoloV4::detector == nullptr){
         AAssetManager* mgr = AAssetManager_fromJava(env, assetManager);
-        YoloV4::detector = new YoloV4(mgr,"yolov4-tiny-opt.param","yolov4-tiny-opt.bin");
+        if (v4tiny == 1) {
+            YoloV4::detector = new YoloV4(mgr,"yolov4-tiny-opt.param","yolov4-tiny-opt.bin");
+        } else if (v4tiny == 0) {
+            YoloV4::detector = new YoloV4(mgr,"MobileNetV2-YOLOv3-Nano-coco.param","MobileNetV2-YOLOv3-Nano-coco.bin");
+        }
     }
 }
 

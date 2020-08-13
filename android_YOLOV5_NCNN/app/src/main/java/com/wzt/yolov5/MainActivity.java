@@ -29,6 +29,7 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.util.Size;
 import android.view.TextureView;
 import android.view.View;
@@ -46,7 +47,11 @@ import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MainActivity extends AppCompatActivity {
-    private boolean USE_YOLOV5 = false;  // true:yolov5  false:yolov4-tiny
+    public static int YOLOV5S = 1;
+    public static int YOLOV4_TINY = 2;
+    public static int MOBILENETV2_YOLOV3_NANO = 3;
+
+    public static int USE_MODEL = MOBILENETV2_YOLOV3_NANO;
 
     private static final int REQUEST_CAMERA = 1;
     private static final int REQUEST_PICK_IMAGE = 2;
@@ -82,17 +87,19 @@ public class MainActivity extends AppCompatActivity {
                     REQUEST_CAMERA
             );
         }
-        if (USE_YOLOV5) {
+        if (USE_MODEL == YOLOV5S) {
             YOLOv5.init(getAssets());
-        } else {
-            YOLOv4.init(getAssets());
+        } else if (USE_MODEL == YOLOV4_TINY) {
+            YOLOv4.init(getAssets(), true);
+        } else if (USE_MODEL == MOBILENETV2_YOLOV3_NANO) {
+            YOLOv4.init(getAssets(), false);
         }
         resultImageView = findViewById(R.id.imageView);
         thresholdTextview = findViewById(R.id.valTxtView);
         tvInfo = findViewById(R.id.tv_info);
         nmsSeekBar = findViewById(R.id.nms_seek);
         thresholdSeekBar = findViewById(R.id.threshold_seek);
-        if (!USE_YOLOV5) {
+        if (USE_MODEL != YOLOV5S) {
             nmsSeekBar.setEnabled(false);
             thresholdSeekBar.setEnabled(false);
         }
@@ -187,7 +194,7 @@ public class MainActivity extends AppCompatActivity {
         PreviewConfig previewConfig = new PreviewConfig.Builder()
                 .setLensFacing(CameraX.LensFacing.BACK)
 //                .setTargetAspectRatio(Rational.NEGATIVE_INFINITY)  // 宽高比
-//                .setTargetResolution(new Size(1280, 720))  // 分辨率
+                .setTargetResolution(new Size(480, 640))  // 分辨率
                 .build();
 
         Preview preview = new Preview(previewConfig);
@@ -211,7 +218,7 @@ public class MainActivity extends AppCompatActivity {
     private UseCase gainAnalyzer(DetectAnalyzer detectAnalyzer) {
         ImageAnalysisConfig.Builder analysisConfigBuilder = new ImageAnalysisConfig.Builder();
         analysisConfigBuilder.setImageReaderMode(ImageAnalysis.ImageReaderMode.ACQUIRE_LATEST_IMAGE);
-        analysisConfigBuilder.setTargetResolution(new Size(1280, 720));  // 输出预览图像尺寸
+        analysisConfigBuilder.setTargetResolution(new Size(480, 640));  // 输出预览图像尺寸
         ImageAnalysisConfig config = analysisConfigBuilder.build();
         ImageAnalysis analysis = new ImageAnalysis(config);
         analysis.setAnalyzer(detectAnalyzer);
@@ -238,7 +245,7 @@ public class MainActivity extends AppCompatActivity {
                     Bitmap bitmap = Bitmap.createBitmap(bitmapsrc, 0, 0, width, height, matrix, false);
 
                     Box[] result = null;
-                    if (USE_YOLOV5) {
+                    if (USE_MODEL == YOLOV5S) {
                         result = YOLOv5.detect(bitmap, threshold, nms_threshold);
                     } else {
                         result = YOLOv4.detect(bitmap, threshold, nms_threshold);
@@ -260,14 +267,25 @@ public class MainActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            resultImageView.setImageBitmap(mutableBitmap);
                             detecting.set(false);
+                            if (detectPhoto.get()) {
+                                return;
+                            }
+                            resultImageView.setImageBitmap(mutableBitmap);
                             endTime = System.currentTimeMillis();
                             long dur = endTime - startTime;
                             float fps = (float) (1000.0 / dur);
+                            String modelName = "YOLOv5s";
+                            if (USE_MODEL == YOLOV5S) {
+                                modelName = "YOLOv5s";
+                            } else if (USE_MODEL == YOLOV4_TINY) {
+                                modelName = "YOLOv4-tiny";
+                            } else {
+                                modelName = "MobileNetV2-YOLOv3-Nano";
+                            }
                             tvInfo.setText(String.format(Locale.CHINESE,
                                     "%s\nSize: %dx%d\nTime: %.3f s\nFPS: %.3f",
-                                    USE_YOLOV5 ? "YOLOv5s" : "YOLOv4-tiny", height, width, dur / 1000.0, fps));
+                                    modelName, height, width, dur / 1000.0, fps));
                         }
                     });
                 }
@@ -330,7 +348,7 @@ public class MainActivity extends AppCompatActivity {
         detectPhoto.set(true);
         Bitmap image = getPicture(data.getData());
         Box[] result = null;
-        if (USE_YOLOV5) {
+        if (USE_MODEL == YOLOV5S) {
             result = YOLOv5.detect(image, threshold, nms_threshold);
         } else {
             result = YOLOv4.detect(image, threshold, nms_threshold);
