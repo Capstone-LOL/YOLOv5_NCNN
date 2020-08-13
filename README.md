@@ -28,7 +28,11 @@ Note：由于手机性能、图像尺寸等因素导致FPS在不同手机上相�
 
 :art: 截图<br/>
 <div>
-<img width="288" height="512" src="https://github.com/WZTENG/YOLOv5_NCNN/blob/master/Screenshots/Android_Meizu16X.jpg"/>
-<img width="288" height="512" src="https://github.com/WZTENG/YOLOv5_NCNN/blob/master/Screenshots/iOS_iPhone5s.jpg"/>
+<img width="288" height="512" src="https://github.com/WZTENG/YOLOv5_NCNN/blob/master/Screenshots/Android_Meizu16x_mobilenetv2_yolov3_nano.jpg"/>
+<img width="288" height="512" src="https://github.com/WZTENG/YOLOv5_NCNN/blob/master/Screenshots/Android_Meizu16x_yolov4_tiny.jpg"/>
+<img width="288" height="512" src="https://github.com/WZTENG/YOLOv5_NCNN/blob/master/Screenshots/Android_Meizu16x_yolov5s.jpg"/>
 </div>
+<div>
+<img width="288" height="512" src="https://github.com/WZTENG/YOLOv5_NCNN/blob/master/Screenshots/iOS_iPhone5s.jpg"/>
+<div/>
 
