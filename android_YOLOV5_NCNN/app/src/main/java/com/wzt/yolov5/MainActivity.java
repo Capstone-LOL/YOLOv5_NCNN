@@ -74,6 +74,9 @@ public class MainActivity extends AppCompatActivity {
     private int width;
     private int height;
 
+    double total_fps = 0;
+    int fps_count = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -275,6 +278,12 @@ public class MainActivity extends AppCompatActivity {
                             endTime = System.currentTimeMillis();
                             long dur = endTime - startTime;
                             float fps = (float) (1000.0 / dur);
+                            if (total_fps == 0) {
+                                total_fps = fps;
+                            } else {
+                                total_fps = total_fps + fps;
+                            }
+                            fps_count++;
                             String modelName = "YOLOv5s";
                             if (USE_MODEL == YOLOV5S) {
                                 modelName = "YOLOv5s";
@@ -284,8 +293,8 @@ public class MainActivity extends AppCompatActivity {
                                 modelName = "MobileNetV2-YOLOv3-Nano";
                             }
                             tvInfo.setText(String.format(Locale.CHINESE,
-                                    "%s\nSize: %dx%d\nTime: %.3f s\nFPS: %.3f",
-                                    modelName, height, width, dur / 1000.0, fps));
+                                    "%s\nSize: %dx%d\nTime: %.3f s\nFPS: %.3f\nAVG_FPS: %.3f",
+                                    modelName, height, width, dur / 1000.0, fps, (float) total_fps / fps_count));
                         }
                     });
                 }
