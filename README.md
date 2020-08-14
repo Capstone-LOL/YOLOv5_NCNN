@@ -5,7 +5,7 @@
 ## iOS:
 - Xcode 11.5
 - macOS 10.15.4
-- iPhone 5s 12.4.5
+- iPhone 6s 13.5.1
 
 ## Android:
 - android studio 4.0
