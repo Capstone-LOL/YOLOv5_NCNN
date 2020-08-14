@@ -41,6 +41,6 @@ Note：由于手机性能、图像尺寸等因素导致FPS在不同手机上相�
 <img width="270" height="500" src="https://github.com/WZTENG/YOLOv5_NCNN/blob/master/Screenshots/Android_Meizu16x_yolov5s.jpg"/>
 </div>
 <div>
-<img width="270" height="500" src="https://github.com/WZTENG/YOLOv5_NCNN/blob/master/Screenshots/iOS_iPhone5s.jpg"/>
+<img width="270" height="500" src="https://github.com/WZTENG/YOLOv5_NCNN/blob/master/Screenshots/iOS_iPhone6s_yolov4_tiny.jpg"/>
 <div/>
 
