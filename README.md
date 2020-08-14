@@ -34,8 +34,6 @@ Select the model to be tested directly on the interface.
 
 Note：由于手机性能、图像尺寸等因素导致FPS在不同手机上相差比较大。该项目主要测试NCNN框架的使用，具体模型的转换可以去NCNN官方查看转换教程。
 
-在Yolo系列模型导出时记得 ONNX_EXPORT = True 可以在模型中直接转换输出格式，提高性能，类似 YoloV4.cpp -> decode_infer() 直接获取结果，不然就像 YoloV5.cpp -> decode_infer() 写一堆 for 循环跟 NMS 来获取结果，导致性能低下。
-
 :art: 截图<br/>
 <div>
 <img width="270" height="500" src="https://github.com/WZTENG/YOLOv5_NCNN/blob/master/Screenshots/Android_Meizu16x_mobilenetv2_yolov3_nano.jpg"/>
