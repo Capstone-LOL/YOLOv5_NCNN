@@ -89,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
                     PERMISSIONS_CAMERA,
                     REQUEST_CAMERA
             );
+            finish();
         }
         if (USE_MODEL == YOLOV5S) {
             YOLOv5.init(getAssets());
