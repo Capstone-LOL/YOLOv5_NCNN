@@ -20,17 +20,18 @@
 YOLOv5s:     ViewController.mm->USE_YOLOV5 = YES;
 YOLOv4-tiny: ViewController.mm->USE_YOLOV5 = NO;
 YOLOv3-nano: Due to time constraints, you need to modify it yourself.
-    1. Copy 2 files from Android library: .param and .bin
-    2. Just modify the loading name of yolov4-tiny.
+                 1. Copy 2 files from Android library: .param and .bin
+                 2. Just modify the loading name of yolov4-tiny.
 ```
 > Android
 ```
 Select the model to be tested directly on the interface.
 ```
-## 模型速度
-* YOLOv5s输入尺寸减小，解码过程使用了大量的 for 循环与 NMS 表现出来会比较慢。
-* YOLOv4-tiny使用默认尺寸，解码过程没有大量的 for 与 NMS 所以速度会快些。
-* YOLOv3-nano与v4-tiny一样。
+## 模型
+* YOLOv5s 输入尺寸减小，解码过程使用了大量的 for 循环与 NMS 表现出来会比较慢。
+* YOLOv4-tiny 使用默认尺寸，解码过程没有大量的 for 与 NMS 所以速度会快些。
+* YOLOv3-nano 与 v4-tiny 一样。
+* Simple-Pose 暂时只写了安卓版本，iOS目前还没有增加。内部原理是先检测人再把人的区域再次进行姿态检测，即2步过程。
 
 Note：由于手机性能、图像尺寸等因素导致FPS在不同手机上相差比较大。该项目主要测试NCNN框架的使用，具体模型的转换可以去NCNN官方查看转换教程。
 
