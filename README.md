@@ -1,6 +1,6 @@
 ## :rocket: 编码不易，点个star！ ##
 
-### 移动端目标检测，项目支持YOLOv5s、YOLOv4-tiny与MobileNetV2-YOLOv3-nano模型，摄像头实时捕获视频流进行检测。
+### 移动端目标检测，项目支持YOLOv5s、YOLOv4-tiny、MobileNetV2-YOLOv3-nano与Simple-Pose模型，摄像头实时捕获视频流进行检测。
 
 ## iOS:
 - Xcode 11.5
