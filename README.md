@@ -37,6 +37,8 @@ Note：<br/>
 * 由于手机性能、图像尺寸等因素导致FPS在不同手机上相差比较大。该项目主要测试NCNN框架的使用，具体模型的转换可以去NCNN官方查看转换教程。<br/>
 * 增加 Simple-Pose 模型时增加了opencv，由于库太大只保留 arm64-v8a/armeabi-v7a 有需要的自己去官方下载。
 
+已知部分大佬网名：nihui、qiuqiu
+
 :art: 截图<br/>
 
 <div>
