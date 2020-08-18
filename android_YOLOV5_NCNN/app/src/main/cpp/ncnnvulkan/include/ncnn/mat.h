@@ -20,6 +20,10 @@
 #if __ARM_NEON
 #include <arm_neon.h>
 #endif
+#if __AVX__
+#include <immintrin.h>
+#endif
+
 #include "allocator.h"
 #include "option.h"
 #include "platform.h"
@@ -85,6 +89,10 @@ public:
     void fill(float32x4_t _v);
     void fill(uint16x4_t _v);
 #endif // __ARM_NEON
+#if __AVX__
+    void fill(__m256 _v);
+    void fill(__m128i _v);
+#endif // __AVX__
     template<typename T>
     void fill(T v);
     // deep copy
@@ -575,6 +583,7 @@ enum BorderType
 };
 void copy_make_border(const Mat& src, Mat& dst, int top, int bottom, int left, int right, int type, float v, const Option& opt = Option());
 void copy_cut_border(const Mat& src, Mat& dst, int top, int bottom, int left, int right, const Option& opt = Option());
+void resize_nearest(const Mat& src, Mat& dst, int w, int h, const Option& opt = Option());
 void resize_bilinear(const Mat& src, Mat& dst, int w, int h, const Option& opt = Option());
 void resize_bicubic(const Mat& src, Mat& dst, int w, int h, const Option& opt = Option());
 void convert_packing(const Mat& src, Mat& dst, int elempack, const Option& opt = Option());
@@ -828,6 +837,28 @@ inline void Mat::fill(uint16x4_t _v)
     }
 }
 #endif // __ARM_NEON
+#if __AVX__
+inline void Mat::fill(__m256 _v)
+{
+    int size = total();
+    float* ptr = (float*)data;
+    for (int i = 0; i < size; i++)
+    {
+        _mm256_storeu_ps(ptr, _v);
+        ptr += 8;
+    }
+}
+inline void Mat::fill(__m128i _v)
+{
+    int size = total();
+    unsigned short* ptr = (unsigned short*)data;
+    for (int i = 0; i < size; i++)
+    {
+        _mm_store_si128((__m128i*)ptr, _v);
+        ptr += 8;
+    }
+}
+#endif // __AVX__
 
 template<typename T>
 inline void Mat::fill(T _v)
