@@ -49,7 +49,7 @@ inline float sigmoid(float x) {
 }
 
 std::vector<BoxInfo>
-YoloV4::decode_infer(ncnn::Mat &data, const cv::Size &frame_size, int net_size, int num_classes, float threshold) {
+YoloV4::decode_infer(ncnn::Mat &data, const yolocv::YoloSize &frame_size, int net_size, int num_classes, float threshold) {
     std::vector<BoxInfo> result;
     for (int i = 0; i < data.h; i++) {
         BoxInfo box;

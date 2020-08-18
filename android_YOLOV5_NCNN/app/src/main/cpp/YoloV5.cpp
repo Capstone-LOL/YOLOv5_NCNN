@@ -53,7 +53,7 @@ inline float sigmoid(float x){
 }
 
 std::vector<BoxInfo>
-YoloV5::decode_infer(ncnn::Mat &data, int stride, const cv::Size &frame_size, int net_size, int num_classes,const std::vector<cv::Size>& anchors, float threshold) {
+YoloV5::decode_infer(ncnn::Mat &data, int stride, const yolocv::YoloSize &frame_size, int net_size, int num_classes,const std::vector<yolocv::YoloSize>& anchors, float threshold) {
     std::vector<BoxInfo> result;
     int grid_size = int(sqrt(data.h));
     float *mat_data[data.c];

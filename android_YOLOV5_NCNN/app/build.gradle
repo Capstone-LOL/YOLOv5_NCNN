@@ -13,7 +13,13 @@ android {
         externalNativeBuild {
             cmake {
                 cppFlags ""
+                arguments "-DANDROID_STL=c++_shared"
             }
+        }
+
+        ndk {
+            moduleName "WztNcnnJniLog" //编译后会生成 .so
+            ldLibs "log", "z", "m"
         }
     }
     buildTypes {

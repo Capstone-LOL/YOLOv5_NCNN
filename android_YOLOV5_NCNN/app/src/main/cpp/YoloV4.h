@@ -41,7 +41,7 @@ public:
                                     "microwave", "oven", "toaster", "sink", "refrigerator", "book", "clock", "vase", "scissors", "teddy bear",
                                     "hair drier", "toothbrush"};
 private:
-    static std::vector<BoxInfo> decode_infer(ncnn::Mat &data, const cv::Size& frame_size, int net_size,int num_classes,float threshold);
+    static std::vector<BoxInfo> decode_infer(ncnn::Mat &data, const yolocv::YoloSize& frame_size, int net_size,int num_classes,float threshold);
 //    static void nms(std::vector<BoxInfo>& result,float nms_threshold);
     ncnn::Net* Net;
     int input_size = 640/2;

@@ -19,6 +19,7 @@ public class WelcomeActivity extends AppCompatActivity {
     private Button btnDetect1;
     private Button btnDetect2;
     private Button btnDetect3;
+    private Button btnDetect4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +51,16 @@ public class WelcomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 MainActivity.USE_MODEL = MainActivity.MOBILENETV2_YOLOV3_NANO;
+                Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
+                WelcomeActivity.this.startActivity(intent);
+            }
+        });
+
+        btnDetect4 = findViewById(R.id.btn_start_detect4);
+        btnDetect4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainActivity.USE_MODEL = MainActivity.SIMPLE_POSE;
                 Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
                 WelcomeActivity.this.startActivity(intent);
             }

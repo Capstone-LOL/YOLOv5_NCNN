@@ -27,5 +27,12 @@
         android:text="MobileNetV2_YOLOV3_NANO"
         app:layout_constraintTop_toBottomOf="@id/btn_start_detect2" />
 
+    <Button
+        android:id="@+id/btn_start_detect4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="MSimplePose_NANO"
+        app:layout_constraintTop_toBottomOf="@id/btn_start_detect3" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

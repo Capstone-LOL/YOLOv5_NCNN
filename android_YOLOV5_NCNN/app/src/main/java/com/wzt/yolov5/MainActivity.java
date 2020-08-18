@@ -20,6 +20,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.ImageFormat;
 import android.graphics.Matrix;
 import android.graphics.Paint;
@@ -44,12 +45,14 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Locale;
+import java.util.Random;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MainActivity extends AppCompatActivity {
     public static int YOLOV5S = 1;
     public static int YOLOV4_TINY = 2;
     public static int MOBILENETV2_YOLOV3_NANO = 3;
+    public static int SIMPLE_POSE = 4;
 
     public static int USE_MODEL = MOBILENETV2_YOLOV3_NANO;
 
@@ -77,6 +80,8 @@ public class MainActivity extends AppCompatActivity {
     double total_fps = 0;
     int fps_count = 0;
 
+    protected Bitmap mutableBitmap;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,6 +102,8 @@ public class MainActivity extends AppCompatActivity {
             YOLOv4.init(getAssets(), true);
         } else if (USE_MODEL == MOBILENETV2_YOLOV3_NANO) {
             YOLOv4.init(getAssets(), false);
+        } else if (USE_MODEL == SIMPLE_POSE) {
+            SimplePose.init(getAssets());
         }
         resultImageView = findViewById(R.id.imageView);
         thresholdTextview = findViewById(R.id.valTxtView);
@@ -249,24 +256,19 @@ public class MainActivity extends AppCompatActivity {
                     Bitmap bitmap = Bitmap.createBitmap(bitmapsrc, 0, 0, width, height, matrix, false);
 
                     Box[] result = null;
+                    KeyPoint[] keyPoints = null;
                     if (USE_MODEL == YOLOV5S) {
                         result = YOLOv5.detect(bitmap, threshold, nms_threshold);
-                    } else {
+                    } else if (USE_MODEL == YOLOV4_TINY || USE_MODEL == MOBILENETV2_YOLOV3_NANO) {
                         result = YOLOv4.detect(bitmap, threshold, nms_threshold);
+                    } else if (USE_MODEL == SIMPLE_POSE) {
+                        keyPoints = SimplePose.detect(bitmap);
                     }
-                    final Bitmap mutableBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
-                    Canvas canvas = new Canvas(mutableBitmap);
-                    final Paint boxPaint = new Paint();
-                    boxPaint.setAlpha(200);
-                    boxPaint.setStyle(Paint.Style.STROKE);
-                    boxPaint.setStrokeWidth(4 * mutableBitmap.getWidth() / 800);
-                    boxPaint.setTextSize(40 * mutableBitmap.getWidth() / 800);
-                    for (Box box : result) {
-                        boxPaint.setColor(box.getColor());
-                        boxPaint.setStyle(Paint.Style.FILL);
-                        canvas.drawText(box.getLabel() + String.format(Locale.CHINESE, " %.3f", box.getScore()), box.x0 + 3, box.y0 + 40 * mutableBitmap.getWidth() / 1000, boxPaint);
-                        boxPaint.setStyle(Paint.Style.STROKE);
-                        canvas.drawRect(box.getRect(), boxPaint);
+                    mutableBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
+                    if (USE_MODEL == YOLOV5S || USE_MODEL == YOLOV4_TINY || USE_MODEL == MOBILENETV2_YOLOV3_NANO) {
+                        mutableBitmap = drawBoxRects(mutableBitmap, result);
+                    } else if (USE_MODEL == SIMPLE_POSE) {
+                        mutableBitmap = drawPersonPose(mutableBitmap, keyPoints);
                     }
                     runOnUiThread(new Runnable() {
                         @Override
@@ -285,14 +287,8 @@ public class MainActivity extends AppCompatActivity {
                                 total_fps = total_fps + fps;
                             }
                             fps_count++;
-                            String modelName = "YOLOv5s";
-                            if (USE_MODEL == YOLOV5S) {
-                                modelName = "YOLOv5s";
-                            } else if (USE_MODEL == YOLOV4_TINY) {
-                                modelName = "YOLOv4-tiny";
-                            } else {
-                                modelName = "MobileNetV2-YOLOv3-Nano";
-                            }
+                            String modelName = getModelName();
+
                             tvInfo.setText(String.format(Locale.CHINESE,
                                     "%s\nSize: %dx%d\nTime: %.3f s\nFPS: %.3f\nAVG_FPS: %.3f",
                                     modelName, height, width, dur / 1000.0, fps, (float) total_fps / fps_count));
@@ -328,6 +324,68 @@ public class MainActivity extends AppCompatActivity {
             return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
         }
 
+    }
+
+    protected Bitmap drawBoxRects(Bitmap mutableBitmap, Box[] results) {
+        Canvas canvas = new Canvas(mutableBitmap);
+        final Paint boxPaint = new Paint();
+        boxPaint.setAlpha(200);
+        boxPaint.setStyle(Paint.Style.STROKE);
+        boxPaint.setStrokeWidth(4 * mutableBitmap.getWidth() / 800);
+        boxPaint.setTextSize(40 * mutableBitmap.getWidth() / 800);
+        for (Box box : results) {
+            boxPaint.setColor(box.getColor());
+            boxPaint.setStyle(Paint.Style.FILL);
+            canvas.drawText(box.getLabel() + String.format(Locale.CHINESE, " %.3f", box.getScore()), box.x0 + 3, box.y0 + 40 * mutableBitmap.getWidth() / 1000, boxPaint);
+            boxPaint.setStyle(Paint.Style.STROKE);
+            canvas.drawRect(box.getRect(), boxPaint);
+        }
+        return mutableBitmap;
+    }
+
+    protected String getModelName() {
+        String modelName = "ohhhhh";
+        if (USE_MODEL == YOLOV5S) {
+            modelName = "YOLOv5s";
+        } else if (USE_MODEL == YOLOV4_TINY) {
+            modelName = "YOLOv4-tiny";
+        } else if (USE_MODEL == MOBILENETV2_YOLOV3_NANO) {
+            modelName = "MobileNetV2-YOLOv3-Nano";
+        } else if (USE_MODEL == SIMPLE_POSE) {
+            modelName = "Simple-Pose";
+        }
+        return modelName;
+    }
+
+    protected Bitmap drawPersonPose(Bitmap mutableBitmap, KeyPoint[] keyPoints) {
+        if (keyPoints == null || keyPoints.length <= 0) {
+            return mutableBitmap;
+        }
+        // draw bone
+        int[][] joint_pairs = {{0, 1}, {1, 3}, {0, 2}, {2, 4}, {5, 6}, {5, 7}, {7, 9}, {6, 8}, {8, 10}, {5, 11}, {6, 12}, {11, 12}, {11, 13}, {12, 14}, {13, 15}, {14, 16}};
+        Canvas canvas = new Canvas(mutableBitmap);
+        final Paint keyPointPaint = new Paint();
+        keyPointPaint.setAlpha(200);
+        keyPointPaint.setStyle(Paint.Style.STROKE);
+        keyPointPaint.setStrokeWidth(5 * mutableBitmap.getWidth() / 800);
+        keyPointPaint.setColor(Color.BLUE);
+        int j = 0;
+        int color = Color.BLUE;
+        for (int i = 0; i < keyPoints.length; i++) {
+            canvas.drawLine(keyPoints[joint_pairs[i % 16][0] + j].x, keyPoints[joint_pairs[i % 16][0] + j].y,
+                    keyPoints[joint_pairs[i % 16][1] + j].x, keyPoints[joint_pairs[i % 16][1] + j].y, keyPointPaint);
+            j = (i / 17) * 17;
+
+            Random random = new Random(j + 2020);
+            color = Color.argb(255,random.nextInt(256), random.nextInt(256),random.nextInt(256));
+            keyPointPaint.setColor(color);
+        }
+        keyPointPaint.setColor(Color.RED);
+        keyPointPaint.setStrokeWidth(8 * mutableBitmap.getWidth() / 800);
+        for (KeyPoint keyPoint : keyPoints) {
+            canvas.drawPoint(keyPoint.x, keyPoint.y, keyPointPaint);
+        }
+        return mutableBitmap;
     }
 
 
