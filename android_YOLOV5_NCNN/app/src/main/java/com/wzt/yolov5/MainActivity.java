@@ -368,15 +368,21 @@ public class MainActivity extends AppCompatActivity {
         int j = 0;
         int color = Color.BLUE;
         for (int i = 0; i < keyPoints.length; i++) {
+            int pl0 = joint_pairs[i % 16][0];
+            int pl1 = joint_pairs[i % 16][1];
+            // 人体左侧改为红线
+            if (pl1 % 15 == 0 || pl1 % 13 == 0 || pl1 % 11 == 0 || pl1 % 9 == 0 || ((pl1 % 7 == 0) && (pl0 % 5 == 0))) {
+                keyPointPaint.setColor(Color.RED);
+            }
             canvas.drawLine(keyPoints[joint_pairs[i % 16][0] + j].x, keyPoints[joint_pairs[i % 16][0] + j].y,
                     keyPoints[joint_pairs[i % 16][1] + j].x, keyPoints[joint_pairs[i % 16][1] + j].y, keyPointPaint);
             j = (i / 17) * 17;
-
+            // 其它随机颜色
             Random random = new Random(j + 2020);
             color = Color.argb(255,random.nextInt(256), random.nextInt(256),random.nextInt(256));
             keyPointPaint.setColor(color);
         }
-        keyPointPaint.setColor(Color.RED);
+        keyPointPaint.setColor(Color.GREEN);
         keyPointPaint.setStrokeWidth(8 * mutableBitmap.getWidth() / 800);
         for (KeyPoint keyPoint : keyPoints) {
             canvas.drawPoint(keyPoint.x, keyPoint.y, keyPointPaint);
