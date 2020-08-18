@@ -36,7 +36,7 @@ Select the model to be tested directly on the interface.
 Note：<br/>
 * 由于手机性能、图像尺寸等因素导致FPS在不同手机上相差比较大。该项目主要测试NCNN框架的使用，具体模型的转换可以去NCNN官方查看转换教程。<br/>
 * 增加 Simple-Pose 模型时增加了opencv，由于库太大只保留 arm64-v8a/armeabi-v7a 有需要的自己去官方下载。
-* ncnn暂时使用vulkan版本，但速度与ncnn差别不大，在加载前需要打开，项目中没有打开，因为加载模型莫名变长且速度差不多暂时关闭了。如果要用ncnn版本需要修复CMakeLists.txt配置。
+* ncnn暂时使用vulkan版本，但速度与ncnn差别不大，在加载前需要打开，项目中没有打开，因为加载模型莫名变长且速度差不多暂时关闭了。如果要用ncnn版本需要修改CMakeLists.txt配置。
 
 已知部分ncnn大佬网名：.... nihui qiuqiu
 
