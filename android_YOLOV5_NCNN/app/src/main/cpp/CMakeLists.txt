@@ -28,7 +28,7 @@ add_library( # Sets the name of the library.
         )
 
 include_directories(
-        ncnn/include
+        ncnnvulkan/include
 )
 # Searches for a specified prebuilt library and stores the path as a
 # variable. Because CMake includes system libraries in the search path by
@@ -48,7 +48,17 @@ set_target_properties( # Specifies the target library.
         PROPERTIES IMPORTED_LOCATION
 
         # Provides the path to the library you want to import.
-        ${CMAKE_SOURCE_DIR}/ncnn/${ANDROID_ABI}/libncnn.a )
+        ${CMAKE_SOURCE_DIR}/ncnnvulkan/${ANDROID_ABI}/libncnn.a )
+
+
+add_library(glslang STATIC IMPORTED)
+add_library(OGLCompiler STATIC IMPORTED)
+add_library(OSDependent STATIC IMPORTED)
+add_library(SPIRV STATIC IMPORTED)
+set_target_properties(glslang PROPERTIES IMPORTED_LOCATION ${CMAKE_SOURCE_DIR}/ncnnvulkan/${ANDROID_ABI}/libglslang.a)
+set_target_properties(OGLCompiler PROPERTIES IMPORTED_LOCATION ${CMAKE_SOURCE_DIR}/ncnnvulkan/${ANDROID_ABI}/libOGLCompiler.a)
+set_target_properties(OSDependent PROPERTIES IMPORTED_LOCATION ${CMAKE_SOURCE_DIR}/ncnnvulkan/${ANDROID_ABI}/libOSDependent.a)
+set_target_properties(SPIRV PROPERTIES IMPORTED_LOCATION ${CMAKE_SOURCE_DIR}/ncnnvulkan/${ANDROID_ABI}/libSPIRV.a)
 
 
 include_directories(
@@ -85,4 +95,5 @@ target_link_libraries( # Specifies the target library.
         ${vulkan-lib}
         ${android-lib}
         ${jnigraphics-lib}
-        ncnn)
+        ncnn
+        glslang SPIRV OGLCompiler OSDependent )

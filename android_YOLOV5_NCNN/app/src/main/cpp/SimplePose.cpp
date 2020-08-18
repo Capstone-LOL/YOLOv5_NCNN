@@ -5,6 +5,7 @@
 #include "SimplePose.h"
 #include "YoloV5.h"
 
+bool SimplePose::hasGPU = true;
 SimplePose *SimplePose::detector = nullptr;
 
 SimplePose::SimplePose(AAssetManager *mgr) {
@@ -41,6 +42,8 @@ int SimplePose::runpose(cv::Mat &roi, int pose_size_w, int pose_size_h, std::vec
     auto ex = PoseNet->create_extractor();
     ex.set_light_mode(true);
     ex.set_num_threads(4);
+    hasGPU = ncnn::get_gpu_count() > 0;
+    ex.set_vulkan_compute(hasGPU);
     ex.input("data", in);
     ncnn::Mat out;
     ex.extract("hybridsequential0_conv7_fwd", out);
@@ -109,7 +112,8 @@ std::vector<KeyPoint> SimplePose::detect(JNIEnv *env, jobject image) {
     auto ex = PersonNet->create_extractor();
     ex.set_light_mode(true);
     ex.set_num_threads(4);
-//    ex.set_vulkan_compute(hasGPU);
+    hasGPU = ncnn::get_gpu_count() > 0;
+    ex.set_vulkan_compute(hasGPU);
     ex.input("data", in);
     ncnn::Mat out;
     ex.extract("output", out);

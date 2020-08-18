@@ -1,6 +1,6 @@
 #include "YoloV4.h"
 
-bool YoloV4::hasGPU = false;
+bool YoloV4::hasGPU = true;
 YoloV4 *YoloV4::detector = nullptr;
 
 YoloV4::YoloV4(AAssetManager *mgr, const char *param, const char *bin) {
@@ -24,7 +24,8 @@ std::vector<BoxInfo> YoloV4::detect(JNIEnv *env, jobject image, float threshold,
     auto ex = Net->create_extractor();
     ex.set_light_mode(true);
     ex.set_num_threads(4);
-//    ex.set_vulkan_compute(hasGPU);
+    hasGPU = ncnn::get_gpu_count() > 0;
+    ex.set_vulkan_compute(hasGPU);
     ex.input(0, in_net);
     std::vector<BoxInfo> result;
     ncnn::Mat blob;
