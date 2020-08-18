@@ -281,11 +281,7 @@ public class MainActivity extends AppCompatActivity {
                             endTime = System.currentTimeMillis();
                             long dur = endTime - startTime;
                             float fps = (float) (1000.0 / dur);
-                            if (total_fps == 0) {
-                                total_fps = fps;
-                            } else {
-                                total_fps = total_fps + fps;
-                            }
+                            total_fps = (total_fps == 0) ? fps : (total_fps + fps);
                             fps_count++;
                             String modelName = getModelName();
 
