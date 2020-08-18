@@ -9,6 +9,7 @@ YoloV5* YoloV5::detector = nullptr;
 
 YoloV5::YoloV5(AAssetManager* mgr, const char *param, const char *bin) {
     Net = new ncnn::Net();
+    Net->opt.use_fp16_arithmetic = true;  // fp16运算加速
     Net->load_param(mgr,param);
     Net->load_model(mgr,bin);
 }

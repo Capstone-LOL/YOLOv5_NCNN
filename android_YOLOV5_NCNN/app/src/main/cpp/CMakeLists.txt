@@ -51,6 +51,7 @@ set_target_properties( # Specifies the target library.
         ${CMAKE_SOURCE_DIR}/ncnnvulkan/${ANDROID_ABI}/libncnn.a )
 
 
+# ncnnvulkan
 add_library(glslang STATIC IMPORTED)
 add_library(OGLCompiler STATIC IMPORTED)
 add_library(OSDependent STATIC IMPORTED)
