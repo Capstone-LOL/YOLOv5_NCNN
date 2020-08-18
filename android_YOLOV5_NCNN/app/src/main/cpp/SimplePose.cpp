@@ -81,15 +81,21 @@ std::vector<KeyPoint> SimplePose::detect(JNIEnv *env, jobject image) {
     int img_w = img_size.width;
     int img_h = img_size.height;
     /** ncnn::Mat -> cv::Mat **/
+//    cv::Mat bgr(src_img.h, src_img.w, CV_8UC3);
+//    for (int c = 0; c < 3; c++) {
+//        for (int i = 0; i < src_img.h; i++) {
+//            for (int j = 0; j < src_img.w; j++) {
+//                float t = ((float *) src_img.data)[j + i * src_img.w + c * src_img.h * src_img.w];
+//                bgr.data[(2 - c) + j * 3 + i * src_img.w * 3] = t;
+//            }
+//        }
+//    }
+//    https://github.com/Tencent/ncnn/wiki/use-ncnn-with-opencv#ncnn-to-opencv
+//    float norm[3] = {1 / 255.f, 1 / 255.f, 1 / 255.f};
+//    float mean[3] = {0, 0, 0};
+//    src_img.substract_mean_normalize(mean, norm);
     cv::Mat bgr(src_img.h, src_img.w, CV_8UC3);
-    for (int c = 0; c < 3; c++) {
-        for (int i = 0; i < src_img.h; i++) {
-            for (int j = 0; j < src_img.w; j++) {
-                float t = ((float *) src_img.data)[j + i * src_img.w + c * src_img.h * src_img.w];
-                bgr.data[(2 - c) + j * 3 + i * src_img.w * 3] = t;
-            }
-        }
-    }
+    src_img.to_pixels(bgr.data, ncnn::Mat::PIXEL_RGB2BGR);
 //    LOGD("bgr w:%d h:%d", bgr.cols, bgr.rows);
 
     ncnn::Mat in = ncnn::Mat::from_android_bitmap_resize(env, image, ncnn::Mat::PIXEL_RGBA2RGB,
