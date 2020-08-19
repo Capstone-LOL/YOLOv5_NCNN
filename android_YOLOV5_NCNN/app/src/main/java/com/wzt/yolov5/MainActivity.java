@@ -25,6 +25,7 @@ import android.graphics.ImageFormat;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.YuvImage;
 import android.media.ExifInterface;
 import android.net.Uri;
@@ -53,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
     public static int YOLOV4_TINY = 2;
     public static int MOBILENETV2_YOLOV3_NANO = 3;
     public static int SIMPLE_POSE = 4;
+    public static int YOLACT = 5;
 
     public static int USE_MODEL = MOBILENETV2_YOLOV3_NANO;
 
@@ -104,6 +106,8 @@ public class MainActivity extends AppCompatActivity {
             YOLOv4.init(getAssets(), false);
         } else if (USE_MODEL == SIMPLE_POSE) {
             SimplePose.init(getAssets());
+        } else if (USE_MODEL == YOLACT) {
+            Yolact.init(getAssets());
         }
         resultImageView = findViewById(R.id.imageView);
         thresholdTextview = findViewById(R.id.valTxtView);
@@ -257,18 +261,27 @@ public class MainActivity extends AppCompatActivity {
 
                     Box[] result = null;
                     KeyPoint[] keyPoints = null;
+                    YolactMask[] yolactMasks = null;
                     if (USE_MODEL == YOLOV5S) {
                         result = YOLOv5.detect(bitmap, threshold, nms_threshold);
                     } else if (USE_MODEL == YOLOV4_TINY || USE_MODEL == MOBILENETV2_YOLOV3_NANO) {
                         result = YOLOv4.detect(bitmap, threshold, nms_threshold);
                     } else if (USE_MODEL == SIMPLE_POSE) {
                         keyPoints = SimplePose.detect(bitmap);
+                    } else if (USE_MODEL == YOLACT) {
+                        yolactMasks = Yolact.detect(bitmap);
+                    }
+                    if (result == null && keyPoints == null && yolactMasks == null) {
+                        detecting.set(false);
+                        return;
                     }
                     mutableBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
                     if (USE_MODEL == YOLOV5S || USE_MODEL == YOLOV4_TINY || USE_MODEL == MOBILENETV2_YOLOV3_NANO) {
                         mutableBitmap = drawBoxRects(mutableBitmap, result);
                     } else if (USE_MODEL == SIMPLE_POSE) {
                         mutableBitmap = drawPersonPose(mutableBitmap, keyPoints);
+                    } else if (USE_MODEL == YOLACT) {
+                        mutableBitmap = drawYolactMask(mutableBitmap, yolactMasks);
                     }
                     runOnUiThread(new Runnable() {
                         @Override
@@ -322,6 +335,43 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    protected Bitmap drawYolactMask(Bitmap mutableBitmap, YolactMask[] results) {
+        Canvas canvas = new Canvas(mutableBitmap);
+        final Paint maskPaint = new Paint();
+        maskPaint.setAlpha(200);
+        maskPaint.setStyle(Paint.Style.STROKE);
+        maskPaint.setStrokeWidth(4 * mutableBitmap.getWidth() / 800);
+        maskPaint.setTextSize(40 * mutableBitmap.getWidth() / 800);
+        maskPaint.setColor(Color.BLUE);
+        for (YolactMask mask : results) {
+            if (mask.prob < 0.4f) {
+                continue;
+            }
+//            mutableBitmap = Bitmap.createBitmap(mask.mask, 480, 640, Bitmap.Config.ARGB_8888);
+//            Log.d("wzt", "mask[0]:" + Integer.toHexString(mask.mask[0]));
+            int index = 0;
+            for (int y = 0; y < mutableBitmap.getHeight(); y++) {
+                for (int x = 0; x < mutableBitmap.getWidth(); x++) {
+                    index = mutableBitmap.getWidth() * y + x;
+                    if (!Integer.toHexString(mask.mask[index]).equals("ff000000")) {
+                        maskPaint.setColor(mask.getColor());
+                        maskPaint.setAlpha(100);
+                        // 数据感觉不是这么解析的
+//                        canvas.drawPoint(x * 3, y * 3, boxPaint);
+                        canvas.drawCircle(x * 3, y * 3, 3, maskPaint);
+                    }
+                }
+            }
+            // 标签跟框放后面画，防止被 mask 挡住
+            maskPaint.setColor(mask.getColor());
+            maskPaint.setStyle(Paint.Style.FILL);
+            canvas.drawText(mask.getLabel() + String.format(Locale.CHINESE, " %.3f", mask.getProb()), mask.left, mask.top - 15 * mutableBitmap.getWidth() / 1000, maskPaint);
+            maskPaint.setStyle(Paint.Style.STROKE);
+            canvas.drawRect(new RectF(mask.left, mask.top, mask.right, mask.bottom), maskPaint);
+        }
+        return mutableBitmap;
+    }
+
     protected Bitmap drawBoxRects(Bitmap mutableBitmap, Box[] results) {
         Canvas canvas = new Canvas(mutableBitmap);
         final Paint boxPaint = new Paint();
@@ -349,6 +399,8 @@ public class MainActivity extends AppCompatActivity {
             modelName = "MobileNetV2-YOLOv3-Nano";
         } else if (USE_MODEL == SIMPLE_POSE) {
             modelName = "Simple-Pose";
+        } else if (USE_MODEL == YOLACT) {
+            modelName = "Yolact";
         }
         return modelName;
     }

@@ -6,6 +6,7 @@
 #include "YoloV5.h"
 #include "YoloV4.h"
 #include "SimplePose.h"
+#include "Yolact.h"
 
 JNIEXPORT jint JNI_OnLoad(JavaVM *vm, void *reserved) {
     ncnn::create_gpu_instance();
@@ -117,5 +118,64 @@ Java_com_wzt_yolov5_SimplePose_detect(JNIEnv *env, jclass clazz, jobject image) 
     }
     return ret;
 
+}
+
+/*********************************************************************************************
+                                         Yolact
+ ********************************************************************************************/
+jintArray matToBitmapArray(JNIEnv *env, const cv::Mat &image) {
+    jintArray resultImage = env->NewIntArray(image.total());
+    jint *_data = new jint[image.total()];
+    for (int i = 0; i < image.total() / 3; i++) {
+        char r = image.data[3 * i + 2];
+        char g = image.data[3 * i + 1];
+        char b = image.data[3 * i + 0];
+        char a = (char) 255;
+        _data[i] = (((jint) a << 24) & 0xFF000000) + (((jint) r << 16) & 0x00FF0000) +
+                   (((jint) g << 8) & 0x0000FF00) + ((jint) b & 0x000000FF);
+    }
+    env->SetIntArrayRegion(resultImage, 0, image.total(), _data);
+    delete[] _data;
+    return resultImage;
+}
+
+extern "C" JNIEXPORT void JNICALL
+Java_com_wzt_yolov5_Yolact_init(JNIEnv *env, jclass clazz, jobject assetManager) {
+    if (Yolact::detector == nullptr) {
+        AAssetManager *mgr = AAssetManager_fromJava(env, assetManager);
+        Yolact::detector = new Yolact(mgr);
+    }
+}
+
+extern "C" JNIEXPORT jobjectArray JNICALL
+Java_com_wzt_yolov5_Yolact_detect(JNIEnv *env, jclass clazz, jobject image) {
+    auto result = Yolact::detector->detect_yolact(env, image);
+
+    auto yolact_mask = env->FindClass("com/wzt/yolov5/YolactMask");
+    auto cid = env->GetMethodID(yolact_mask, "<init>", "(FFFFIF[F[I)V");
+    jobjectArray ret = env->NewObjectArray(result.size(), yolact_mask, nullptr);
+    int i = 0;
+    for (auto &mask : result) {
+//        LOGD("jni yolact mask rect x:%f y:%f", mask.rect.x, mask.rect.y);
+//        LOGD("jni yolact maskdata size:%d", mask.maskdata.size());
+//        LOGD("jni yolact mask size:%d", mask.mask.cols * mask.mask.rows);
+        jintArray jintmask = matToBitmapArray(env, mask.mask);
+
+        env->PushLocalFrame(1);
+        jfloatArray maskdata = env->NewFloatArray(mask.maskdata.size());
+        jfloat *jnum = new jfloat[mask.maskdata.size()];
+        for (int i = 0; i < mask.maskdata.size(); ++i) {
+            *(jnum + i) = mask.maskdata[i];
+        }
+        env->SetFloatArrayRegion(maskdata, 0, mask.maskdata.size(), jnum);
+        delete[] jnum;
+
+        jobject obj = env->NewObject(yolact_mask, cid,
+                mask.rect.x, mask.rect.y, mask.rect.x + mask.rect.width, mask.rect.y + mask.rect.height,
+                mask.label, mask.prob, maskdata, jintmask);
+        obj = env->PopLocalFrame(obj);
+        env->SetObjectArrayElement(ret, i++, obj);
+    }
+    return ret;
 }
 

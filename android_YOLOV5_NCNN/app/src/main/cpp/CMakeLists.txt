@@ -25,6 +25,7 @@ add_library( # Sets the name of the library.
         YoloV5.cpp
         YoloV4.cpp
         SimplePose.cpp
+        Yolact.cpp
         )
 
 include_directories(
