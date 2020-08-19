@@ -371,7 +371,7 @@ public class MainActivity extends AppCompatActivity {
             int pl0 = joint_pairs[i % 16][0];
             int pl1 = joint_pairs[i % 16][1];
             // 人体左侧改为红线
-            if (pl1 % 15 == 0 || pl1 % 13 == 0 || pl1 % 11 == 0 || pl1 % 9 == 0 || ((pl1 % 7 == 0) && (pl0 % 5 == 0))) {
+            if ((pl0 % 2 == 1) && (pl1 % 2 == 1) && pl0 >= 5 && pl1 >= 5) {
                 keyPointPaint.setColor(Color.RED);
             }
             canvas.drawLine(keyPoints[joint_pairs[i % 16][0] + j].x, keyPoints[joint_pairs[i % 16][0] + j].y,
