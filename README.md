@@ -49,6 +49,7 @@ Note：<br/>
 </div>
 <div>
 <img width="270" height="500" src="https://github.com/WZTENG/YOLOv5_NCNN/blob/master/Screenshots/Android_Meizu16x_simple_pose.jpg"/>
+<img width="270" height="500" src="https://github.com/WZTENG/YOLOv5_NCNN/blob/master/Screenshots/Android_Meizu16x_yolact.jpg"/>
 </div>
 
 <div>
