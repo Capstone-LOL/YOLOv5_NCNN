@@ -1,6 +1,6 @@
 ## :rocket: 编码不易，点个star！ ##
 
-### 移动端目标检测，项目支持YOLOv5s、YOLOv4-tiny、MobileNetV2-YOLOv3-nano与Simple-Pose模型，摄像头实时捕获视频流进行检测。
+### 移动端NCNN部署，项目支持YOLOv5s、YOLOv4-tiny、MobileNetV2-YOLOv3-nano与Simple-Pose模型，摄像头实时捕获视频流进行检测。
 
 ## iOS:
 - Xcode 11.5
@@ -49,6 +49,7 @@ Note：<br/>
 </div>
 <div>
 <img width="270" height="500" src="https://github.com/WZTENG/YOLOv5_NCNN/blob/master/Screenshots/Android_Meizu16x_simple_pose.jpg"/>
+<img width="270" height="500" src="https://github.com/WZTENG/YOLOv5_NCNN/blob/master/Screenshots/Android_Meizu16x_yolact.jpg"/>
 </div>
 
 <div>
