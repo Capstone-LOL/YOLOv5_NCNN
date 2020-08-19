@@ -21,6 +21,8 @@ android {
             moduleName "WztNcnnJniLog" //编译后会生成 .so
             ldLibs "log", "z", "m"
         }
+
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -32,6 +34,17 @@ android {
         cmake {
             path "src/main/cpp/CMakeLists.txt"
             version "3.10.2"
+        }
+    }
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+
+    repositories {
+        flatDir {
+            dirs 'libs'
         }
     }
 }
@@ -50,5 +63,9 @@ dependencies {
     implementation "androidx.camera:camera-core:${camerax_version}"
     //noinspection GradleDependency
     implementation "androidx.camera:camera-camera2:${camerax_version}"
+
+    implementation 'com.android.support:multidex:1.0.3'
+    // crash
+    implementation 'com.zxy.android:recovery:1.0.0'
 
 }
