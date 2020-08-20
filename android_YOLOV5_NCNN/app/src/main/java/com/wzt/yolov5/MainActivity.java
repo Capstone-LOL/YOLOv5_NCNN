@@ -47,6 +47,8 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Locale;
 import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MainActivity extends AppCompatActivity {
@@ -83,6 +85,8 @@ public class MainActivity extends AppCompatActivity {
     int fps_count = 0;
 
     protected Bitmap mutableBitmap;
+
+    ExecutorService detectService = Executors.newSingleThreadExecutor();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -250,7 +254,11 @@ public class MainActivity extends AppCompatActivity {
             detecting.set(true);
             startTime = System.currentTimeMillis();
             final Bitmap bitmapsrc = imageToBitmap(image);  // 格式转换
-            Thread detectThread = new Thread(new Runnable() {
+            if (detectService == null) {
+                detecting.set(false);
+                return;
+            }
+            detectService.execute(new Runnable() {
                 @Override
                 public void run() {
                     Matrix matrix = new Matrix();
@@ -304,8 +312,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
                 }
-            }, "detect");
-            detectThread.start();
+            });
         }
 
         private Bitmap imageToBitmap(ImageProxy image) {
@@ -336,6 +343,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     protected Bitmap drawYolactMask(Bitmap mutableBitmap, YolactMask[] results) {
+        if (results == null || results.length <= 0) {
+            return mutableBitmap;
+        }
         Canvas canvas = new Canvas(mutableBitmap);
         final Paint maskPaint = new Paint();
         maskPaint.setAlpha(200);
@@ -347,8 +357,6 @@ public class MainActivity extends AppCompatActivity {
             if (mask.prob < 0.4f) {
                 continue;
             }
-//            mutableBitmap = Bitmap.createBitmap(mask.mask, 480, 640, Bitmap.Config.ARGB_8888);
-//            Log.d("wzt", "mask size:" + mask.mask.length);
             int index = 0;
             for (int y = 0; y < mutableBitmap.getHeight(); y++) {
                 for (int x = 0; x < mutableBitmap.getWidth(); x++) {
@@ -371,6 +379,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     protected Bitmap drawBoxRects(Bitmap mutableBitmap, Box[] results) {
+        if (results == null || results.length <= 0) {
+            return mutableBitmap;
+        }
         Canvas canvas = new Canvas(mutableBitmap);
         final Paint boxPaint = new Paint();
         boxPaint.setAlpha(200);
@@ -443,6 +454,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+        if (detectService != null) {
+            detectService.shutdown();
+            detectService = null;
+        }
         CameraX.unbindAll();
         super.onDestroy();
     }
