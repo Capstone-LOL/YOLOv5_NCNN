@@ -467,25 +467,26 @@ public class MainActivity extends AppCompatActivity {
         }
         detectPhoto.set(true);
         Bitmap image = getPicture(data.getData());
+        Bitmap mutableBitmap = image.copy(Bitmap.Config.ARGB_8888, true);
+
         Box[] result = null;
+        KeyPoint[] keyPoints = null;
+        YolactMask[] yolactMasks = null;
         if (USE_MODEL == YOLOV5S) {
             result = YOLOv5.detect(image, threshold, nms_threshold);
-        } else {
+        } else if (USE_MODEL == YOLOV4_TINY || USE_MODEL == MOBILENETV2_YOLOV3_NANO) {
             result = YOLOv4.detect(image, threshold, nms_threshold);
+        } else if (USE_MODEL == SIMPLE_POSE) {
+            keyPoints = SimplePose.detect(image);
+        } else if (USE_MODEL == YOLACT) {
+            yolactMasks = Yolact.detect(image);
         }
-        Bitmap mutableBitmap = image.copy(Bitmap.Config.ARGB_8888, true);
-        Canvas canvas = new Canvas(mutableBitmap);
-        final Paint boxPaint = new Paint();
-        boxPaint.setAlpha(200);
-        boxPaint.setStyle(Paint.Style.STROKE);
-        boxPaint.setStrokeWidth(4 * image.getWidth() / 800);
-        boxPaint.setTextSize(40 * image.getWidth() / 800);
-        for (Box box : result) {
-            boxPaint.setColor(box.getColor());
-            boxPaint.setStyle(Paint.Style.FILL);
-            canvas.drawText(box.getLabel() + String.format(Locale.CHINESE, " %.3f", box.getScore()), box.x0 + 3, box.y0 + 17, boxPaint);
-            boxPaint.setStyle(Paint.Style.STROKE);
-            canvas.drawRect(box.getRect(), boxPaint);
+        if (USE_MODEL == YOLOV5S || USE_MODEL == YOLOV4_TINY || USE_MODEL == MOBILENETV2_YOLOV3_NANO) {
+            mutableBitmap = drawBoxRects(mutableBitmap, result);
+        } else if (USE_MODEL == SIMPLE_POSE) {
+            mutableBitmap = drawPersonPose(mutableBitmap, keyPoints);
+        } else if (USE_MODEL == YOLACT) {
+            mutableBitmap = drawYolactMask(mutableBitmap, yolactMasks);
         }
         resultImageView.setImageBitmap(mutableBitmap);
     }
