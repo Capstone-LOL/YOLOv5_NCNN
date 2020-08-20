@@ -66,7 +66,8 @@ Java_com_wzt_yolov5_YOLOv4_init(JNIEnv *env, jclass, jobject assetManager, jbool
         if (v4tiny == 1) {
             YoloV4::detector = new YoloV4(mgr, "yolov4-tiny-opt.param", "yolov4-tiny-opt.bin");
         } else if (v4tiny == 0) {
-            YoloV4::detector = new YoloV4(mgr, "MobileNetV2-YOLOv3-Nano-coco.param", "MobileNetV2-YOLOv3-Nano-coco.bin");
+            YoloV4::detector = new YoloV4(mgr, "MobileNetV2-YOLOv3-Nano-coco.param",
+                                          "MobileNetV2-YOLOv3-Nano-coco.bin");
 //            YoloV4::detector = new YoloV4(mgr,"export_demo.param","export_demo.bin");
         }
     }
@@ -177,7 +178,7 @@ Java_com_wzt_yolov5_Yolact_detect(JNIEnv *env, jclass clazz, jobject image) {
 
         env->PushLocalFrame(1);
         jfloatArray maskdata = env->NewFloatArray(mask.maskdata.size());
-        jfloat *jnum = new jfloat[mask.maskdata.size()];
+        auto *jnum = new jfloat[mask.maskdata.size()];
         for (int i = 0; i < mask.maskdata.size(); ++i) {
             *(jnum + i) = mask.maskdata[i];
         }
@@ -185,8 +186,9 @@ Java_com_wzt_yolov5_Yolact_detect(JNIEnv *env, jclass clazz, jobject image) {
         delete[] jnum;
 
         jobject obj = env->NewObject(yolact_mask, cid,
-                mask.rect.x, mask.rect.y, mask.rect.x + mask.rect.width, mask.rect.y + mask.rect.height,
-                mask.label, mask.prob, maskdata, jcharmask);
+                                     mask.rect.x, mask.rect.y, mask.rect.x + mask.rect.width,
+                                     mask.rect.y + mask.rect.height,
+                                     mask.label, mask.prob, maskdata, jcharmask);
         obj = env->PopLocalFrame(obj);
         env->SetObjectArrayElement(ret, i++, obj);
     }
