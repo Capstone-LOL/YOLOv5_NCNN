@@ -5,6 +5,8 @@ YoloV4 *YoloV4::detector = nullptr;
 
 YoloV4::YoloV4(AAssetManager *mgr, const char *param, const char *bin) {
     Net = new ncnn::Net();
+    // opt 需要在加载前设置
+//    Net->opt.use_vulkan_compute = ncnn::get_gpu_count() > 0;  // gpu
     Net->opt.use_fp16_arithmetic = true;  // fp16运算加速
     Net->load_param(mgr, param);
     Net->load_model(mgr, bin);
