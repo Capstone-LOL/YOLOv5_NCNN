@@ -179,8 +179,8 @@ Java_com_wzt_yolov5_Yolact_detect(JNIEnv *env, jclass clazz, jobject image) {
         env->PushLocalFrame(1);
         jfloatArray maskdata = env->NewFloatArray(mask.maskdata.size());
         auto *jnum = new jfloat[mask.maskdata.size()];
-        for (int i = 0; i < mask.maskdata.size(); ++i) {
-            *(jnum + i) = mask.maskdata[i];
+        for (int j = 0; j < mask.maskdata.size(); ++j) {
+            *(jnum + j) = mask.maskdata[j];
         }
         env->SetFloatArrayRegion(maskdata, 0, mask.maskdata.size(), jnum);
         delete[] jnum;
