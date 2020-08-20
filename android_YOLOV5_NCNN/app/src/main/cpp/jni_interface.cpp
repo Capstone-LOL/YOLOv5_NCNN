@@ -123,10 +123,10 @@ Java_com_wzt_yolov5_SimplePose_detect(JNIEnv *env, jclass clazz, jobject image) 
 /*********************************************************************************************
                                          Yolact
  ********************************************************************************************/
-jintArray matToBitmapArray(JNIEnv *env, const cv::Mat &image) {
+jintArray matToBitmapIntArray(JNIEnv *env, const cv::Mat &image) {
     jintArray resultImage = env->NewIntArray(image.total());
-    jint *_data = new jint[image.total()];
-    for (int i = 0; i < image.total() / 3; i++) {
+    auto *_data = new jint[image.total()];
+    for (int i = 0; i < image.total() / 3; i++) {  // =========== 注意这里再确认下要不要除3
         char r = image.data[3 * i + 2];
         char g = image.data[3 * i + 1];
         char b = image.data[3 * i + 0];
@@ -135,6 +135,18 @@ jintArray matToBitmapArray(JNIEnv *env, const cv::Mat &image) {
                    (((jint) g << 8) & 0x0000FF00) + ((jint) b & 0x000000FF);
     }
     env->SetIntArrayRegion(resultImage, 0, image.total(), _data);
+    delete[] _data;
+    return resultImage;
+}
+
+jcharArray matToBitmapCharArray(JNIEnv *env, const cv::Mat &image) {
+    jcharArray resultImage = env->NewCharArray(image.total());
+    auto *_data = new jchar[image.total()];
+    for (int i = 0; i < image.total(); i++) {
+        char m = image.data[i];
+        _data[i] = (m & 0xFF);
+    }
+    env->SetCharArrayRegion(resultImage, 0, image.total(), _data);
     delete[] _data;
     return resultImage;
 }
@@ -152,14 +164,16 @@ Java_com_wzt_yolov5_Yolact_detect(JNIEnv *env, jclass clazz, jobject image) {
     auto result = Yolact::detector->detect_yolact(env, image);
 
     auto yolact_mask = env->FindClass("com/wzt/yolov5/YolactMask");
-    auto cid = env->GetMethodID(yolact_mask, "<init>", "(FFFFIF[F[I)V");
+//    auto cid = env->GetMethodID(yolact_mask, "<init>", "(FFFFIF[F[I)V");
+    auto cid = env->GetMethodID(yolact_mask, "<init>", "(FFFFIF[F[C)V");
     jobjectArray ret = env->NewObjectArray(result.size(), yolact_mask, nullptr);
     int i = 0;
     for (auto &mask : result) {
 //        LOGD("jni yolact mask rect x:%f y:%f", mask.rect.x, mask.rect.y);
 //        LOGD("jni yolact maskdata size:%d", mask.maskdata.size());
 //        LOGD("jni yolact mask size:%d", mask.mask.cols * mask.mask.rows);
-        jintArray jintmask = matToBitmapArray(env, mask.mask);
+//        jintArray jintmask = matToBitmapIntArray(env, mask.mask);
+        jcharArray jcharmask = matToBitmapCharArray(env, mask.mask);
 
         env->PushLocalFrame(1);
         jfloatArray maskdata = env->NewFloatArray(mask.maskdata.size());
@@ -172,7 +186,7 @@ Java_com_wzt_yolov5_Yolact_detect(JNIEnv *env, jclass clazz, jobject image) {
 
         jobject obj = env->NewObject(yolact_mask, cid,
                 mask.rect.x, mask.rect.y, mask.rect.x + mask.rect.width, mask.rect.y + mask.rect.height,
-                mask.label, mask.prob, maskdata, jintmask);
+                mask.label, mask.prob, maskdata, jcharmask);
         obj = env->PopLocalFrame(obj);
         env->SetObjectArrayElement(ret, i++, obj);
     }

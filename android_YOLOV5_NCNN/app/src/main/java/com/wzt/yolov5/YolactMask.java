@@ -9,7 +9,7 @@ class YolactMask {
     public int label;
     public float prob;
     public float[] maskdata;
-    public int[] mask;
+    public char[] mask;
 
     public static String[] labels={
             "background", "person", "bicycle", "car", "motorcycle", "airplane", "bus", "train", "truck", "boat", "traffic light",
@@ -44,7 +44,7 @@ class YolactMask {
         {96,  125, 139}
     };
 
-    public YolactMask(float left, float top, float right, float bottom, int label, float prob, float[] maskdata, int[] mask) {
+    public YolactMask(float left, float top, float right, float bottom, int label, float prob, float[] maskdata, char[] mask) {
         this.left = left;
         this.top = top;
         this.right = right;
@@ -117,11 +117,11 @@ class YolactMask {
         this.maskdata = maskdata;
     }
 
-    public int[] getMask() {
+    public char[] getMask() {
         return mask;
     }
 
-    public void setMask(int[] mask) {
+    public void setMask(char[] mask) {
         this.mask = mask;
     }
 }

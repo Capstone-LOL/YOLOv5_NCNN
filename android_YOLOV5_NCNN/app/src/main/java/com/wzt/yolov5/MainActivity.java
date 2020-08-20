@@ -348,22 +348,16 @@ public class MainActivity extends AppCompatActivity {
                 continue;
             }
 //            mutableBitmap = Bitmap.createBitmap(mask.mask, 480, 640, Bitmap.Config.ARGB_8888);
-//            Log.d("wzt", "mask[0]:" + Integer.toHexString(mask.mask[0]));
+//            Log.d("wzt", "mask size:" + mask.mask.length);
             int index = 0;
             for (int y = 0; y < mutableBitmap.getHeight(); y++) {
                 for (int x = 0; x < mutableBitmap.getWidth(); x++) {
-                    index = mutableBitmap.getWidth() * y + x;
-//                    if (!Integer.toHexString(mask.mask[index]).equals("ff000000")) {
-                    if (mask.mask[index] != -16777216) {
+                    if (mask.mask[index] != 0) {
                         maskPaint.setColor(mask.getColor());
                         maskPaint.setAlpha(100);
-                        // 数据感觉不是这么解析的
-//                        canvas.drawPoint(x, y, maskPaint);
-                        if ((x * 3) > mutableBitmap.getWidth() || (y * 3) > mutableBitmap.getHeight()) {
-                            continue;
-                        }
-                        canvas.drawCircle(x * 3, y * 3, 3, maskPaint);
+                        canvas.drawPoint(x, y, maskPaint);
                     }
+                    index++;
                 }
             }
             // 标签跟框放后面画，防止被 mask 挡住
