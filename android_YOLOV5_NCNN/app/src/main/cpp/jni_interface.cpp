@@ -126,7 +126,7 @@ Java_com_wzt_yolov5_SimplePose_detect(JNIEnv *env, jclass clazz, jobject image) 
 jintArray matToBitmapIntArray(JNIEnv *env, const cv::Mat &image) {
     jintArray resultImage = env->NewIntArray(image.total());
     auto *_data = new jint[image.total()];
-    for (int i = 0; i < image.total() / 3; i++) {  // =========== 注意这里再确认下要不要除3
+    for (int i = 0; i < image.total(); i++) {  // =========== 注意这里再确认下要不要除3
         char r = image.data[3 * i + 2];
         char g = image.data[3 * i + 1];
         char b = image.data[3 * i + 0];
