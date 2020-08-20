@@ -32,7 +32,7 @@ Select the model to be tested directly on the interface.
 * YOLOv4-tiny 使用默认尺寸，解码过程没有大量的 for 与 NMS 所以速度会快些。
 * YOLOv3-nano 与 v4-tiny 一样。
 * Simple-Pose 暂时只写了安卓版本，iOS目前还没有增加。内部原理是先检测人再用人的区域再次进行姿态检测，即2步过程。
-* Yolact 暂时只写了安卓版本，iOS目前还没有增加。（功能看上去没有问题，但感觉哪里遗漏了什么!）
+* Yolact 暂时只写了安卓版本，iOS目前还没有增加。
 
 Note：<br/>
 * 由于手机性能、图像尺寸等因素导致FPS在不同手机上相差比较大。该项目主要测试NCNN框架的使用，具体模型的转换可以去NCNN官方查看转换教程。<br/>
