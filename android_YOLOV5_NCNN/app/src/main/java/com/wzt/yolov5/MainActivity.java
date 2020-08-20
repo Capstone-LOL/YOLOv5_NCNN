@@ -353,11 +353,15 @@ public class MainActivity extends AppCompatActivity {
             for (int y = 0; y < mutableBitmap.getHeight(); y++) {
                 for (int x = 0; x < mutableBitmap.getWidth(); x++) {
                     index = mutableBitmap.getWidth() * y + x;
-                    if (!Integer.toHexString(mask.mask[index]).equals("ff000000")) {
+//                    if (!Integer.toHexString(mask.mask[index]).equals("ff000000")) {
+                    if (mask.mask[index] != -16777216) {
                         maskPaint.setColor(mask.getColor());
                         maskPaint.setAlpha(100);
                         // 数据感觉不是这么解析的
-//                        canvas.drawPoint(x * 3, y * 3, boxPaint);
+//                        canvas.drawPoint(x, y, maskPaint);
+                        if ((x * 3) > mutableBitmap.getWidth() || (y * 3) > mutableBitmap.getHeight()) {
+                            continue;
+                        }
                         canvas.drawCircle(x * 3, y * 3, 3, maskPaint);
                     }
                 }
