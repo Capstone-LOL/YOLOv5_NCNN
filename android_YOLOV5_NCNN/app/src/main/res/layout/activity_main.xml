@@ -18,23 +18,22 @@
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="0dp"
-        android:layout_height="400dp"
-        android:src="@color/imageResultbg"
-        android:background="@color/imageResultbg"
+        android:layout_height="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button"
-        app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@android:color/background_light" />
+        app:layout_constraintBottom_toTopOf="@+id/view_finder"
+        app:layout_constraintVertical_bias="1.0" />
 
     <TextureView
         android:id="@+id/view_finder"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintDimensionRatio="h,4:3"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        android:layout_height="150dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="h,4:3"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
@@ -92,7 +91,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
-        android:text="Thresh:x.xx,NMS:x.xx"
+        android:text="Thresh:-.--,NMS:-.--"
         app:layout_constraintBottom_toTopOf="@+id/imageView"
         app:layout_constraintStart_toEndOf="@+id/button"
         app:layout_constraintTop_toBottomOf="@+id/threshold_seek" />
@@ -101,7 +100,7 @@
         android:id="@+id/tv_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="000x000 FPS:x.xxx"
+        android:text="Please wait..."
         android:paddingLeft="5dp"
         android:paddingTop="2dp"
         app:layout_constraintStart_toEndOf="@+id/view_finder"
