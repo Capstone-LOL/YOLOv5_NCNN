@@ -14,8 +14,9 @@ JNIEXPORT jint JNI_OnLoad(JavaVM *vm, void *reserved) {
         YoloV5::hasGPU = true;
         YoloV4::hasGPU = true;
         SimplePose::hasGPU = true;
+        Yolact::hasGPU = true;
     }
-    return JNI_VERSION_1_4;
+    return JNI_VERSION_1_6;
 }
 
 JNIEXPORT void JNI_OnUnload(JavaVM *vm, void *reserved) {
