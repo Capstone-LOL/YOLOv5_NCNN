@@ -63,11 +63,11 @@ OCR::OCR(JNIEnv *env, jclass clazz, AAssetManager *mgr) {
     buffer[bufferSize] = 0;
     int numBytesRead = AAsset_read(asset, buffer, bufferSize);
 //    LOGD(": %s", buffer);
-    // 感觉这样遍历不是个好方法
+    // 感觉这样遍历不是个好方法，但目前没找到系统方法
     for (int i = 0; i < numBytesRead - 1;) {
         char a0 = buffer[i];
         char a1 = buffer[i + 1];
-        if (i == 0) {
+        if (i == 0) {  // 默认开头直接读取
             char *b = (char *) malloc(2);
             b[0] = buffer[i];
             b[1] = '\0';
@@ -76,6 +76,7 @@ OCR::OCR(JNIEnv *env, jclass clazz, AAssetManager *mgr) {
             free(b);
             i = i + 1;
         } else {
+            // 太菜暂时就这样吧
             if (a0 == '\r' && a1 == '\n') {
                 int j = i + 2;
                 do {
