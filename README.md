@@ -33,7 +33,7 @@ Select the model to be tested directly on the interface.
 * YOLOv3-nano 与 v4-tiny 一样。
 * Simple-Pose 暂时只写了安卓版本，iOS目前还没有增加。内部原理是先检测人再用人的区域再次进行姿态检测，即2步过程。
 * Yolact 暂时只写了安卓版本，iOS目前还没有增加。
-* ChineseOCR_lite 暂时只写了安卓版本，iOS目前还没有增加。
+* ChineseOCR_lite 暂时只写了安卓版本，iOS目前还没有增加。(需要注意的是偶尔会发生崩溃现象，有空修复一下)
 
 Note：<br/>
 * 由于手机性能、图像尺寸等因素导致FPS在不同手机上相差比较大。该项目主要测试NCNN框架的使用，具体模型的转换可以去NCNN官方查看转换教程。<br/>
