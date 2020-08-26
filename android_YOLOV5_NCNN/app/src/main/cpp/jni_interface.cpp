@@ -7,6 +7,7 @@
 #include "YoloV4.h"
 #include "SimplePose.h"
 #include "Yolact.h"
+#include "ocr.h"
 
 JNIEXPORT jint JNI_OnLoad(JavaVM *vm, void *reserved) {
     ncnn::create_gpu_instance();
@@ -15,6 +16,7 @@ JNIEXPORT jint JNI_OnLoad(JavaVM *vm, void *reserved) {
         YoloV4::hasGPU = true;
         SimplePose::hasGPU = true;
         Yolact::hasGPU = true;
+        OCR::hasGPU = true;
     }
     return JNI_VERSION_1_6;
 }
@@ -23,6 +25,10 @@ JNIEXPORT void JNI_OnUnload(JavaVM *vm, void *reserved) {
     ncnn::destroy_gpu_instance();
 }
 
+
+/*********************************************************************************************
+                                         Yolov5
+ ********************************************************************************************/
 extern "C" JNIEXPORT void JNICALL
 Java_com_wzt_yolov5_YOLOv5_init(JNIEnv *env, jclass, jobject assetManager) {
     if (YoloV5::detector == nullptr) {
@@ -195,4 +201,101 @@ Java_com_wzt_yolov5_Yolact_detect(JNIEnv *env, jclass clazz, jobject image) {
     }
     return ret;
 }
+
+
+/*********************************************************************************************
+                                         chineseocr-lite
+ ********************************************************************************************/
+jstring str2jstring(JNIEnv *env, const char *pat) {
+    //定义java String类 strClass
+    jclass strClass = (env)->FindClass("java/lang/String");
+    //获取String(byte[],String)的构造器,用于将本地byte[]数组转换为一个新String
+    jmethodID ctorID = (env)->GetMethodID(strClass, "<init>", "([BLjava/lang/String;)V");
+    //建立byte数组
+    jbyteArray bytes = (env)->NewByteArray(strlen(pat));
+    //将char* 转换为byte数组
+    (env)->SetByteArrayRegion(bytes, 0, strlen(pat), (jbyte *) pat);
+    // 设置String, 保存语言类型,用于byte数组转换至String时的参数
+    jstring encoding = (env)->NewStringUTF("UTF-8");
+    //将byte数组转换为java String,并输出
+    return (jstring) (env)->NewObject(strClass, ctorID, bytes, encoding);
+}
+
+std::string jstring2str(JNIEnv *env, jstring jstr) {
+    char *rtn = NULL;
+    jclass clsstring = env->FindClass("java/lang/String");
+    jstring strencode = env->NewStringUTF("UTF-8");
+    jmethodID mid = env->GetMethodID(clsstring, "getBytes", "(Ljava/lang/String;)[B");
+    jbyteArray barr = (jbyteArray) env->CallObjectMethod(jstr, mid, strencode);
+    jsize alen = env->GetArrayLength(barr);
+    jbyte *ba = env->GetByteArrayElements(barr, JNI_FALSE);
+    if (alen > 0) {
+        rtn = (char *) malloc(alen + 1);
+        memcpy(rtn, ba, alen);
+        rtn[alen] = 0;
+    }
+    env->ReleaseByteArrayElements(barr, ba, 0);
+    std::string stemp(rtn);
+    free(rtn);
+    return stemp;
+}
+
+extern "C" JNIEXPORT void JNICALL
+Java_com_wzt_yolov5_ocr_ChineseOCRLite_init(JNIEnv *env, jclass clazz, jobject assetManager) {
+    if (OCR::detector == nullptr) {
+        AAssetManager *mgr = AAssetManager_fromJava(env, assetManager);
+        OCR::detector = new OCR(env, clazz, mgr);
+    }
+}
+
+extern "C" JNIEXPORT jobjectArray JNICALL
+Java_com_wzt_yolov5_ocr_ChineseOCRLite_detect(JNIEnv *env, jclass clazz, jobject bitmap, jint short_size) {
+    auto ocrResult = OCR::detector->detect(env, bitmap, short_size);
+//    LOGD("jni ocr result size:%ld", ocrResult.size());
+//    LOGD("jni ocr ocrresult[0].pre_res size:%ld", ocrResult[0].pre_res.size());
+//    LOGD("jni ocr ocrresult[0][0]:%s", ocrResult[0].pre_res[0].c_str());
+
+    auto ocr_result = env->FindClass("com/wzt/yolov5/ocr/OCRResult");
+    auto cid = env->GetMethodID(ocr_result, "<init>", "([D[DLjava/lang/String;)V");
+    jobjectArray ret = env->NewObjectArray(ocrResult.size(), ocr_result, nullptr);
+    int i = 0;
+    for (auto &info : ocrResult) {
+        // boxScore
+        env->PushLocalFrame(1);
+        jdoubleArray boxScoreData = env->NewDoubleArray(1);
+        auto *bsnum = new jdouble[1];
+        for (int j = 0; j < 1; ++j) {
+            *(bsnum + j) = info.box_score;
+        }
+        env->SetDoubleArrayRegion(boxScoreData, 0, 1, bsnum);
+        delete[] bsnum;
+
+        // text
+        char *cp = new char;
+        for (auto & pre_re : info.pre_res) {
+            strcat(cp, pre_re.c_str());
+        }
+        jstring text = str2jstring(env, cp);
+        delete cp;
+
+        // boxs
+        jdoubleArray boxsData = env->NewDoubleArray(info.boxes.size() * 2);
+        auto *bnum = new jdouble[info.boxes.size() * 2];
+        for (int j = 0; j < info.boxes.size(); j++) {
+            *(bnum + j * 2) = info.boxes[j].x;
+            *(bnum + j * 2 + 1) = info.boxes[j].y;
+        }
+        env->SetDoubleArrayRegion(boxsData, 0, info.boxes.size() * 2, bnum);
+        delete[] bnum;
+
+        // 合并一下
+        jobject obj = env->NewObject(ocr_result, cid, boxScoreData, boxsData, text);
+        obj = env->PopLocalFrame(obj);
+        env->SetObjectArrayElement(ret, i++, obj);
+    }
+//    LOGD("jni ocr return");
+    return ret;
+}
+
+
 

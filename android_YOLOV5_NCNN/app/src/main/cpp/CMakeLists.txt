@@ -26,10 +26,16 @@ add_library( # Sets the name of the library.
         YoloV4.cpp
         SimplePose.cpp
         Yolact.cpp
+        ocr/clipper.cpp
+        ocr/NCNNDBNet.cpp
+        ocr/ocr.cpp
+        ocr/RRLib.cpp
+        ocr/ZUtil.cpp
         )
 
 include_directories(
         ncnnvulkan/include
+        ocr
 )
 # Searches for a specified prebuilt library and stores the path as a
 # variable. Because CMake includes system libraries in the search path by
