@@ -240,6 +240,7 @@ public class OcrActivity extends AppCompatActivity {
             returnBm = Bitmap.createBitmap(bm, 0, 0, bm.getWidth(),
                     bm.getHeight(), matrix, true);
         } catch (OutOfMemoryError e) {
+            e.printStackTrace();
         }
         if (returnBm == null) {
             returnBm = bm;
@@ -272,7 +273,7 @@ public class OcrActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 showText = isChecked;
-                Toast.makeText(OcrActivity.this, showText ? "开启文本显示" : "关闭文本显示", Toast.LENGTH_SHORT).show();
+                Toast.makeText(OcrActivity.this, showText ? "显示识别文字" : "不显示识别文字", Toast.LENGTH_SHORT).show();
             }
         });
     }
