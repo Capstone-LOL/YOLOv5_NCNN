@@ -8,8 +8,8 @@
 - iPhone 6sp 13.5.1
 
 ## Android:
-- android studio 4.0
-- win10 1909
+- Android Studio 4.0
+- Win10 1909
 - meizu 16x 8.1.0
 
 部分代码参考自：sunnyden 的开源项目。
@@ -39,6 +39,7 @@ Note：<br/>
 * 由于手机性能、图像尺寸等因素导致FPS在不同手机上相差比较大。该项目主要测试NCNN框架的使用，具体模型的转换可以去NCNN官方查看转换教程。<br/>
 * 增加 Simple-Pose 模型时增加了opencv，由于库太大只保留 arm64-v8a/armeabi-v7a 有需要的自己去官方下载。
 * ncnn暂时使用vulkan版本，在加载前需要打开加速，本项目中没有打开。如果要用ncnn版本需要修改CMakeLists.txt配置。
+* AS版本不一样可能编译会有各种问题，如果编译错误无法解决、建议使用AS4.0以上版本尝试一下。
 
 已知部分ncnn大佬网名：.... nihui qiuqiu
 
