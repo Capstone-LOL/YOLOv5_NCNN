@@ -17,6 +17,7 @@ public class WelcomeActivity extends AppCompatActivity {
     private Button simplepose;
     private Button yolact;
     private Button chineseocrlite;
+    private Button enet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +79,16 @@ public class WelcomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(WelcomeActivity.this, OcrActivity.class);
+                WelcomeActivity.this.startActivity(intent);
+            }
+        });
+
+        enet = findViewById(R.id.btn_start_detect7);
+        enet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainActivity.USE_MODEL = MainActivity.ENET;
+                Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
                 WelcomeActivity.this.startActivity(intent);
             }
         });

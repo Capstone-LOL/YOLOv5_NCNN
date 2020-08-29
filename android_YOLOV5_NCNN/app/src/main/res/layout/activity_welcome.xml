@@ -63,4 +63,12 @@
         android:textAllCaps="false"
         app:layout_constraintTop_toBottomOf="@id/btn_start_detect5" />
 
+    <Button
+        android:id="@+id/btn_start_detect7"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="ENet"
+        android:textAllCaps="false"
+        app:layout_constraintTop_toBottomOf="@id/btn_start_detect6" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

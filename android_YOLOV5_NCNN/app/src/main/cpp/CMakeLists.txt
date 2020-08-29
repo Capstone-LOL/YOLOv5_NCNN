@@ -31,6 +31,7 @@ add_library( # Sets the name of the library.
         ocr/ocr.cpp
         ocr/RRLib.cpp
         ocr/ZUtil.cpp
+        ENet.cpp
         )
 
 include_directories(

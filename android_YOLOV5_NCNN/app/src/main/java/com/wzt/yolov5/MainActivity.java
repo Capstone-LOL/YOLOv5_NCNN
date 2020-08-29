@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
     public static int MOBILENETV2_YOLOV3_NANO = 3;
     public static int SIMPLE_POSE = 4;
     public static int YOLACT = 5;
+    public static int ENET = 6;
 
     public static int USE_MODEL = MOBILENETV2_YOLOV3_NANO;
 
@@ -112,6 +113,8 @@ public class MainActivity extends AppCompatActivity {
             SimplePose.init(getAssets());
         } else if (USE_MODEL == YOLACT) {
             Yolact.init(getAssets());
+        } else if (USE_MODEL == ENET) {
+            ENet.init(getAssets());
         }
         resultImageView = findViewById(R.id.imageView);
         thresholdTextview = findViewById(R.id.valTxtView);
@@ -270,6 +273,7 @@ public class MainActivity extends AppCompatActivity {
                     Box[] result = null;
                     KeyPoint[] keyPoints = null;
                     YolactMask[] yolactMasks = null;
+                    float[] enetMasks = null;
                     if (USE_MODEL == YOLOV5S) {
                         result = YOLOv5.detect(bitmap, threshold, nms_threshold);
                     } else if (USE_MODEL == YOLOV4_TINY || USE_MODEL == MOBILENETV2_YOLOV3_NANO) {
@@ -278,8 +282,10 @@ public class MainActivity extends AppCompatActivity {
                         keyPoints = SimplePose.detect(bitmap);
                     } else if (USE_MODEL == YOLACT) {
                         yolactMasks = Yolact.detect(bitmap);
+                    } else if (USE_MODEL == ENET) {
+                        enetMasks = ENet.detect(bitmap);
                     }
-                    if (result == null && keyPoints == null && yolactMasks == null) {
+                    if (result == null && keyPoints == null && yolactMasks == null && enetMasks == null) {
                         detecting.set(false);
                         return;
                     }
@@ -290,6 +296,8 @@ public class MainActivity extends AppCompatActivity {
                         mutableBitmap = drawPersonPose(mutableBitmap, keyPoints);
                     } else if (USE_MODEL == YOLACT) {
                         mutableBitmap = drawYolactMask(mutableBitmap, yolactMasks);
+                    } else if (USE_MODEL == ENET) {
+                        mutableBitmap = drawENetMask(mutableBitmap, enetMasks);
                     }
                     runOnUiThread(new Runnable() {
                         @Override
@@ -340,6 +348,29 @@ public class MainActivity extends AppCompatActivity {
             return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
         }
 
+    }
+
+    protected Bitmap drawENetMask(Bitmap mutableBitmap, float[] results) {
+        if (results == null || results.length <= 0) {
+            return mutableBitmap;
+        }
+        Canvas canvas = new Canvas(mutableBitmap);
+        final Paint maskPaint = new Paint();
+        maskPaint.setStyle(Paint.Style.STROKE);
+        maskPaint.setStrokeWidth(4 * mutableBitmap.getWidth() / 800);
+        maskPaint.setTextSize(40 * mutableBitmap.getWidth() / 800);
+        float mask = 0;
+        for (int y = 0; y < mutableBitmap.getHeight(); y++) {
+            for (int x = 0; x < mutableBitmap.getWidth(); x++) {
+                mask = results[y * mutableBitmap.getWidth() + x];
+                Random random = new Random((long) (mask));
+                int color = Color.argb(255, random.nextInt(256), 125, random.nextInt(256));
+                maskPaint.setColor(color);
+                maskPaint.setAlpha(100);
+                canvas.drawPoint(x, y, maskPaint);
+            }
+        }
+        return mutableBitmap;
     }
 
     protected Bitmap drawYolactMask(Bitmap mutableBitmap, YolactMask[] results) {
@@ -410,6 +441,8 @@ public class MainActivity extends AppCompatActivity {
             modelName = "Simple-Pose";
         } else if (USE_MODEL == YOLACT) {
             modelName = "Yolact";
+        } else if (USE_MODEL == ENET) {
+            modelName = "ENet";
         }
         return modelName;
     }
@@ -487,6 +520,7 @@ public class MainActivity extends AppCompatActivity {
         Box[] result = null;
         KeyPoint[] keyPoints = null;
         YolactMask[] yolactMasks = null;
+        float[] enetMasks = null;
         if (USE_MODEL == YOLOV5S) {
             result = YOLOv5.detect(image, threshold, nms_threshold);
         } else if (USE_MODEL == YOLOV4_TINY || USE_MODEL == MOBILENETV2_YOLOV3_NANO) {
@@ -495,6 +529,8 @@ public class MainActivity extends AppCompatActivity {
             keyPoints = SimplePose.detect(image);
         } else if (USE_MODEL == YOLACT) {
             yolactMasks = Yolact.detect(image);
+        } else if (USE_MODEL == ENET) {
+            enetMasks = ENet.detect(image);
         }
         if (USE_MODEL == YOLOV5S || USE_MODEL == YOLOV4_TINY || USE_MODEL == MOBILENETV2_YOLOV3_NANO) {
             mutableBitmap = drawBoxRects(mutableBitmap, result);
@@ -502,6 +538,8 @@ public class MainActivity extends AppCompatActivity {
             mutableBitmap = drawPersonPose(mutableBitmap, keyPoints);
         } else if (USE_MODEL == YOLACT) {
             mutableBitmap = drawYolactMask(mutableBitmap, yolactMasks);
+        } else if (USE_MODEL == ENET) {
+            mutableBitmap = drawENetMask(mutableBitmap, enetMasks);
         }
         resultImageView.setImageBitmap(mutableBitmap);
     }

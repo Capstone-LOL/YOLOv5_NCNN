@@ -8,6 +8,8 @@
 #include "SimplePose.h"
 #include "Yolact.h"
 #include "ocr.h"
+#include "ENet.h"
+
 
 JNIEXPORT jint JNI_OnLoad(JavaVM *vm, void *reserved) {
     ncnn::create_gpu_instance();
@@ -272,7 +274,7 @@ Java_com_wzt_yolov5_ocr_ChineseOCRLite_detect(JNIEnv *env, jclass clazz, jobject
 
         // text
         char *cp = new char;
-        for (auto & pre_re : info.pre_res) {
+        for (auto &pre_re : info.pre_res) {
             strcat(cp, pre_re.c_str());
         }
         jstring text = str2jstring(env, cp);
@@ -298,4 +300,36 @@ Java_com_wzt_yolov5_ocr_ChineseOCRLite_detect(JNIEnv *env, jclass clazz, jobject
 }
 
 
+/*********************************************************************************************
+                                            ENet
+ ********************************************************************************************/
+extern "C" JNIEXPORT void JNICALL
+Java_com_wzt_yolov5_ENet_init(JNIEnv *env, jclass, jobject assetManager) {
+    if (ENet::detector == nullptr) {
+        AAssetManager *mgr = AAssetManager_fromJava(env, assetManager);
+        ENet::detector = new ENet(mgr);
+    }
+}
+
+extern "C" JNIEXPORT jfloatArray JNICALL
+Java_com_wzt_yolov5_ENet_detect(JNIEnv *env, jclass, jobject image) {
+    auto result = ENet::detector->detect_enet(env, image);
+
+    int output_w = result.w;
+    int output_h = result.h;
+//    LOGD("jni enet output w:%d h:%d", output_w, output_h);
+    auto *output = new jfloat[output_w * output_h];
+    for (int h = 0; h < output_h; h++) {
+        for (int w = 0; w < output_w; w++) {
+            output[h * output_w + w] = result.row(h)[w];
+        }
+    }
+    jfloatArray jfloats = env->NewFloatArray(output_w * output_h);
+    if (jfloats == nullptr) {
+        return nullptr;
+    }
+    env->SetFloatArrayRegion(jfloats, 0, output_w * output_h, output);
+    delete[] output;
+    return jfloats;
+}
 
