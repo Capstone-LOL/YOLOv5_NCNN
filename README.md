@@ -35,6 +35,7 @@ Select the model to be tested directly on the interface.
 * Yolact 暂时只写了安卓版本，iOS目前还没有增加。
 * ChineseOCR_lite 暂时只写了安卓版本，iOS目前还没有增加。(需要注意的是偶尔会发生崩溃现象，有空修复一下)
 * ENet 暂时只写了安卓版本，iOS目前还没有增加。(由于模型太小所以分割效果比较差，可以自行更换更强的网络)
+* Landmark106 暂时只写了安卓版本，iOS目前还没有增加。内部原理是先检测脸再用脸的区域再次进行关键点检测，即2步过程。
 
 Note：<br/>
 * 由于手机性能、图像尺寸等因素导致FPS在不同手机上相差比较大。该项目主要测试NCNN框架的使用，具体模型的转换可以去NCNN官方查看转换教程。<br/>
@@ -59,6 +60,7 @@ Note：<br/>
 <div>
 <img width="270" height="500" src="https://github.com/WZTENG/YOLOv5_NCNN/blob/master/Screenshots/Android_meizu16x_chineseocr_lite_02.jpg"/>
 <img width="270" height="500" src="https://github.com/WZTENG/YOLOv5_NCNN/blob/master/Screenshots/Android_Meizu16x_ENet.jpg"/>
+<img width="270" height="500" src="https://github.com/WZTENG/YOLOv5_NCNN/blob/master/Screenshots/Android_Meizu16x_yoloface500k-landmark106.jpg"/>
 </div>
 
 <div>
