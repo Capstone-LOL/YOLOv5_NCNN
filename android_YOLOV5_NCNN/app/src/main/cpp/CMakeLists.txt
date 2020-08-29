@@ -32,6 +32,7 @@ add_library( # Sets the name of the library.
         ocr/RRLib.cpp
         ocr/ZUtil.cpp
         ENet.cpp
+        FaceLandmark.cpp
         )
 
 include_directories(

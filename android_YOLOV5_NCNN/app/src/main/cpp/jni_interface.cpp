@@ -9,6 +9,7 @@
 #include "Yolact.h"
 #include "ocr.h"
 #include "ENet.h"
+#include "FaceLandmark.h"
 
 
 JNIEXPORT jint JNI_OnLoad(JavaVM *vm, void *reserved) {
@@ -19,6 +20,8 @@ JNIEXPORT jint JNI_OnLoad(JavaVM *vm, void *reserved) {
         SimplePose::hasGPU = true;
         Yolact::hasGPU = true;
         OCR::hasGPU = true;
+        ENet::hasGPU = true;
+        FaceLandmark::hasGPU = true;
     }
     return JNI_VERSION_1_6;
 }
@@ -331,5 +334,35 @@ Java_com_wzt_yolov5_ENet_detect(JNIEnv *env, jclass, jobject image) {
     env->SetFloatArrayRegion(jfloats, 0, output_w * output_h, output);
     delete[] output;
     return jfloats;
+}
+
+/*********************************************************************************************
+                                         Face_Landmark
+ ********************************************************************************************/
+
+extern "C" JNIEXPORT void JNICALL
+Java_com_wzt_yolov5_FaceLandmark_init(JNIEnv *env, jclass clazz, jobject assetManager) {
+    if (FaceLandmark::detector == nullptr) {
+        AAssetManager *mgr = AAssetManager_fromJava(env, assetManager);
+        FaceLandmark::detector = new FaceLandmark(mgr);
+    }
+}
+
+extern "C" JNIEXPORT jobjectArray JNICALL
+Java_com_wzt_yolov5_FaceLandmark_detect(JNIEnv *env, jclass clazz, jobject image) {
+    auto result = FaceLandmark::detector->detect(env, image);
+
+    auto box_cls = env->FindClass("com/wzt/yolov5/FaceKeyPoint");
+    auto cid = env->GetMethodID(box_cls, "<init>", "(FF)V");
+    jobjectArray ret = env->NewObjectArray(result.size(), box_cls, nullptr);
+    int i = 0;
+    for (auto &keypoint : result) {
+        env->PushLocalFrame(1);
+        jobject obj = env->NewObject(box_cls, cid, keypoint.p.x, keypoint.p.y);
+        obj = env->PopLocalFrame(obj);
+        env->SetObjectArrayElement(ret, i++, obj);
+    }
+    return ret;
+
 }
 
