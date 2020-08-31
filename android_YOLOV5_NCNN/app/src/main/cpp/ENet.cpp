@@ -65,7 +65,7 @@ ncnn::Mat ENet::detect_enet(JNIEnv *env, jobject image) {
 
         for (int j = 0; j < mask_w; j++) {
             int maxindex = 0;
-            float maxvalue = 0;
+            float maxvalue = -1000;
             for (int n = 0; n < mask_c; n++) {
                 if (pChn[n][j] > maxvalue) {
                     maxindex = n;

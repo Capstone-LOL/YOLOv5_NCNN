@@ -473,7 +473,7 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < keyPoints.length; i++) {
             // 其它随机颜色
             Random random = new Random(i / 106 + 2020);
-            int color = Color.argb(255,random.nextInt(256), 125, random.nextInt(256));
+            int color = Color.argb(255, random.nextInt(256), 125, random.nextInt(256));
             keyPointPaint.setColor(color);
             canvas.drawPoint(keyPoints[i].x, keyPoints[i].y, keyPointPaint);
         }
@@ -508,7 +508,7 @@ public class MainActivity extends AppCompatActivity {
             j = (i / 17) * 17;
             // 其它随机颜色
             Random random = new Random(j + 2020);
-            color = Color.argb(255,random.nextInt(256), random.nextInt(256),random.nextInt(256));
+            color = Color.argb(255, random.nextInt(256), random.nextInt(256), random.nextInt(256));
             keyPointPaint.setColor(color);
         }
         keyPointPaint.setColor(Color.GREEN);
