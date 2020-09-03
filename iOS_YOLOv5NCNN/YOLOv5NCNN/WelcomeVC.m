@@ -31,12 +31,14 @@
     [_btnYolov5s addTarget:self action:@selector(pressYolov5s:) forControlEvents:UIControlEventTouchUpInside];
 }
 
+// yolov5s
 - (void)pressYolov5s:(UIButton *)btn {
     ViewController *vc = [[ViewController alloc] init];
     vc.USE_MODEL = W_YOLOV5S;
     [self.navigationController pushViewController:vc animated:YES];
 }
 
+// yolov4-tiny
 - (void)pressYolov4tiny:(UIButton *)btn {
     ViewController *vc = [[ViewController alloc] init];
     vc.USE_MODEL = W_YOLOV4TINY;
