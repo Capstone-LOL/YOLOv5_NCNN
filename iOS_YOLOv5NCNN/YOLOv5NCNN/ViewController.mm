@@ -2,7 +2,7 @@
 //  ViewController.m
 //  YOLOv5NCNN
 //
-//  Created by TURUI on 2020/7/5.
+//  Created by WZTENG on 2020/7/5.
 //  Copyright © 2020 TENG. All rights reserved.
 //
 
@@ -42,7 +42,7 @@
 @property YoloV4 *yolov4;
 @property (assign, atomic) Boolean isDetecting;
 
-@property (assign, nonatomic) Boolean USE_YOLOV5;  // YES:YOLOv5  NO:YOLOv4-tiny
+//@property (assign, nonatomic) Boolean USE_YOLOV5;  // YES:YOLOv5  NO:YOLOv4-tiny
 
 
 @end
@@ -59,10 +59,20 @@
     } else {
         // 有权限
     }
+    [self initTitleName];
     self.isDetecting = NO;
-    self.USE_YOLOV5 = NO;  // YES:YOLOv5  NO:YOLOv4-tiny
     [self initView];
     [self setCameraUI];
+}
+
+- (void)initTitleName {
+    if (self.USE_MODEL == W_YOLOV5S) {
+        self.title = @"YOLOv5s";
+    } else if (self.USE_MODEL == W_YOLOV4TINY) {
+        self.title = @"YOLOV4-tiny";
+    } else {
+        self.title = @"ohhhhhh";
+    }
 }
 
 - (CGFloat)degreesToRadians:(CGFloat)degrees {
@@ -154,10 +164,10 @@
 - (void)initView {
     self.threshold = 0.3f;
     self.nms_threshold = 0.7f;
-    self.imageView.image = [UIImage imageNamed:@"000000000650.jpg"];
+//    self.imageView.image = [UIImage imageNamed:@"000000000650.jpg"];
     [self.nmsSlider addTarget:self action:@selector(nmsChange:forEvent:) forControlEvents:UIControlEventValueChanged];
     [self.thresholdSlider addTarget:self action:@selector(nmsChange:forEvent:) forControlEvents:UIControlEventValueChanged];
-    if (!self.USE_YOLOV5) {
+    if (!(self.USE_MODEL == W_YOLOV5S)) {
         self.nmsSlider.enabled = NO;
         self.thresholdSlider.enabled = NO;
     }
@@ -199,7 +209,7 @@
     // load image
     UIImage* image = [UIImage imageNamed:@"000000000650.jpg"];
     self.imageView.image = image;
-    if (self.USE_YOLOV5) {
+    if (self.USE_MODEL == W_YOLOV5S) {
         YoloV5 *yolo = new YoloV5("", "");
         std::vector<BoxInfo> result = yolo->dectect(image, self.threshold, self.nms_threshold);
         printf("result size:%lu", result.size());
@@ -211,7 +221,7 @@
         delete yolo;
         self.resultLabel.text = detect_result;
         self.imageView.image = [self drawBox:self.imageView image:image boxs:result];
-    } else {
+    } else if (self.USE_MODEL == W_YOLOV4TINY) {
         YoloV4 *yolo = new YoloV4("", "");
         std::vector<BoxInfo> result = yolo->detectv4(image, self.threshold, self.nms_threshold);
         printf("result size:%lu", result.size());
@@ -227,14 +237,14 @@
 }
 
 - (void)detectImage:(UIImage *)image {
-    if (!self.yolo && self.USE_YOLOV5) {
+    if (!self.yolo && self.USE_MODEL == 1) {
         NSLog(@"new YoloV5");
         self.yolo = new YoloV5("", "");
-    } else if (!self.yolov4) {
+    } else if (!self.yolov4 && self.USE_MODEL == 2) {
         NSLog(@"new YoloV4");
         self.yolov4 = new YoloV4("", "");
     }
-    if (self.USE_YOLOV5) {
+    if (self.USE_MODEL == W_YOLOV5S) {
         NSDate *start = [NSDate date];
         std::vector<BoxInfo> result = self.yolo->dectect(image, self.threshold, self.nms_threshold);
         NSString *detect_result = @"";
@@ -250,7 +260,7 @@
             weakSelf.resultLabel.text = info;
             weakSelf.imageView.image = [weakSelf drawBox:weakSelf.imageView image:image boxs:result];
         });
-    } else {
+    } else if (self.USE_MODEL == W_YOLOV4TINY) {
         NSDate *start = [NSDate date];
         std::vector<BoxInfo> result = self.yolov4->detectv4(image, self.threshold, self.nms_threshold);
         NSString *detect_result = @"";
@@ -283,10 +293,10 @@
         srand(box.label + 2020);
         UIColor *color = [UIColor colorWithRed:rand()%256/255.0f green:rand()%256/255.0f blue:rand()%255/255.0f alpha:1.0f];
         CGContextAddRect(context, CGRectMake(box.x1, box.y1, box.x2 - box.x1, box.y2 - box.y1));
-        if (self.USE_YOLOV5) {
+        if (self.USE_MODEL == W_YOLOV5S) {
             NSString *name = [NSString stringWithFormat:@"%s %.3f", self.yolo->labels[box.label].c_str(), box.score];
             [name drawAtPoint:CGPointMake(box.x1, box.y1) withAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:35], NSParagraphStyleAttributeName:style, NSForegroundColorAttributeName:color}];
-        } else {
+        } else if (self.USE_MODEL == W_YOLOV4TINY) {
             NSString *name = [NSString stringWithFormat:@"%s %.3f", self.yolov4->labels[box.label].c_str(), box.score];
             [name drawAtPoint:CGPointMake(box.x1, box.y1) withAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:35], NSParagraphStyleAttributeName:style, NSForegroundColorAttributeName:color}];
         }

@@ -21,6 +21,7 @@
 		5F50870724B300720088E326 /* ncnn.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F50870624B300720088E326 /* ncnn.framework */; };
 		5F50870924B3007C0088E326 /* openmp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F50870824B3007C0088E326 /* openmp.framework */; };
 		5F50870C24B309F30088E326 /* YoloV5.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5F50870A24B309F30088E326 /* YoloV5.mm */; };
+		5F87CD3124FFA41C00B60518 /* WelcomeVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F87CD3024FFA41C00B60518 /* WelcomeVC.m */; };
 		5FD3E2CB24B3FDF70049450B /* 000000000650.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5FD3E2CA24B3FDF70049450B /* 000000000650.jpg */; };
 		5FD3E2D924B417AA0049450B /* ELCameraControlCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 5FD3E2D524B417AA0049450B /* ELCameraControlCapture.m */; };
 		5FD3E2DA24B417AA0049450B /* ELCameraBaseCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 5FD3E2D824B417AA0049450B /* ELCameraBaseCapture.m */; };
@@ -31,7 +32,7 @@
 		5F37E19D24B97F9600BF9E94 /* yolov4-tiny-opt.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = "yolov4-tiny-opt.bin"; sourceTree = "<group>"; };
 		5F37E1A024B97FD900BF9E94 /* YoloV4.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = YoloV4.mm; sourceTree = "<group>"; };
 		5F37E1A124B97FD900BF9E94 /* YoloV4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YoloV4.h; sourceTree = "<group>"; };
-		5F40C2A724B1647800C84041 /* YOLONCNN.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YOLONCNN.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		5F40C2A724B1647800C84041 /* NCNN Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "NCNN Demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5F40C2AA24B1647800C84041 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		5F40C2AB24B1647800C84041 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		5F40C2B024B1647800C84041 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
@@ -47,6 +48,8 @@
 		5F50870824B3007C0088E326 /* openmp.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = openmp.framework; sourceTree = "<group>"; };
 		5F50870A24B309F30088E326 /* YoloV5.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = YoloV5.mm; sourceTree = "<group>"; };
 		5F50870B24B309F30088E326 /* YoloV5.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YoloV5.h; sourceTree = "<group>"; };
+		5F87CD2F24FFA41C00B60518 /* WelcomeVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WelcomeVC.h; sourceTree = "<group>"; };
+		5F87CD3024FFA41C00B60518 /* WelcomeVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WelcomeVC.m; sourceTree = "<group>"; };
 		5FD3E2CA24B3FDF70049450B /* 000000000650.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 000000000650.jpg; sourceTree = "<group>"; };
 		5FD3E2D524B417AA0049450B /* ELCameraControlCapture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ELCameraControlCapture.m; sourceTree = "<group>"; };
 		5FD3E2D624B417AA0049450B /* ELCameraControlCapture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ELCameraControlCapture.h; sourceTree = "<group>"; };
@@ -79,7 +82,7 @@
 		5F40C2A824B1647800C84041 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				5F40C2A724B1647800C84041 /* YOLONCNN.app */,
+				5F40C2A724B1647800C84041 /* NCNN Demo.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -102,6 +105,8 @@
 				5F50870B24B309F30088E326 /* YoloV5.h */,
 				5F37E1A024B97FD900BF9E94 /* YoloV4.mm */,
 				5F37E1A124B97FD900BF9E94 /* YoloV4.h */,
+				5F87CD2F24FFA41C00B60518 /* WelcomeVC.h */,
+				5F87CD3024FFA41C00B60518 /* WelcomeVC.m */,
 			);
 			path = YOLOv5NCNN;
 			sourceTree = "<group>";
@@ -155,7 +160,7 @@
 			);
 			name = YOLOv5NCNN;
 			productName = YOLOv5NCNN;
-			productReference = 5F40C2A724B1647800C84041 /* YOLONCNN.app */;
+			productReference = 5F40C2A724B1647800C84041 /* NCNN Demo.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -216,6 +221,7 @@
 				5FD3E2DA24B417AA0049450B /* ELCameraBaseCapture.m in Sources */,
 				5FD3E2D924B417AA0049450B /* ELCameraControlCapture.m in Sources */,
 				5F40C2B224B1647800C84041 /* ViewController.mm in Sources */,
+				5F87CD3124FFA41C00B60518 /* WelcomeVC.m in Sources */,
 				5F37E1A224B97FD900BF9E94 /* YoloV4.mm in Sources */,
 				5F40C2AC24B1647800C84041 /* AppDelegate.m in Sources */,
 				5F50870C24B309F30088E326 /* YoloV5.mm in Sources */,
@@ -369,7 +375,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.teng.YOLONCNN;
-				PRODUCT_NAME = YOLONCNN;
+				PRODUCT_NAME = "NCNN Demo";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALID_ARCHS = "arm64 armv7";
 			};
@@ -393,7 +399,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.teng.YOLONCNN;
-				PRODUCT_NAME = YOLONCNN;
+				PRODUCT_NAME = "NCNN Demo";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALID_ARCHS = "arm64 armv7";
 			};

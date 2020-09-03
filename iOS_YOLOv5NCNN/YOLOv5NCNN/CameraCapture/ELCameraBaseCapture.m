@@ -79,7 +79,8 @@
     if (!_captureSession) {
         _captureSession = [[AVCaptureSession alloc] init];
         //设置session采集质量 
-        _captureSession.sessionPreset = AVCaptureSessionPresetPhoto;
+//        _captureSession.sessionPreset = AVCaptureSessionPresetPhoto;
+        _captureSession.sessionPreset = AVCaptureSessionPreset1280x720;
     }
     return _captureSession;
 }

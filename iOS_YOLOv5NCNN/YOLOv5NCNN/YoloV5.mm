@@ -2,7 +2,7 @@
 //  YoloV5.cpp
 //  YOLOv5NCNN
 //
-//  Created by TURUI on 2020/7/6.
+//  Created by WZTENG on 2020/7/6.
 //  Copyright © 2020 TENG. All rights reserved.
 //
 
