@@ -80,7 +80,7 @@
         _captureSession = [[AVCaptureSession alloc] init];
         //设置session采集质量 
 //        _captureSession.sessionPreset = AVCaptureSessionPresetPhoto;
-        _captureSession.sessionPreset = AVCaptureSessionPreset1280x720;
+        _captureSession.sessionPreset = AVCaptureSessionPreset640x480;
     }
     return _captureSession;
 }
