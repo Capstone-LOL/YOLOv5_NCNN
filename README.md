@@ -64,6 +64,6 @@ Note：<br/>
 </div>
 
 <div>
-<img width="270" height="500" src="https://github.com/WZTENG/YOLOv5_NCNN/blob/master/Screenshots/iOS_iPhone6s_yolov4_tiny.jpg"/>
+<img width="270" height="500" src="https://github.com/WZTENG/YOLOv5_NCNN/blob/master/Screenshots/iOS_iPhone6sp_yolov4_tiny.jpg"/>
 <div/>
 
