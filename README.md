@@ -1,6 +1,6 @@
-## :rocket: 编码不易，点个star！ ##
+## :rocket: If it helps you, click a star！ ##
 
-### 移动端NCNN部署，项目支持YOLOv5s、YOLOv4-tiny、MobileNetV2-YOLOv3-nano、Simple-Pose、Yolact、ChineseOCR-lite、ENet与Landmark106模型，摄像头实时捕获视频流进行检测。
+### Ncnn deployment on mobile,support:YOLOv5s,YOLOv4-tiny,MobileNetV2-YOLOv3-nano,Simple-Pose,Yolact,ChineseOCR-lite,ENet and Landmark106 on camera.
 
 ## iOS:
 - Xcode 11.5
@@ -12,8 +12,7 @@
 - Win10 1909
 - meizu 16x 8.1.0
 
-部分代码参考自：sunnyden 的开源项目。
-安卓已经增加权限申请，但如果还是闪退请手动确认下相关权限是否允许。
+Android has added permission requests, but if it still crashes, please manually confirm whether the relevant permissions are allowed.
 
 > iOS
 ```code
@@ -27,25 +26,25 @@ YOLOv3-nano: Due to time constraints, you need to modify it yourself.
 ```
 Select the model to be tested directly on the interface.
 ```
-## 模型
-* YOLOv5s 输入尺寸减小，解码过程使用了大量的 for 循环与 NMS 表现出来会比较慢。
-* YOLOv4-tiny 使用默认尺寸，解码过程没有大量的 for 与 NMS 所以速度会快些。
-* YOLOv3-nano 与 v4-tiny 一样。
-* Simple-Pose 暂时只写了安卓版本，iOS目前还没有增加。内部原理是先检测人再用人的区域再次进行姿态检测，即2步过程。
-* Yolact 暂时只写了安卓版本，iOS目前还没有增加。
-* ChineseOCR_lite 暂时只写了安卓版本，iOS目前还没有增加。(需要注意的是偶尔会发生崩溃现象，有空修复一下)
-* ENet 暂时只写了安卓版本，iOS目前还没有增加。(由于模型太小所以分割效果比较差，可以自行更换更强的网络。但是效果太差了可能哪里有问题)
-* Landmark106 暂时只写了安卓版本，iOS目前还没有增加。内部原理是先检测脸再用脸的区域再次进行关键点检测，即2步过程。
+## Molels
+* YOLOv5s: The input size is reduced, the decoding process uses a large number of for loops and NMS appears to be slower.
+* YOLOv4-tiny: Using the default size, the decoding process does not have a lot of for and NMS, so the speed will be faster.
+* YOLOv3-nano: Same as v4-tiny.
+* Simple-Pose: Only the Android version is written for the time being, and iOS has not been added yet. The internal principle is to first detect the person and then use the area of the person to perform posture detection again, that is, a 2-step process.
+* Yolact: Only the Android version is written for the time being, and iOS has not been added yet.
+* ChineseOCR_lite: Only the Android version is written for the time being, and iOS has not been added yet. (It should be noted that crashes occasionally occur, please fix it if you have time)
+* ENet: Only the Android version is written for the time being, and iOS has not been added yet. (Because the model is too small, the segmentation effect is relatively poor, you can replace the stronger network by yourself. But the effect is too poor, there may be problems)
+* Landmark106: Only the Android version is written for the time being, and iOS has not been added yet. The internal principle is to first detect the face and then use the area of the face to perform key point detection again, that is, a 2-step process.
 
 Note：<br/>
-* 由于手机性能、图像尺寸等因素导致FPS在不同手机上相差比较大。该项目主要测试NCNN框架的使用，具体模型的转换可以去NCNN官方查看转换教程。<br/>
-* 由于opencv库太大只保留 arm64-v8a/armeabi-v7a 有需要其它版本的自己去官方下载。
-* ncnn暂时使用vulkan版本，在加载前需要打开加速，本项目中没有打开。如果要用ncnn版本需要修改CMakeLists.txt配置。
-* AS版本不一样可能编译会有各种问题，如果编译错误无法解决、建议使用AS4.0以上版本尝试一下。
+* Due to factors such as mobile phone performance and image size, FPS varies greatly on different mobile phones. This project mainly tests the use of the NCNN framework. For the conversion of specific models, you can go to the NCNN official to view the conversion tutorial.
+* Because the opencv library is too large, only arm64-v8a/armeabi-v7a is reserved. If you need other versions, go to the official download.
+* ncnn temporarily uses the vulkan version, and acceleration needs to be turned on before loading, which is not turned on in this project. If you want to use the ncnn version, you need to modify the CMakeLists.txt configuration.
+* Different AS versions may have various problems with compilation. If the compilation error cannot be solved, it is recommended to use AS4.0 or higher to try.
 
-已知部分ncnn大佬网名：.... nihui qiuqiu
+Known names of some ncnn bosses:.... nihui qiuqiu
 
-:art: 截图<br/>
+:art: Screenshot<br/>
 
 > Android
 
@@ -67,4 +66,7 @@ Note：<br/>
 |-------------------|-------------|---------|
 | none |<img width="270" height="500" src="https://github.com/WZTENG/YOLOv5_NCNN/blob/master/Screenshots/iOS_iPhone6sp_yolov4_tiny.jpg"/>| none |
 
+
+Thanks:<br/>
+sunnyden,dog-qiuqiu
 
