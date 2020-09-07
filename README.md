@@ -1,4 +1,4 @@
-## :rocket: If it helps you, click a star！ ##
+## :rocket: If it helps you, click a star! :star: ##
 
 ### Ncnn deployment on mobile,support:YOLOv5s,YOLOv4-tiny,MobileNetV2-YOLOv3-nano,Simple-Pose,Yolact,ChineseOCR-lite,ENet and Landmark106 on camera.
 
