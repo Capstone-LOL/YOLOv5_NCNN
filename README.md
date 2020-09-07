@@ -26,7 +26,7 @@ YOLOv3-nano: Due to time constraints, you need to modify it yourself.
 ```
 Select the model to be tested directly on the interface.
 ```
-## Molels
+## Models
 * YOLOv5s: The input size is reduced, the decoding process uses a large number of for loops and NMS appears to be slower.
 * YOLOv4-tiny: Using the default size, the decoding process does not have a lot of for and NMS, so the speed will be faster.
 * YOLOv3-nano: Same as v4-tiny.
