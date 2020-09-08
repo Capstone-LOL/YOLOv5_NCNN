@@ -10,7 +10,7 @@
 ## Android:
 - Android Studio 4.0
 - Win10 1909
-- meizu 16x 8.1.0
+- Meizu 16x 8.1.0
 
 Android has added permission requests, but if it still crashes, please manually confirm whether the relevant permissions are allowed.
 
@@ -26,17 +26,17 @@ YOLOv3-nano: Due to time constraints, you need to modify it yourself.
 ```
 Select the model to be tested directly on the interface.
 ```
-## Models
-* YOLOv5s: The input size is reduced, the decoding process uses a large number of for loops and NMS appears to be slower.
-* YOLOv4-tiny: Using the default size, the decoding process does not have a lot of for and NMS, so the speed will be faster.
-* YOLOv3-nano: Same as v4-tiny.
-* Simple-Pose: Only the Android version is written for the time being, and iOS has not been added yet. The internal principle is to first detect the person and then use the area of the person to perform posture detection again, that is, a 2-step process.
-* Yolact: Only the Android version is written for the time being, and iOS has not been added yet.
-* ChineseOCR_lite: Only the Android version is written for the time being, and iOS has not been added yet. (It should be noted that crashes occasionally occur, please fix it if you have time)
-* ENet: Only the Android version is written for the time being, and iOS has not been added yet. (Because the model is too small, the segmentation effect is relatively poor, you can replace the stronger network by yourself. But the effect is too poor, there may be problems)
-* Landmark106: Only the Android version is written for the time being, and iOS has not been added yet. The internal principle is to first detect the face and then use the area of the face to perform key point detection again, that is, a 2-step process.
+### Models
+* ***YOLOv5s***: The input size is reduced, the decoding process uses a large number of for loops and NMS appears to be slower.
+* ***YOLOv4-tiny***: Using the default size, the decoding process does not have a lot of for and NMS, so the speed will be faster.
+* ***YOLOv3-nano***: Same as v4-tiny.
+* ***Simple-Pose***: Only the Android version is written for the time being, and iOS has not been added yet. The internal principle is to first detect the person and then use the area of the person to perform posture detection again, that is, a 2-step process.
+* ***Yolact***: Only the Android version is written for the time being, and iOS has not been added yet.
+* ***ChineseOCR_lite***: Only the Android version is written for the time being, and iOS has not been added yet. (It should be noted that crashes occasionally occur, please fix it if you have time)
+* ***ENet***: Only the Android version is written for the time being, and iOS has not been added yet. (Because the model is too small, the segmentation effect is relatively poor, you can replace the stronger network by yourself. But the effect is too poor, there may be problems)
+* ***Landmark106***: Only the Android version is written for the time being, and iOS has not been added yet. The internal principle is to first detect the face and then use the area of the face to perform key point detection again, that is, a 2-step process.
 
-Note：<br/>
+### Note：<br/>
 * Due to factors such as mobile phone performance and image size, FPS varies greatly on different mobile phones. This project mainly tests the use of the NCNN framework. For the conversion of specific models, you can go to the NCNN official to view the conversion tutorial.
 * Because the opencv library is too large, only arm64-v8a/armeabi-v7a is reserved. If you need other versions, go to the official download.
 * ncnn temporarily uses the vulkan version, and acceleration needs to be turned on before loading, which is not turned on in this project. If you want to use the ncnn version, you need to modify the CMakeLists.txt configuration.
