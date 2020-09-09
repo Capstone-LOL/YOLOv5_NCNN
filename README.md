@@ -22,7 +22,7 @@ YOLOv5s:     Select the model to be tested directly on the interface.
 YOLOv4-tiny: Select the model to be tested directly on the interface.
 YOLOv3-nano: Due to time constraints, you need to modify it yourself.
                  1. Copy 2 files from Android library: .param and .bin
-                 2. Just modify the loading name of yolov4-tiny.
+                 2. Just modify the loading name of model.
 ```
 > Android
 ```
