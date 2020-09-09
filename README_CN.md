@@ -1,4 +1,4 @@
-## :rocket: 如果有帮助，点个star！ ##
+## :rocket: 如果有帮助，点个star！:star: ##
 
 ### 移动端NCNN部署，项目支持YOLOv5s、YOLOv4-tiny、MobileNetV2-YOLOv3-nano、Simple-Pose、Yolact、ChineseOCR-lite、ENet与Landmark106模型，摄像头实时捕获视频流进行检测。
 
