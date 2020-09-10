@@ -1,3 +1,5 @@
+[中文说明](https://github.com/WZTENG/YOLOv5_NCNN/blob/master/README_CN.md)
+
 ## :rocket: If it helps you, click a star! :star: ##
 
 ### Ncnn deployment on mobile,support:YOLOv5s,YOLOv4-tiny,MobileNetV2-YOLOv3-nano,Simple-Pose,Yolact,ChineseOCR-lite,ENet and Landmark106 on camera.
@@ -20,7 +22,7 @@ YOLOv5s:     Select the model to be tested directly on the interface.
 YOLOv4-tiny: Select the model to be tested directly on the interface.
 YOLOv3-nano: Due to time constraints, you need to modify it yourself.
                  1. Copy 2 files from Android library: .param and .bin
-                 2. Just modify the loading name of yolov4-tiny.
+                 2. Just modify the loading name of model.
 ```
 > Android
 ```
