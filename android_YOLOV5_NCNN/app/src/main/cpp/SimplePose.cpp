@@ -80,7 +80,7 @@ int SimplePose::runpose(cv::Mat &roi, int pose_size_w, int pose_size_h, std::vec
     return 0;
 }
 
-std::vector<KeyPoint> SimplePose::detect(JNIEnv *env, jobject image) {
+std::vector<PoseResult> SimplePose::detect(JNIEnv *env, jobject image) {
     AndroidBitmapInfo img_size;
     AndroidBitmap_getInfo(env, image, &img_size);
 
@@ -124,8 +124,9 @@ std::vector<KeyPoint> SimplePose::detect(JNIEnv *env, jobject image) {
     ex.extract("output", out);
 
 //    LOGD("person out.h:%d", out.h);
-    std::vector<KeyPoint> keyPointList;
-    std::vector<BoxInfo> boxInfoList;
+    std::vector<PoseResult> poseResults;
+//    std::vector<KeyPoint> keyPointList;
+//    std::vector<BoxInfo> boxInfoList;
     for (int i = 0; i < out.h; i++) {
         float x1, y1, x2, y2, score, label;
         float pw, ph, cx, cy;
@@ -167,7 +168,7 @@ std::vector<KeyPoint> SimplePose::detect(JNIEnv *env, jobject image) {
         std::vector<KeyPoint> keypoints;
         runpose(roi, pose_size_width, pose_size_height, keypoints, x1, y1);
 //        draw_pose(image, keypoints);
-        keyPointList.insert(keyPointList.begin(), keypoints.begin(), keypoints.end());
+//        keyPointList.insert(keyPointList.begin(), keypoints.begin(), keypoints.end());
 
         BoxInfo box;
         box.x1 = x1;
@@ -176,9 +177,15 @@ std::vector<KeyPoint> SimplePose::detect(JNIEnv *env, jobject image) {
         box.y2 = y2;
         box.label = label;
         box.score = score;
-        boxInfoList.push_back(box);
+//        boxInfoList.push_back(box);
+
+        PoseResult poseResult;
+        poseResult.keyPoints = keypoints;
+        poseResult.boxInfos = box;
+        poseResults.push_back(poseResult);
     }
 //    result.insert(result.begin(), boxes.begin(), boxes.end());
-    return keyPointList;
+//    return keyPointList;
+    return poseResults;
 }
 

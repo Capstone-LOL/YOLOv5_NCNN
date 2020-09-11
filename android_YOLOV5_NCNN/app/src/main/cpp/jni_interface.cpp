@@ -120,12 +120,26 @@ Java_com_wzt_yolov5_SimplePose_detect(JNIEnv *env, jclass clazz, jobject image) 
     auto result = SimplePose::detector->detect(env, image);
 
     auto box_cls = env->FindClass("com/wzt/yolov5/KeyPoint");
-    auto cid = env->GetMethodID(box_cls, "<init>", "(FF)V");
+    auto cid = env->GetMethodID(box_cls, "<init>", "([F[FFFFFF)V");
     jobjectArray ret = env->NewObjectArray(result.size(), box_cls, nullptr);
     int i = 0;
+    int KEY_NUM = 17;
     for (auto &keypoint : result) {
         env->PushLocalFrame(1);
-        jobject obj = env->NewObject(box_cls, cid, keypoint.p.x, keypoint.p.y);
+        float x[KEY_NUM];
+        float y[KEY_NUM];
+        for (int j = 0; j < KEY_NUM; j++) {
+            x[j] = keypoint.keyPoints[j].p.x;
+            y[j] = keypoint.keyPoints[j].p.y;
+        }
+        jfloatArray xs = env->NewFloatArray(KEY_NUM);
+        env->SetFloatArrayRegion(xs, 0, KEY_NUM, x);
+        jfloatArray ys = env->NewFloatArray(KEY_NUM);
+        env->SetFloatArrayRegion(ys, 0, KEY_NUM, y);
+
+        jobject obj = env->NewObject(box_cls, cid, xs, ys,
+                keypoint.boxInfos.x1, keypoint.boxInfos.y1, keypoint.boxInfos.x2, keypoint.boxInfos.y2,
+                keypoint.boxInfos.score);
         obj = env->PopLocalFrame(obj);
         env->SetObjectArrayElement(ret, i++, obj);
     }

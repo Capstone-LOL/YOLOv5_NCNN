@@ -15,6 +15,8 @@
 #include <algorithm>
 #include <opencv2/core/types.hpp>
 
+#include "YoloV5.h"
+
 #include <android/log.h>
 
 #ifndef LOG_TAG
@@ -32,6 +34,11 @@ struct KeyPoint {
     float prob;
 };
 
+struct PoseResult {
+    std::vector<KeyPoint> keyPoints;
+    BoxInfo boxInfos;
+};
+
 
 class SimplePose {
 public:
@@ -39,7 +46,7 @@ public:
 
     ~SimplePose();
 
-    std::vector<KeyPoint> detect(JNIEnv *env, jobject image);
+    std::vector<PoseResult> detect(JNIEnv *env, jobject image);
 
 private:
     int runpose(cv::Mat &roi, int pose_size_width, int pose_size_height,

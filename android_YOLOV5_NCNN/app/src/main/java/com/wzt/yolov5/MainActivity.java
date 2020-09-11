@@ -492,29 +492,38 @@ public class MainActivity extends AppCompatActivity {
         final Paint keyPointPaint = new Paint();
         keyPointPaint.setAlpha(200);
         keyPointPaint.setStyle(Paint.Style.STROKE);
-        keyPointPaint.setStrokeWidth(5 * mutableBitmap.getWidth() / 800);
         keyPointPaint.setColor(Color.BLUE);
-        int j = 0;
         int color = Color.BLUE;
+        // 画线、画框、画点
         for (int i = 0; i < keyPoints.length; i++) {
-            int pl0 = joint_pairs[i % 16][0];
-            int pl1 = joint_pairs[i % 16][1];
-            // 人体左侧改为红线
-            if ((pl0 % 2 == 1) && (pl1 % 2 == 1) && pl0 >= 5 && pl1 >= 5) {
-                keyPointPaint.setColor(Color.RED);
-            }
-            canvas.drawLine(keyPoints[joint_pairs[i % 16][0] + j].x, keyPoints[joint_pairs[i % 16][0] + j].y,
-                    keyPoints[joint_pairs[i % 16][1] + j].x, keyPoints[joint_pairs[i % 16][1] + j].y, keyPointPaint);
-            j = (i / 17) * 17;
             // 其它随机颜色
-            Random random = new Random(j + 2020);
+            Random random = new Random(i + 2020);
             color = Color.argb(255, random.nextInt(256), random.nextInt(256), random.nextInt(256));
+            // 画线
+            keyPointPaint.setStrokeWidth(5 * mutableBitmap.getWidth() / 800);
+            for (int j = 0; j < 16; j++) {  // 17个点连成16条线
+                int pl0 = joint_pairs[j][0];
+                int pl1 = joint_pairs[j][1];
+                // 人体左侧改为红线
+                if ((pl0 % 2 == 1) && (pl1 % 2 == 1) && pl0 >= 5 && pl1 >= 5) {
+                    keyPointPaint.setColor(Color.RED);
+                } else {
+                    keyPointPaint.setColor(color);
+                }
+                canvas.drawLine(keyPoints[i].x[joint_pairs[j][0]], keyPoints[i].y[joint_pairs[j][0]],
+                        keyPoints[i].x[joint_pairs[j][1]], keyPoints[i].y[joint_pairs[j][1]],
+                        keyPointPaint);
+            }
+            // 画点
+            keyPointPaint.setColor(Color.GREEN);
+            keyPointPaint.setStrokeWidth(8 * mutableBitmap.getWidth() / 800);
+            for (int n = 0; n < 17; n++) {
+                canvas.drawPoint(keyPoints[i].x[n], keyPoints[i].y[n], keyPointPaint);
+            }
+            // 画框
             keyPointPaint.setColor(color);
-        }
-        keyPointPaint.setColor(Color.GREEN);
-        keyPointPaint.setStrokeWidth(8 * mutableBitmap.getWidth() / 800);
-        for (KeyPoint keyPoint : keyPoints) {
-            canvas.drawPoint(keyPoint.x, keyPoint.y, keyPointPaint);
+            keyPointPaint.setStrokeWidth(3 * mutableBitmap.getWidth() / 800);
+            canvas.drawRect(keyPoints[i].x0, keyPoints[i].y0, keyPoints[i].x1, keyPoints[i].y1, keyPointPaint);
         }
         return mutableBitmap;
     }
