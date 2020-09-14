@@ -15,76 +15,96 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
-        android:id="@+id/btn_start_detect1"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="YoloV5s"
-        android:textAllCaps="false"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <Button
-        android:id="@+id/btn_start_detect2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="YoloV4_tiny"
-        android:textAllCaps="false"
-        app:layout_constraintTop_toBottomOf="@id/btn_start_detect1" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-    <Button
-        android:id="@+id/btn_start_detect3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="MobileNetV2_YoloV3_nano"
-        android:textAllCaps="false"
-        app:layout_constraintTop_toBottomOf="@id/btn_start_detect2" />
+            <Button
+                android:id="@+id/btn_start_detect1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="YoloV5s"
+                android:textAllCaps="false"
+                app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/btn_start_detect4"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Simple_Pose"
-        android:textAllCaps="false"
-        app:layout_constraintTop_toBottomOf="@id/btn_start_detect3" />
+            <Button
+                android:id="@+id/btn_start_detect2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="YoloV4_tiny"
+                android:textAllCaps="false"
+                app:layout_constraintTop_toBottomOf="@id/btn_start_detect1" />
 
-    <Button
-        android:id="@+id/btn_start_detect5"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Yolact"
-        android:textAllCaps="false"
-        app:layout_constraintTop_toBottomOf="@id/btn_start_detect4" />
+            <Button
+                android:id="@+id/btn_start_detect3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="MobileNetV2_YoloV3_nano"
+                android:textAllCaps="false"
+                app:layout_constraintTop_toBottomOf="@id/btn_start_detect2" />
 
-    <Button
-        android:id="@+id/btn_start_detect6"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="ChineseOCR_lite (Beta)"
-        android:textAllCaps="false"
-        app:layout_constraintTop_toBottomOf="@id/btn_start_detect5" />
+            <Button
+                android:id="@+id/btn_start_detect4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Simple_Pose"
+                android:textAllCaps="false"
+                app:layout_constraintTop_toBottomOf="@id/btn_start_detect3" />
 
-    <Button
-        android:id="@+id/btn_start_detect7"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="ENet (Alpha)"
-        android:textAllCaps="false"
-        app:layout_constraintTop_toBottomOf="@id/btn_start_detect6" />
+            <Button
+                android:id="@+id/btn_start_detect5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Yolact"
+                android:textAllCaps="false"
+                app:layout_constraintTop_toBottomOf="@id/btn_start_detect4" />
 
-    <Button
-        android:id="@+id/btn_start_detect8"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="YoloFace50k_Landmark106"
-        android:textAllCaps="false"
-        app:layout_constraintTop_toBottomOf="@id/btn_start_detect7" />
+            <Button
+                android:id="@+id/btn_start_detect6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="ChineseOCR_lite (Beta)"
+                android:textAllCaps="false"
+                app:layout_constraintTop_toBottomOf="@id/btn_start_detect5" />
 
-    <Button
-        android:id="@+id/btn_start_detect9"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="DBFace"
-        android:textAllCaps="false"
-        app:layout_constraintTop_toBottomOf="@id/btn_start_detect8" />
+            <Button
+                android:id="@+id/btn_start_detect7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="ENet (Alpha)"
+                android:textAllCaps="false"
+                app:layout_constraintTop_toBottomOf="@id/btn_start_detect6" />
+
+            <Button
+                android:id="@+id/btn_start_detect8"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="YoloFace50k_Landmark106"
+                android:textAllCaps="false"
+                app:layout_constraintTop_toBottomOf="@id/btn_start_detect7" />
+
+            <Button
+                android:id="@+id/btn_start_detect9"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="DBFace"
+                android:textAllCaps="false"
+                app:layout_constraintTop_toBottomOf="@id/btn_start_detect8" />
+
+        </LinearLayout>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
