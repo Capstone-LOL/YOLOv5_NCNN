@@ -62,6 +62,10 @@ Known names of some ncnn bosses:.... nihui qiuqiu
 |-------------------|-------------|---------|
 |<img width="270" height="500" src="https://github.com/WZTENG/YOLOv5_NCNN/blob/master/Screenshots/Android_meizu16x_chineseocr_lite_02.jpg"/>|<img width="270" height="500" src="https://github.com/WZTENG/YOLOv5_NCNN/blob/master/Screenshots/Android_Meizu16x_ENet.jpg"/>|<img width="270" height="500" src="https://github.com/WZTENG/YOLOv5_NCNN/blob/master/Screenshots/Android_Meizu16x_yoloface500k-landmark106.jpg"/>|
 
+|  dbface |
+|-------------------|
+| <img width="270" height="500" src="https://github.com/WZTENG/YOLOv5_NCNN/blob/master/Screenshots/Android_Meizu16x_dbface.jpg"/>|
+
 > iOS
 
 |  mbnv2-yolov3-nano | yolov4-tiny | yolov5s |
