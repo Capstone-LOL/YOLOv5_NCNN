@@ -132,9 +132,9 @@ inline float DBFace::myExp(float v) {
         return v * base;
     }
     if (v > 0) {
-        return exp(v);
+        return fast_exp(v);
     } else {
-        return -exp(-v);
+        return -fast_exp(-v);
     }
 }
 
