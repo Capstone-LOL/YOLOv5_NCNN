@@ -2,7 +2,7 @@
 
 ## :rocket: If it helps you, click a star! :star: ##
 
-### Ncnn deployment on mobile,support:YOLOv5s,YOLOv4-tiny,MobileNetV2-YOLOv3-nano,Simple-Pose,Yolact,ChineseOCR-lite,ENet and Landmark106 on camera.
+### Ncnn deployment on mobile,support:YOLOv5s,YOLOv4-tiny,MobileNetV2-YOLOv3-nano,Simple-Pose,Yolact,ChineseOCR-lite,ENet,Landmark106 and DBFace on camera.
 
 ## iOS:
 - Xcode 11.5
@@ -37,6 +37,7 @@ Select the model to be tested directly on the interface.
 * ***ChineseOCR_lite***: Only the Android version is written for the time being, and iOS has not been added yet. (It should be noted that crashes occasionally occur, please fix it if you have time)
 * ***ENet***: Only the Android version is written for the time being, and iOS has not been added yet. (Because the model is too small, the segmentation effect is relatively poor, you can replace the stronger network by yourself. But the effect is too poor, there may be problems)
 * ***Landmark106***: Only the Android version is written for the time being, and iOS has not been added yet. The internal principle is to first detect the face and then use the area of the face to perform key point detection again, that is, a 2-step process.
+* ***DBFace***: Only the Android version is written for the time being, and iOS has not been added yet.
 
 ### Note：<br/>
 * Due to factors such as mobile phone performance and image size, FPS varies greatly on different mobile phones. This project mainly tests the use of the NCNN framework. For the conversion of specific models, you can go to the NCNN official to view the conversion tutorial.
