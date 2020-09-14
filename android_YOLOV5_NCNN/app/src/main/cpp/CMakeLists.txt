@@ -33,6 +33,7 @@ add_library( # Sets the name of the library.
         ocr/ZUtil.cpp
         ENet.cpp
         FaceLandmark.cpp
+        DBFace.cpp
         )
 
 include_directories(

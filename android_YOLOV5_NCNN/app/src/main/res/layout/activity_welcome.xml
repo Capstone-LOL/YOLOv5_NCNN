@@ -79,4 +79,12 @@
         android:textAllCaps="false"
         app:layout_constraintTop_toBottomOf="@id/btn_start_detect7" />
 
+    <Button
+        android:id="@+id/btn_start_detect9"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="DBFace"
+        android:textAllCaps="false"
+        app:layout_constraintTop_toBottomOf="@id/btn_start_detect8" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

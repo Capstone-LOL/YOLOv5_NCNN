@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
     public static int YOLACT = 5;
     public static int ENET = 6;
     public static int FACE_LANDMARK = 7;
+    public static int DBFACE = 8;
 
     public static int USE_MODEL = MOBILENETV2_YOLOV3_NANO;
 
@@ -120,13 +121,15 @@ public class MainActivity extends AppCompatActivity {
             ENet.init(getAssets());
         } else if (USE_MODEL == FACE_LANDMARK) {
             FaceLandmark.init(getAssets());
+        } else if (USE_MODEL == DBFACE) {
+            DBFace.init(getAssets());
         }
         resultImageView = findViewById(R.id.imageView);
         thresholdTextview = findViewById(R.id.valTxtView);
         tvInfo = findViewById(R.id.tv_info);
         nmsSeekBar = findViewById(R.id.nms_seek);
         thresholdSeekBar = findViewById(R.id.threshold_seek);
-        if (USE_MODEL != YOLOV5S) {
+        if (USE_MODEL != YOLOV5S && USE_MODEL != DBFACE) {
             nmsSeekBar.setEnabled(false);
             thresholdSeekBar.setEnabled(false);
         }
@@ -292,6 +295,8 @@ public class MainActivity extends AppCompatActivity {
                         enetMasks = ENet.detect(bitmap);
                     } else if (USE_MODEL == FACE_LANDMARK) {
                         faceKeyPoints = FaceLandmark.detect(bitmap);
+                    } else if (USE_MODEL == DBFACE) {
+                        keyPoints = DBFace.detect(bitmap, threshold, nms_threshold);
                     }
                     if (result == null && keyPoints == null && yolactMasks == null && enetMasks == null && faceKeyPoints == null) {
                         detecting.set(false);
@@ -308,6 +313,8 @@ public class MainActivity extends AppCompatActivity {
                         mutableBitmap = drawENetMask(mutableBitmap, enetMasks);
                     } else if (USE_MODEL == FACE_LANDMARK) {
                         mutableBitmap = drawFaceLandmark(mutableBitmap, faceKeyPoints);
+                    } else if (USE_MODEL == DBFACE) {
+                        mutableBitmap = drawDBFaceLandmark(mutableBitmap, keyPoints);
                     }
                     runOnUiThread(new Runnable() {
                         @Override
@@ -358,6 +365,31 @@ public class MainActivity extends AppCompatActivity {
             return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
         }
 
+    }
+
+    protected Bitmap drawDBFaceLandmark(Bitmap mutableBitmap, KeyPoint[] keyPoints) {
+        if (keyPoints == null || keyPoints.length <= 0) {
+            return mutableBitmap;
+        }
+        Canvas canvas = new Canvas(mutableBitmap);
+        final Paint keyPointPaint = new Paint();
+        keyPointPaint.setAlpha(200);
+        keyPointPaint.setStyle(Paint.Style.STROKE);
+        keyPointPaint.setColor(Color.BLUE);
+//        Log.d("wzt", "dbface size:" + keyPoints.length);
+        for (int i = 0; i < keyPoints.length; i++) {
+            // 其它随机颜色
+            Random random = new Random(i + 2020);
+            int color = Color.argb(255, random.nextInt(256), 125, random.nextInt(256));
+            keyPointPaint.setColor(color);
+            keyPointPaint.setStrokeWidth(9 * mutableBitmap.getWidth() / 800);
+            for (int j = 0; j < 5; j++) {
+                canvas.drawPoint(keyPoints[i].x[j], keyPoints[i].y[j], keyPointPaint);
+            }
+            keyPointPaint.setStrokeWidth(4 * mutableBitmap.getWidth() / 800);
+            canvas.drawRect(keyPoints[i].x0, keyPoints[i].y0, keyPoints[i].x1, keyPoints[i].y1, keyPointPaint);
+        }
+        return mutableBitmap;
     }
 
     protected Bitmap drawENetMask(Bitmap mutableBitmap, float[] results) {
@@ -455,6 +487,8 @@ public class MainActivity extends AppCompatActivity {
             modelName = "ENet";
         } else if (USE_MODEL == FACE_LANDMARK) {
             modelName = "YoloFace500k-landmark106";
+        } else if (USE_MODEL == DBFACE) {
+            modelName = "DBFace";
         }
         return modelName;
     }
@@ -578,6 +612,8 @@ public class MainActivity extends AppCompatActivity {
             enetMasks = ENet.detect(image);
         } else if (USE_MODEL == FACE_LANDMARK) {
             faceKeyPoints = FaceLandmark.detect(image);
+        } else if (USE_MODEL == DBFACE) {
+            keyPoints = DBFace.detect(image, threshold, nms_threshold);
         }
         if (USE_MODEL == YOLOV5S || USE_MODEL == YOLOV4_TINY || USE_MODEL == MOBILENETV2_YOLOV3_NANO) {
             mutableBitmap = drawBoxRects(mutableBitmap, result);
@@ -589,6 +625,8 @@ public class MainActivity extends AppCompatActivity {
             mutableBitmap = drawENetMask(mutableBitmap, enetMasks);
         } else if (USE_MODEL == FACE_LANDMARK) {
             mutableBitmap = drawFaceLandmark(mutableBitmap, faceKeyPoints);
+        } else if (USE_MODEL == DBFACE) {
+            mutableBitmap = drawDBFaceLandmark(mutableBitmap, keyPoints);
         }
         resultImageView.setImageBitmap(mutableBitmap);
     }

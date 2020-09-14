@@ -10,6 +10,7 @@
 #include "ocr.h"
 #include "ENet.h"
 #include "FaceLandmark.h"
+#include "DBFace.h"
 
 
 JNIEXPORT jint JNI_OnLoad(JavaVM *vm, void *reserved) {
@@ -22,6 +23,7 @@ JNIEXPORT jint JNI_OnLoad(JavaVM *vm, void *reserved) {
         OCR::hasGPU = true;
         ENet::hasGPU = true;
         FaceLandmark::hasGPU = true;
+        DBFace::hasGPU = true;
     }
     return JNI_VERSION_1_6;
 }
@@ -380,3 +382,46 @@ Java_com_wzt_yolov5_FaceLandmark_detect(JNIEnv *env, jclass clazz, jobject image
 
 }
 
+/*********************************************************************************************
+                                            DBFace
+ ********************************************************************************************/
+extern "C" JNIEXPORT void JNICALL
+Java_com_wzt_yolov5_DBFace_init(JNIEnv *env, jclass clazz, jobject assetManager) {
+    if (DBFace::detector == nullptr) {
+        AAssetManager *mgr = AAssetManager_fromJava(env, assetManager);
+        DBFace::detector = new DBFace(mgr);
+    }
+}
+
+extern "C" JNIEXPORT jobjectArray JNICALL
+Java_com_wzt_yolov5_DBFace_detect(JNIEnv *env, jclass clazz, jobject image, jdouble threshold, jdouble nms_threshold) {
+    auto result = DBFace::detector->detect(env, image, threshold, nms_threshold);
+//    LOGD("jni dbface size:%d %f %f", result.size(), threshold, nms_threshold);
+
+    auto box_cls = env->FindClass("com/wzt/yolov5/KeyPoint");
+    auto cid = env->GetMethodID(box_cls, "<init>", "([F[FFFFFF)V");
+    jobjectArray ret = env->NewObjectArray(result.size(), box_cls, nullptr);
+    int i = 0;
+    int KEY_NUM = 5;
+    for (auto &keypoint : result) {
+        env->PushLocalFrame(1);
+        float x[KEY_NUM];
+        float y[KEY_NUM];
+        for (int j = 0; j < KEY_NUM; j++) {
+            x[j] = keypoint.landmark.x[j];
+            y[j] = keypoint.landmark.y[j];
+        }
+        jfloatArray xs = env->NewFloatArray(KEY_NUM);
+        env->SetFloatArrayRegion(xs, 0, KEY_NUM, x);
+        jfloatArray ys = env->NewFloatArray(KEY_NUM);
+        env->SetFloatArrayRegion(ys, 0, KEY_NUM, y);
+
+        jobject obj = env->NewObject(box_cls, cid, xs, ys,
+                                     keypoint.box.x, keypoint.box.y, keypoint.box.r, keypoint.box.b,
+                                     (float) keypoint.score);
+        obj = env->PopLocalFrame(obj);
+        env->SetObjectArrayElement(ret, i++, obj);
+    }
+    return ret;
+
+}
