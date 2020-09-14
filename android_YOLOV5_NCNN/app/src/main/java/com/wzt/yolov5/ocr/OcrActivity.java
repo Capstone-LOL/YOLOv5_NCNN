@@ -201,11 +201,17 @@ public class OcrActivity extends AppCompatActivity {
     public Bitmap getPicture(Uri selectedImage) {
         String[] filePathColumn = {MediaStore.Images.Media.DATA};
         Cursor cursor = this.getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+        if (cursor == null) {
+            return null;
+        }
         cursor.moveToFirst();
         int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
         String picturePath = cursor.getString(columnIndex);
         cursor.close();
         Bitmap bitmap = BitmapFactory.decodeFile(picturePath);
+        if (bitmap == null) {
+            return null;
+        }
         int rotate = readPictureDegree(picturePath);
         return rotateBitmapByDegree(bitmap, rotate);
     }

@@ -382,11 +382,11 @@ public class MainActivity extends AppCompatActivity {
             Random random = new Random(i + 2020);
             int color = Color.argb(255, random.nextInt(256), 125, random.nextInt(256));
             keyPointPaint.setColor(color);
-            keyPointPaint.setStrokeWidth(9 * mutableBitmap.getWidth() / 800);
+            keyPointPaint.setStrokeWidth(9 * mutableBitmap.getWidth() / 800.0f);
             for (int j = 0; j < 5; j++) {
                 canvas.drawPoint(keyPoints[i].x[j], keyPoints[i].y[j], keyPointPaint);
             }
-            keyPointPaint.setStrokeWidth(4 * mutableBitmap.getWidth() / 800);
+            keyPointPaint.setStrokeWidth(4 * mutableBitmap.getWidth() / 800.0f);
             canvas.drawRect(keyPoints[i].x0, keyPoints[i].y0, keyPoints[i].x1, keyPoints[i].y1, keyPointPaint);
         }
         return mutableBitmap;
@@ -399,8 +399,8 @@ public class MainActivity extends AppCompatActivity {
         Canvas canvas = new Canvas(mutableBitmap);
         final Paint maskPaint = new Paint();
         maskPaint.setStyle(Paint.Style.STROKE);
-        maskPaint.setStrokeWidth(4 * mutableBitmap.getWidth() / 800);
-        maskPaint.setTextSize(40 * mutableBitmap.getWidth() / 800);
+        maskPaint.setStrokeWidth(4 * mutableBitmap.getWidth() / 800.0f);
+        maskPaint.setTextSize(40 * mutableBitmap.getWidth() / 800.0f);
         float mask = 0;
         for (int y = 0; y < mutableBitmap.getHeight(); y++) {
             for (int x = 0; x < mutableBitmap.getWidth(); x++) {
@@ -423,8 +423,8 @@ public class MainActivity extends AppCompatActivity {
         final Paint maskPaint = new Paint();
         maskPaint.setAlpha(200);
         maskPaint.setStyle(Paint.Style.STROKE);
-        maskPaint.setStrokeWidth(4 * mutableBitmap.getWidth() / 800);
-        maskPaint.setTextSize(40 * mutableBitmap.getWidth() / 800);
+        maskPaint.setStrokeWidth(4 * mutableBitmap.getWidth() / 800.0f);
+        maskPaint.setTextSize(40 * mutableBitmap.getWidth() / 800.0f);
         maskPaint.setColor(Color.BLUE);
         for (YolactMask mask : results) {
             if (mask.prob < 0.4f) {
@@ -444,7 +444,7 @@ public class MainActivity extends AppCompatActivity {
             // 标签跟框放后面画，防止被 mask 挡住
             maskPaint.setColor(mask.getColor());
             maskPaint.setStyle(Paint.Style.FILL);
-            canvas.drawText(mask.getLabel() + String.format(Locale.CHINESE, " %.3f", mask.getProb()), mask.left, mask.top - 15 * mutableBitmap.getWidth() / 1000, maskPaint);
+            canvas.drawText(mask.getLabel() + String.format(Locale.CHINESE, " %.3f", mask.getProb()), mask.left, mask.top - 15 * mutableBitmap.getWidth() / 1000.0f, maskPaint);
             maskPaint.setStyle(Paint.Style.STROKE);
             canvas.drawRect(new RectF(mask.left, mask.top, mask.right, mask.bottom), maskPaint);
         }
@@ -459,12 +459,12 @@ public class MainActivity extends AppCompatActivity {
         final Paint boxPaint = new Paint();
         boxPaint.setAlpha(200);
         boxPaint.setStyle(Paint.Style.STROKE);
-        boxPaint.setStrokeWidth(4 * mutableBitmap.getWidth() / 800);
-        boxPaint.setTextSize(40 * mutableBitmap.getWidth() / 800);
+        boxPaint.setStrokeWidth(4 * mutableBitmap.getWidth() / 800.0f);
+        boxPaint.setTextSize(40 * mutableBitmap.getWidth() / 800.0f);
         for (Box box : results) {
             boxPaint.setColor(box.getColor());
             boxPaint.setStyle(Paint.Style.FILL);
-            canvas.drawText(box.getLabel() + String.format(Locale.CHINESE, " %.3f", box.getScore()), box.x0 + 3, box.y0 + 40 * mutableBitmap.getWidth() / 1000, boxPaint);
+            canvas.drawText(box.getLabel() + String.format(Locale.CHINESE, " %.3f", box.getScore()), box.x0 + 3, box.y0 + 40 * mutableBitmap.getWidth() / 1000.0f, boxPaint);
             boxPaint.setStyle(Paint.Style.STROKE);
             canvas.drawRect(box.getRect(), boxPaint);
         }
@@ -501,7 +501,7 @@ public class MainActivity extends AppCompatActivity {
         final Paint keyPointPaint = new Paint();
         keyPointPaint.setAlpha(200);
         keyPointPaint.setStyle(Paint.Style.STROKE);
-        keyPointPaint.setStrokeWidth(8 * mutableBitmap.getWidth() / 800);
+        keyPointPaint.setStrokeWidth(8 * mutableBitmap.getWidth() / 800.0f);
         keyPointPaint.setColor(Color.BLUE);
 //        Log.d("wzt", "facePoint length:" + keyPoints.length);
         for (int i = 0; i < keyPoints.length; i++) {
@@ -534,7 +534,7 @@ public class MainActivity extends AppCompatActivity {
             Random random = new Random(i + 2020);
             color = Color.argb(255, random.nextInt(256), random.nextInt(256), random.nextInt(256));
             // 画线
-            keyPointPaint.setStrokeWidth(5 * mutableBitmap.getWidth() / 800);
+            keyPointPaint.setStrokeWidth(5 * mutableBitmap.getWidth() / 800.0f);
             for (int j = 0; j < 16; j++) {  // 17个点连成16条线
                 int pl0 = joint_pairs[j][0];
                 int pl1 = joint_pairs[j][1];
@@ -550,13 +550,13 @@ public class MainActivity extends AppCompatActivity {
             }
             // 画点
             keyPointPaint.setColor(Color.GREEN);
-            keyPointPaint.setStrokeWidth(8 * mutableBitmap.getWidth() / 800);
+            keyPointPaint.setStrokeWidth(8 * mutableBitmap.getWidth() / 800.0f);
             for (int n = 0; n < 17; n++) {
                 canvas.drawPoint(keyPoints[i].x[n], keyPoints[i].y[n], keyPointPaint);
             }
             // 画框
             keyPointPaint.setColor(color);
-            keyPointPaint.setStrokeWidth(3 * mutableBitmap.getWidth() / 800);
+            keyPointPaint.setStrokeWidth(3 * mutableBitmap.getWidth() / 800.0f);
             canvas.drawRect(keyPoints[i].x0, keyPoints[i].y0, keyPoints[i].x1, keyPoints[i].y1, keyPointPaint);
         }
         return mutableBitmap;
