@@ -132,7 +132,15 @@ public class MainActivity extends AppCompatActivity {
         if (USE_MODEL != YOLOV5S && USE_MODEL != DBFACE) {
             nmsSeekBar.setEnabled(false);
             thresholdSeekBar.setEnabled(false);
+        } else if (USE_MODEL == YOLOV5S) {
+            threshold = 0.3f;
+            nms_threshold = 0.7f;
+        } else if (USE_MODEL == DBFACE) {
+            threshold = 0.4f;
+            nms_threshold = 0.6f;
         }
+        nmsSeekBar.setProgress((int) (nms_threshold * 100));
+        thresholdSeekBar.setProgress((int) (threshold * 100));
         final String format = "Thresh: %.2f, NMS: %.2f";
         thresholdTextview.setText(String.format(Locale.ENGLISH, format, threshold, nms_threshold));
         nmsSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
