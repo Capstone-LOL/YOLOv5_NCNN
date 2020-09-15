@@ -281,7 +281,7 @@ public class OcrActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 showText = isChecked;
-                Toast.makeText(OcrActivity.this, showText ? "显示识别文字" : "不显示识别文字", Toast.LENGTH_SHORT).show();
+                Toast.makeText(OcrActivity.this, showText ? "Show text" : "Hide text", Toast.LENGTH_SHORT).show();
             }
         });
     }
