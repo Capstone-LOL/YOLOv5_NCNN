@@ -44,7 +44,7 @@ struct Id {
 
 class DBFace {
 public:
-    DBFace(AAssetManager *mgr);
+    DBFace(AAssetManager *mgr, bool useGPU);
 
     ~DBFace();
 

@@ -17,7 +17,7 @@
 
 class ENet {
 public:
-    ENet(AAssetManager *mgr);
+    ENet(AAssetManager *mgr, bool useGPU);
     ~ENet();
 
     ncnn::Mat detect_enet(JNIEnv *env, jobject image);

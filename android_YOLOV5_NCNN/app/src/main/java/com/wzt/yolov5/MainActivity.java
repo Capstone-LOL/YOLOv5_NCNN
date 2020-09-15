@@ -62,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
     public static int DBFACE = 8;
 
     public static int USE_MODEL = MOBILENETV2_YOLOV3_NANO;
+    public static boolean USE_GPU = false;
 
     public static CameraX.LensFacing CAMERA_ID = CameraX.LensFacing.BACK;
 
@@ -108,21 +109,21 @@ public class MainActivity extends AppCompatActivity {
             finish();
         }
         if (USE_MODEL == YOLOV5S) {
-            YOLOv5.init(getAssets());
+            YOLOv5.init(getAssets(), USE_GPU);
         } else if (USE_MODEL == YOLOV4_TINY) {
-            YOLOv4.init(getAssets(), true);
+            YOLOv4.init(getAssets(), true, USE_GPU);
         } else if (USE_MODEL == MOBILENETV2_YOLOV3_NANO) {
-            YOLOv4.init(getAssets(), false);
+            YOLOv4.init(getAssets(), false, USE_GPU);
         } else if (USE_MODEL == SIMPLE_POSE) {
-            SimplePose.init(getAssets());
+            SimplePose.init(getAssets(), USE_GPU);
         } else if (USE_MODEL == YOLACT) {
-            Yolact.init(getAssets());
+            Yolact.init(getAssets(), USE_GPU);
         } else if (USE_MODEL == ENET) {
-            ENet.init(getAssets());
+            ENet.init(getAssets(), USE_GPU);
         } else if (USE_MODEL == FACE_LANDMARK) {
-            FaceLandmark.init(getAssets());
+            FaceLandmark.init(getAssets(), USE_GPU);
         } else if (USE_MODEL == DBFACE) {
-            DBFace.init(getAssets());
+            DBFace.init(getAssets(), USE_GPU);
         }
         resultImageView = findViewById(R.id.imageView);
         thresholdTextview = findViewById(R.id.valTxtView);

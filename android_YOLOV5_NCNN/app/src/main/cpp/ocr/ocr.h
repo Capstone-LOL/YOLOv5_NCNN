@@ -28,7 +28,7 @@ struct OCRResult {
 
 class OCR {
 public:
-    OCR(JNIEnv *env, jclass clazz, AAssetManager *mgr);
+    OCR(JNIEnv *env, jclass clazz, AAssetManager *mgr, bool useGPU);
     ~OCR();
 
 //    void detect(cv::Mat im_bgr, int short_size);

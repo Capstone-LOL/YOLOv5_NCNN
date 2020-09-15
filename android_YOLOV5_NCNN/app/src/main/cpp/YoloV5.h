@@ -31,7 +31,7 @@ typedef struct BoxInfo {
 
 class YoloV5 {
 public:
-    YoloV5(AAssetManager* mgr, const char* param, const char* bin);
+    YoloV5(AAssetManager* mgr, const char* param, const char* bin, bool useGPU);
     ~YoloV5();
     std::vector<BoxInfo> detect(JNIEnv* env, jobject image, float threshold, float nms_threshold);
     std::vector<std::string> labels{"person", "bicycle", "car", "motorcycle", "airplane", "bus", "train", "truck", "boat", "traffic light",

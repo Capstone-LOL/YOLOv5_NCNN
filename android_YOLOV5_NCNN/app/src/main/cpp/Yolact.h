@@ -24,7 +24,7 @@ struct Object {
 
 class Yolact {
 public:
-    Yolact(AAssetManager *mgr);
+    Yolact(AAssetManager *mgr, bool useGPU);
     ~Yolact();
 
     std::vector<Object> detect_yolact(JNIEnv *env, jobject image);

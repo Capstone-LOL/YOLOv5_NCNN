@@ -10,21 +10,24 @@
 bool OCR::hasGPU = true;
 OCR *OCR::detector = nullptr;
 
-OCR::OCR(JNIEnv *env, jclass clazz, AAssetManager *mgr) {
+OCR::OCR(JNIEnv *env, jclass clazz, AAssetManager *mgr, bool useGPU) {
     dbnet = new ncnn::Net();
-//    dbnet->opt.use_vulkan_compute = ncnn::get_gpu_count() > 0;  // gpu
+    hasGPU = ncnn::get_gpu_count() > 0;
+    dbnet->opt.use_vulkan_compute = hasGPU && useGPU;  // gpu
     dbnet->opt.use_fp16_arithmetic = true;  // fp16运算加速
     dbnet->load_param(mgr, "ocr/dbnet_op.param");
     dbnet->load_model(mgr, "ocr/dbnet_op.bin");
 
     crnn_net = new ncnn::Net();
-//    crnn_net->opt.use_vulkan_compute = ncnn::get_gpu_count() > 0;  // gpu
+    hasGPU = ncnn::get_gpu_count() > 0;
+    crnn_net->opt.use_vulkan_compute = hasGPU && useGPU;  // gpu
     crnn_net->opt.use_fp16_arithmetic = true;  // fp16运算加速
     crnn_net->load_param(mgr, "ocr/crnn_lite_op.param");
     crnn_net->load_model(mgr, "ocr/crnn_lite_op.bin");
 
     angle_net = new ncnn::Net();
-//    angle_net->opt.use_vulkan_compute = ncnn::get_gpu_count() > 0;  // gpu
+    hasGPU = ncnn::get_gpu_count() > 0;
+    angle_net->opt.use_vulkan_compute = hasGPU && useGPU;  // gpu
     angle_net->opt.use_fp16_arithmetic = true;  // fp16运算加速
     angle_net->load_param(mgr, "ocr/angle_op.param");
     angle_net->load_model(mgr, "ocr/angle_op.bin");

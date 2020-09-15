@@ -10,11 +10,12 @@
 bool ENet::hasGPU = true;
 ENet *ENet::detector = nullptr;
 
-ENet::ENet(AAssetManager *mgr) {
+ENet::ENet(AAssetManager *mgr, bool useGPU) {
 
     ENetsim = new ncnn::Net();
     // opt 需要在加载前设置
-//    ENetsim->opt.use_vulkan_compute = ncnn::get_gpu_count() > 0;  // gpu
+    hasGPU = ncnn::get_gpu_count() > 0;
+    ENetsim->opt.use_vulkan_compute = hasGPU && useGPU;  // gpu
     ENetsim->opt.use_fp16_arithmetic = true;  // fp16运算加速
     ENetsim->load_param(mgr, "ENet_sim-opt.param");
     ENetsim->load_model(mgr, "ENet_sim-opt.bin");

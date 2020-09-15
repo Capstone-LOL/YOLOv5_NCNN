@@ -1,16 +1,20 @@
 package com.wzt.yolov5;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.ToggleButton;
 
 import com.wzt.yolov5.ocr.OcrActivity;
 
 public class WelcomeActivity extends AppCompatActivity {
 
+    private ToggleButton tbUseGpu;
     private Button yolov5s;
     private Button yolov4tiny;
     private Button mobilenetyolov3nano;
@@ -21,10 +25,30 @@ public class WelcomeActivity extends AppCompatActivity {
     private Button faceLandmark;
     private Button dbface;
 
+    private boolean useGPU = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
+
+        tbUseGpu = findViewById(R.id.tb_use_gpu);
+        tbUseGpu.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                useGPU = isChecked;
+                MainActivity.USE_GPU = useGPU;
+                if (useGPU) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(WelcomeActivity.this);
+                    builder.setTitle("Warning");
+                    builder.setMessage("May not run well in GPU mode");
+                    builder.setCancelable(true);
+                    builder.setPositiveButton("OK", null);
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                }
+            }
+        });
 
         yolov5s = findViewById(R.id.btn_start_detect1);
         yolov5s.setOnClickListener(new View.OnClickListener() {

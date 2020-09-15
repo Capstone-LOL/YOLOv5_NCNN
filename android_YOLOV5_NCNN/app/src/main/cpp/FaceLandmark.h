@@ -26,7 +26,7 @@ struct FaceKeyPoint {
 
 class FaceLandmark {
 public:
-    FaceLandmark(AAssetManager *mgr);
+    FaceLandmark(AAssetManager *mgr, bool useGPU);
 
     ~FaceLandmark();
 

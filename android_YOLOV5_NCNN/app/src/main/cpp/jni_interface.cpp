@@ -37,10 +37,10 @@ JNIEXPORT void JNI_OnUnload(JavaVM *vm, void *reserved) {
                                          Yolov5
  ********************************************************************************************/
 extern "C" JNIEXPORT void JNICALL
-Java_com_wzt_yolov5_YOLOv5_init(JNIEnv *env, jclass, jobject assetManager) {
+Java_com_wzt_yolov5_YOLOv5_init(JNIEnv *env, jclass, jobject assetManager, jboolean useGPU) {
     if (YoloV5::detector == nullptr) {
         AAssetManager *mgr = AAssetManager_fromJava(env, assetManager);
-        YoloV5::detector = new YoloV5(mgr, "yolov5.param", "yolov5.bin");
+        YoloV5::detector = new YoloV5(mgr, "yolov5.param", "yolov5.bin", useGPU);
     }
 }
 
@@ -70,7 +70,7 @@ Java_com_wzt_yolov5_YOLOv5_detect(JNIEnv *env, jclass, jobject image, jdouble th
 // 20200813 增加 MobileNetV2-YOLOv3-Nano-coco
 
 extern "C" JNIEXPORT void JNICALL
-Java_com_wzt_yolov5_YOLOv4_init(JNIEnv *env, jclass, jobject assetManager, jboolean v4tiny) {
+Java_com_wzt_yolov5_YOLOv4_init(JNIEnv *env, jclass, jobject assetManager, jboolean v4tiny, jboolean useGPU) {
     if (YoloV4::detector != nullptr) {
         delete YoloV4::detector;
         YoloV4::detector = nullptr;
@@ -78,10 +78,10 @@ Java_com_wzt_yolov5_YOLOv4_init(JNIEnv *env, jclass, jobject assetManager, jbool
     if (YoloV4::detector == nullptr) {
         AAssetManager *mgr = AAssetManager_fromJava(env, assetManager);
         if (v4tiny == 1) {
-            YoloV4::detector = new YoloV4(mgr, "yolov4-tiny-opt.param", "yolov4-tiny-opt.bin");
+            YoloV4::detector = new YoloV4(mgr, "yolov4-tiny-opt.param", "yolov4-tiny-opt.bin", useGPU);
         } else if (v4tiny == 0) {
             YoloV4::detector = new YoloV4(mgr, "MobileNetV2-YOLOv3-Nano-coco.param",
-                                          "MobileNetV2-YOLOv3-Nano-coco.bin");
+                                          "MobileNetV2-YOLOv3-Nano-coco.bin", useGPU);
 //            YoloV4::detector = new YoloV4(mgr,"export_demo.param","export_demo.bin");
         }
     }
@@ -110,10 +110,10 @@ Java_com_wzt_yolov5_YOLOv4_detect(JNIEnv *env, jclass, jobject image, jdouble th
  ********************************************************************************************/
 
 extern "C" JNIEXPORT void JNICALL
-Java_com_wzt_yolov5_SimplePose_init(JNIEnv *env, jclass clazz, jobject assetManager) {
+Java_com_wzt_yolov5_SimplePose_init(JNIEnv *env, jclass clazz, jobject assetManager, jboolean useGPU) {
     if (SimplePose::detector == nullptr) {
         AAssetManager *mgr = AAssetManager_fromJava(env, assetManager);
-        SimplePose::detector = new SimplePose(mgr);
+        SimplePose::detector = new SimplePose(mgr, useGPU);
     }
 }
 
@@ -181,10 +181,10 @@ jcharArray matToBitmapCharArray(JNIEnv *env, const cv::Mat &image) {
 }
 
 extern "C" JNIEXPORT void JNICALL
-Java_com_wzt_yolov5_Yolact_init(JNIEnv *env, jclass clazz, jobject assetManager) {
+Java_com_wzt_yolov5_Yolact_init(JNIEnv *env, jclass clazz, jobject assetManager, jboolean useGPU) {
     if (Yolact::detector == nullptr) {
         AAssetManager *mgr = AAssetManager_fromJava(env, assetManager);
-        Yolact::detector = new Yolact(mgr);
+        Yolact::detector = new Yolact(mgr, useGPU);
     }
 }
 
@@ -262,10 +262,10 @@ std::string jstring2str(JNIEnv *env, jstring jstr) {
 }
 
 extern "C" JNIEXPORT void JNICALL
-Java_com_wzt_yolov5_ocr_ChineseOCRLite_init(JNIEnv *env, jclass clazz, jobject assetManager) {
+Java_com_wzt_yolov5_ocr_ChineseOCRLite_init(JNIEnv *env, jclass clazz, jobject assetManager, jboolean useGPU) {
     if (OCR::detector == nullptr) {
         AAssetManager *mgr = AAssetManager_fromJava(env, assetManager);
-        OCR::detector = new OCR(env, clazz, mgr);
+        OCR::detector = new OCR(env, clazz, mgr, useGPU);
     }
 }
 
@@ -323,10 +323,10 @@ Java_com_wzt_yolov5_ocr_ChineseOCRLite_detect(JNIEnv *env, jclass clazz, jobject
                                             ENet
  ********************************************************************************************/
 extern "C" JNIEXPORT void JNICALL
-Java_com_wzt_yolov5_ENet_init(JNIEnv *env, jclass, jobject assetManager) {
+Java_com_wzt_yolov5_ENet_init(JNIEnv *env, jclass, jobject assetManager, jboolean useGPU) {
     if (ENet::detector == nullptr) {
         AAssetManager *mgr = AAssetManager_fromJava(env, assetManager);
-        ENet::detector = new ENet(mgr);
+        ENet::detector = new ENet(mgr, useGPU);
     }
 }
 
@@ -357,10 +357,10 @@ Java_com_wzt_yolov5_ENet_detect(JNIEnv *env, jclass, jobject image) {
  ********************************************************************************************/
 
 extern "C" JNIEXPORT void JNICALL
-Java_com_wzt_yolov5_FaceLandmark_init(JNIEnv *env, jclass clazz, jobject assetManager) {
+Java_com_wzt_yolov5_FaceLandmark_init(JNIEnv *env, jclass clazz, jobject assetManager, jboolean useGPU) {
     if (FaceLandmark::detector == nullptr) {
         AAssetManager *mgr = AAssetManager_fromJava(env, assetManager);
-        FaceLandmark::detector = new FaceLandmark(mgr);
+        FaceLandmark::detector = new FaceLandmark(mgr, useGPU);
     }
 }
 
@@ -386,10 +386,10 @@ Java_com_wzt_yolov5_FaceLandmark_detect(JNIEnv *env, jclass clazz, jobject image
                                             DBFace
  ********************************************************************************************/
 extern "C" JNIEXPORT void JNICALL
-Java_com_wzt_yolov5_DBFace_init(JNIEnv *env, jclass clazz, jobject assetManager) {
+Java_com_wzt_yolov5_DBFace_init(JNIEnv *env, jclass clazz, jobject assetManager, jboolean useGPU) {
     if (DBFace::detector == nullptr) {
         AAssetManager *mgr = AAssetManager_fromJava(env, assetManager);
-        DBFace::detector = new DBFace(mgr);
+        DBFace::detector = new DBFace(mgr, useGPU);
     }
 }
 

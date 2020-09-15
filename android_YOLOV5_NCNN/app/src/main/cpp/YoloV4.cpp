@@ -3,10 +3,11 @@
 bool YoloV4::hasGPU = true;
 YoloV4 *YoloV4::detector = nullptr;
 
-YoloV4::YoloV4(AAssetManager *mgr, const char *param, const char *bin) {
+YoloV4::YoloV4(AAssetManager *mgr, const char *param, const char *bin, bool useGPU) {
     Net = new ncnn::Net();
     // opt 需要在加载前设置
-//    Net->opt.use_vulkan_compute = ncnn::get_gpu_count() > 0;  // gpu
+    hasGPU = ncnn::get_gpu_count() > 0;
+    Net->opt.use_vulkan_compute = hasGPU && useGPU;  // gpu
     Net->opt.use_fp16_arithmetic = true;  // fp16运算加速
     Net->load_param(mgr, param);
     Net->load_model(mgr, bin);

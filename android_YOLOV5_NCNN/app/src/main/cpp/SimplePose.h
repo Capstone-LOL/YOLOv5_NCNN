@@ -42,7 +42,7 @@ struct PoseResult {
 
 class SimplePose {
 public:
-    SimplePose(AAssetManager *mgr);
+    SimplePose(AAssetManager *mgr, bool useGPU);
 
     ~SimplePose();
 

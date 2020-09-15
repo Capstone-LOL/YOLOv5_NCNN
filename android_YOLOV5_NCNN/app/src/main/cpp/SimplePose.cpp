@@ -8,18 +8,20 @@
 bool SimplePose::hasGPU = true;
 SimplePose *SimplePose::detector = nullptr;
 
-SimplePose::SimplePose(AAssetManager *mgr) {
+SimplePose::SimplePose(AAssetManager *mgr, bool useGPU) {
 
     PersonNet = new ncnn::Net();
     // opt 需要在加载前设置
-//    PersonNet->opt.use_vulkan_compute = ncnn::get_gpu_count() > 0;  // gpu
+    hasGPU = ncnn::get_gpu_count() > 0;
+    PersonNet->opt.use_vulkan_compute = hasGPU && useGPU;  // gpu
     PersonNet->opt.use_fp16_arithmetic = true;  // fp16运算加速
     PersonNet->load_param(mgr, "person_detector.param");
     PersonNet->load_model(mgr, "person_detector.bin");
 //    LOGD("person_detector");
 
     PoseNet = new ncnn::Net();
-//    PoseNet->opt.use_vulkan_compute = ncnn::get_gpu_count() > 0;  // gpu
+    hasGPU = ncnn::get_gpu_count() > 0;
+    PoseNet->opt.use_vulkan_compute = hasGPU && useGPU;  // gpu
     PoseNet->opt.use_fp16_arithmetic = true;  // fp16运算加速
     PoseNet->load_param(mgr, "Ultralight-Nano-SimplePose.param");
     PoseNet->load_model(mgr, "Ultralight-Nano-SimplePose.bin");
