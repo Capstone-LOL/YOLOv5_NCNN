@@ -691,6 +691,7 @@ public class MainActivity extends AppCompatActivity {
             returnBm = Bitmap.createBitmap(bm, 0, 0, bm.getWidth(),
                     bm.getHeight(), matrix, true);
         } catch (OutOfMemoryError e) {
+            e.printStackTrace();
         }
         if (returnBm == null) {
             returnBm = bm;
