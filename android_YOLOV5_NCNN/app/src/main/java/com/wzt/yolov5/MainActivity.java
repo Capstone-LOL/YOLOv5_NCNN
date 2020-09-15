@@ -481,6 +481,10 @@ public class MainActivity extends AppCompatActivity {
         boxPaint.setStrokeWidth(4 * mutableBitmap.getWidth() / 800.0f);
         boxPaint.setTextSize(40 * mutableBitmap.getWidth() / 800.0f);
         for (Box box : results) {
+            if (USE_MODEL == MOBILENETV2_YOLOV3_NANO && box.getScore() < 0.3f) {
+                // 模型比较小，置信度太低就不要了
+                continue;
+            }
             boxPaint.setColor(box.getColor());
             boxPaint.setStyle(Paint.Style.FILL);
             canvas.drawText(box.getLabel() + String.format(Locale.CHINESE, " %.3f", box.getScore()), box.x0 + 3, box.y0 + 40 * mutableBitmap.getWidth() / 1000.0f, boxPaint);
