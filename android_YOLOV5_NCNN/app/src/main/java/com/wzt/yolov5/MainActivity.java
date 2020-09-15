@@ -487,8 +487,8 @@ public class MainActivity extends AppCompatActivity {
                     continue;
                 }
                 // 有时候差太多了，手动改一下
-                box.x0 = box.x0 < 0 ? 0 : box.x0;
-                box.y0 = box.y0 < 0 ? 0 : box.y0;
+                box.x0 = box.x0 < 0 ? box.x0 / 6 : box.x0;
+                box.y0 = box.y0 < 0 ? box.y0 / 6 : box.y0;
             }
             boxPaint.setColor(box.getColor());
             boxPaint.setStyle(Paint.Style.FILL);
