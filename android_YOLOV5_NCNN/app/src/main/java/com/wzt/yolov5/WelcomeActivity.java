@@ -38,6 +38,7 @@ public class WelcomeActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 useGPU = isChecked;
                 MainActivity.USE_GPU = useGPU;
+                OcrActivity.USE_GPU = useGPU;
                 if (useGPU) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(WelcomeActivity.this);
                     builder.setTitle("Warning");

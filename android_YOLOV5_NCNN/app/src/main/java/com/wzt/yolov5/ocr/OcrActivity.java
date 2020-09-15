@@ -48,6 +48,8 @@ public class OcrActivity extends AppCompatActivity {
     protected boolean showText;
     protected Bitmap mutableBitmap;
 
+    public static boolean USE_GPU = false;
+
     long startTime = 0;
     long endTime = 0;
 
@@ -66,7 +68,7 @@ public class OcrActivity extends AppCompatActivity {
             finish();
         }
         initView();
-        ChineseOCRLite.init(getAssets());
+        ChineseOCRLite.init(getAssets(), USE_GPU);
     }
 
     @Override
