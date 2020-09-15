@@ -123,8 +123,8 @@ public class OcrActivity extends AppCompatActivity {
         final Paint boxPaint = new Paint();
         boxPaint.setAlpha(200);
         boxPaint.setStyle(Paint.Style.STROKE);
-        boxPaint.setStrokeWidth(4 * Math.min(mutableBitmap.getWidth(), mutableBitmap.getHeight()) / 800);
-        boxPaint.setTextSize(15 * Math.min(mutableBitmap.getWidth(), mutableBitmap.getHeight()) / 800);
+        boxPaint.setStrokeWidth(2 * Math.min(mutableBitmap.getWidth(), mutableBitmap.getHeight()) / 800.0f);
+        boxPaint.setTextSize(15 * Math.min(mutableBitmap.getWidth(), mutableBitmap.getHeight()) / 800.0f);
         boxPaint.setColor(Color.BLUE);
         boxPaint.setAntiAlias(true);
         for (OCRResult result : results) {
