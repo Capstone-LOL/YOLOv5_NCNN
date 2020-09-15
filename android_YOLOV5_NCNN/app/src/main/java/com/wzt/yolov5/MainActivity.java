@@ -481,9 +481,14 @@ public class MainActivity extends AppCompatActivity {
         boxPaint.setStrokeWidth(4 * mutableBitmap.getWidth() / 800.0f);
         boxPaint.setTextSize(40 * mutableBitmap.getWidth() / 800.0f);
         for (Box box : results) {
-            if (USE_MODEL == MOBILENETV2_YOLOV3_NANO && box.getScore() < 0.3f) {
-                // 模型比较小，置信度太低就不要了
-                continue;
+            if (USE_MODEL == MOBILENETV2_YOLOV3_NANO) {
+                if (box.getScore() < 0.3f) {
+                    // 模型比较小，置信度太低就不要了
+                    continue;
+                }
+                // 有时候差太多了，手动改一下
+                box.x0 = box.x0 < 0 ? 0 : box.x0;
+                box.y0 = box.y0 < 0 ? 0 : box.y0;
             }
             boxPaint.setColor(box.getColor());
             boxPaint.setStyle(Paint.Style.FILL);
