@@ -75,4 +75,6 @@ YOLOv3-nano: 由于时间关系需要自行修改一下代码：
 
 
 感谢:<br/>
-sunnyden,dog-qiuqiu
+- sunnyden, dog-qiuqiu, ..., nihui
+- https://github.com/Tencent/ncnn
+
