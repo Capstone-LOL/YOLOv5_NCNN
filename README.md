@@ -75,5 +75,6 @@ Known names of some ncnn bosses:.... nihui qiuqiu
 
 
 Thanks:<br/>
-sunnyden,dog-qiuqiu
+- sunnyden, dog-qiuqiu, ..., nihui
+- https://github.com/Tencent/ncnn
 
