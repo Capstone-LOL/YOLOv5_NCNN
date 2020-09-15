@@ -264,116 +264,126 @@ public class MainActivity extends AppCompatActivity {
         return analysis;
     }
 
+    private Bitmap imageToBitmap(ImageProxy image) {
+        byte[] nv21 = imagetToNV21(image);
+
+        YuvImage yuvImage = new YuvImage(nv21, ImageFormat.NV21, image.getWidth(), image.getHeight(), null);
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        yuvImage.compressToJpeg(new Rect(0, 0, yuvImage.getWidth(), yuvImage.getHeight()), 100, out);
+        byte[] imageBytes = out.toByteArray();
+
+        return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
+    }
+
+    private byte[] imagetToNV21(ImageProxy image) {
+        ImageProxy.PlaneProxy[] planes = image.getPlanes();
+        ImageProxy.PlaneProxy y = planes[0];
+        ImageProxy.PlaneProxy u = planes[1];
+        ImageProxy.PlaneProxy v = planes[2];
+        ByteBuffer yBuffer = y.getBuffer();
+        ByteBuffer uBuffer = u.getBuffer();
+        ByteBuffer vBuffer = v.getBuffer();
+        int ySize = yBuffer.remaining();
+        int uSize = uBuffer.remaining();
+        int vSize = vBuffer.remaining();
+        byte[] nv21 = new byte[ySize + uSize + vSize];
+        // U and V are swapped
+        yBuffer.get(nv21, 0, ySize);
+        vBuffer.get(nv21, ySize, vSize);
+        uBuffer.get(nv21, ySize + vSize, uSize);
+
+        return nv21;
+    }
+
     private class DetectAnalyzer implements ImageAnalysis.Analyzer {
 
         @Override
         public void analyze(ImageProxy image, final int rotationDegrees) {
-            if (detecting.get() || detectPhoto.get()) {
-                return;
-            }
-            detecting.set(true);
-            startTime = System.currentTimeMillis();
-            final Bitmap bitmapsrc = imageToBitmap(image);  // 格式转换
-            if (detectService == null) {
-                detecting.set(false);
-                return;
-            }
-            detectService.execute(new Runnable() {
-                @Override
-                public void run() {
-                    Matrix matrix = new Matrix();
-                    matrix.postRotate(rotationDegrees);
-                    width = bitmapsrc.getWidth();
-                    height = bitmapsrc.getHeight();
-                    Bitmap bitmap = Bitmap.createBitmap(bitmapsrc, 0, 0, width, height, matrix, false);
+            detectOnModel(image, rotationDegrees);
+        }
+    }
 
-                    Box[] result = null;
-                    KeyPoint[] keyPoints = null;
-                    YolactMask[] yolactMasks = null;
-                    FaceKeyPoint[] faceKeyPoints = null;
-                    float[] enetMasks = null;
-                    if (USE_MODEL == YOLOV5S) {
-                        result = YOLOv5.detect(bitmap, threshold, nms_threshold);
-                    } else if (USE_MODEL == YOLOV4_TINY || USE_MODEL == MOBILENETV2_YOLOV3_NANO) {
-                        result = YOLOv4.detect(bitmap, threshold, nms_threshold);
-                    } else if (USE_MODEL == SIMPLE_POSE) {
-                        keyPoints = SimplePose.detect(bitmap);
-                    } else if (USE_MODEL == YOLACT) {
-                        yolactMasks = Yolact.detect(bitmap);
-                    } else if (USE_MODEL == ENET) {
-                        enetMasks = ENet.detect(bitmap);
-                    } else if (USE_MODEL == FACE_LANDMARK) {
-                        faceKeyPoints = FaceLandmark.detect(bitmap);
-                    } else if (USE_MODEL == DBFACE) {
-                        keyPoints = DBFace.detect(bitmap, threshold, nms_threshold);
-                    }
-                    if (result == null && keyPoints == null && yolactMasks == null && enetMasks == null && faceKeyPoints == null) {
-                        detecting.set(false);
-                        return;
-                    }
-                    mutableBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
-                    if (USE_MODEL == YOLOV5S || USE_MODEL == YOLOV4_TINY || USE_MODEL == MOBILENETV2_YOLOV3_NANO) {
-                        mutableBitmap = drawBoxRects(mutableBitmap, result);
-                    } else if (USE_MODEL == SIMPLE_POSE) {
-                        mutableBitmap = drawPersonPose(mutableBitmap, keyPoints);
-                    } else if (USE_MODEL == YOLACT) {
-                        mutableBitmap = drawYolactMask(mutableBitmap, yolactMasks);
-                    } else if (USE_MODEL == ENET) {
-                        mutableBitmap = drawENetMask(mutableBitmap, enetMasks);
-                    } else if (USE_MODEL == FACE_LANDMARK) {
-                        mutableBitmap = drawFaceLandmark(mutableBitmap, faceKeyPoints);
-                    } else if (USE_MODEL == DBFACE) {
-                        mutableBitmap = drawDBFaceLandmark(mutableBitmap, keyPoints);
-                    }
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            detecting.set(false);
-                            if (detectPhoto.get()) {
-                                return;
-                            }
-                            resultImageView.setImageBitmap(mutableBitmap);
-                            endTime = System.currentTimeMillis();
-                            long dur = endTime - startTime;
-                            float fps = (float) (1000.0 / dur);
-                            total_fps = (total_fps == 0) ? fps : (total_fps + fps);
-                            fps_count++;
-                            String modelName = getModelName();
 
-                            tvInfo.setText(String.format(Locale.CHINESE,
-                                    "%s\nSize: %dx%d\nTime: %.3f s\nFPS: %.3f\nAVG_FPS: %.3f",
-                                    modelName, height, width, dur / 1000.0, fps, (float) total_fps / fps_count));
-                        }
-                    });
+    private void detectOnModel(ImageProxy image, final int rotationDegrees) {
+        if (detecting.get() || detectPhoto.get()) {
+            return;
+        }
+        detecting.set(true);
+        startTime = System.currentTimeMillis();
+        final Bitmap bitmapsrc = imageToBitmap(image);  // 格式转换
+        if (detectService == null) {
+            detecting.set(false);
+            return;
+        }
+        detectService.execute(new Runnable() {
+            @Override
+            public void run() {
+                Matrix matrix = new Matrix();
+                matrix.postRotate(rotationDegrees);
+                width = bitmapsrc.getWidth();
+                height = bitmapsrc.getHeight();
+                Bitmap bitmap = Bitmap.createBitmap(bitmapsrc, 0, 0, width, height, matrix, false);
+
+                Box[] result = null;
+                KeyPoint[] keyPoints = null;
+                YolactMask[] yolactMasks = null;
+                FaceKeyPoint[] faceKeyPoints = null;
+                float[] enetMasks = null;
+                if (USE_MODEL == YOLOV5S) {
+                    result = YOLOv5.detect(bitmap, threshold, nms_threshold);
+                } else if (USE_MODEL == YOLOV4_TINY || USE_MODEL == MOBILENETV2_YOLOV3_NANO) {
+                    result = YOLOv4.detect(bitmap, threshold, nms_threshold);
+                } else if (USE_MODEL == SIMPLE_POSE) {
+                    keyPoints = SimplePose.detect(bitmap);
+                } else if (USE_MODEL == YOLACT) {
+                    yolactMasks = Yolact.detect(bitmap);
+                } else if (USE_MODEL == ENET) {
+                    enetMasks = ENet.detect(bitmap);
+                } else if (USE_MODEL == FACE_LANDMARK) {
+                    faceKeyPoints = FaceLandmark.detect(bitmap);
+                } else if (USE_MODEL == DBFACE) {
+                    keyPoints = DBFace.detect(bitmap, threshold, nms_threshold);
                 }
-            });
-        }
+                if (result == null && keyPoints == null && yolactMasks == null && enetMasks == null && faceKeyPoints == null) {
+                    detecting.set(false);
+                    return;
+                }
+                mutableBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
+                if (USE_MODEL == YOLOV5S || USE_MODEL == YOLOV4_TINY || USE_MODEL == MOBILENETV2_YOLOV3_NANO) {
+                    mutableBitmap = drawBoxRects(mutableBitmap, result);
+                } else if (USE_MODEL == SIMPLE_POSE) {
+                    mutableBitmap = drawPersonPose(mutableBitmap, keyPoints);
+                } else if (USE_MODEL == YOLACT) {
+                    mutableBitmap = drawYolactMask(mutableBitmap, yolactMasks);
+                } else if (USE_MODEL == ENET) {
+                    mutableBitmap = drawENetMask(mutableBitmap, enetMasks);
+                } else if (USE_MODEL == FACE_LANDMARK) {
+                    mutableBitmap = drawFaceLandmark(mutableBitmap, faceKeyPoints);
+                } else if (USE_MODEL == DBFACE) {
+                    mutableBitmap = drawDBFaceLandmark(mutableBitmap, keyPoints);
+                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        detecting.set(false);
+                        if (detectPhoto.get()) {
+                            return;
+                        }
+                        resultImageView.setImageBitmap(mutableBitmap);
+                        endTime = System.currentTimeMillis();
+                        long dur = endTime - startTime;
+                        float fps = (float) (1000.0 / dur);
+                        total_fps = (total_fps == 0) ? fps : (total_fps + fps);
+                        fps_count++;
+                        String modelName = getModelName();
 
-        private Bitmap imageToBitmap(ImageProxy image) {
-            ImageProxy.PlaneProxy[] planes = image.getPlanes();
-            ImageProxy.PlaneProxy y = planes[0];
-            ImageProxy.PlaneProxy u = planes[1];
-            ImageProxy.PlaneProxy v = planes[2];
-            ByteBuffer yBuffer = y.getBuffer();
-            ByteBuffer uBuffer = u.getBuffer();
-            ByteBuffer vBuffer = v.getBuffer();
-            int ySize = yBuffer.remaining();
-            int uSize = uBuffer.remaining();
-            int vSize = vBuffer.remaining();
-            byte[] nv21 = new byte[ySize + uSize + vSize];
-            // U and V are swapped
-            yBuffer.get(nv21, 0, ySize);
-            vBuffer.get(nv21, ySize, vSize);
-            uBuffer.get(nv21, ySize + vSize, uSize);
-
-            YuvImage yuvImage = new YuvImage(nv21, ImageFormat.NV21, image.getWidth(), image.getHeight(), null);
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-            yuvImage.compressToJpeg(new Rect(0, 0, yuvImage.getWidth(), yuvImage.getHeight()), 100, out);
-            byte[] imageBytes = out.toByteArray();
-
-            return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
-        }
-
+                        tvInfo.setText(String.format(Locale.CHINESE,
+                                "%s\nSize: %dx%d\nTime: %.3f s\nFPS: %.3f\nAVG_FPS: %.3f",
+                                modelName, height, width, dur / 1000.0, fps, (float) total_fps / fps_count));
+                    }
+                });
+            }
+        });
     }
 
     protected Bitmap drawDBFaceLandmark(Bitmap mutableBitmap, KeyPoint[] keyPoints) {
@@ -480,28 +490,6 @@ public class MainActivity extends AppCompatActivity {
         return mutableBitmap;
     }
 
-    protected String getModelName() {
-        String modelName = "ohhhhh";
-        if (USE_MODEL == YOLOV5S) {
-            modelName = "YOLOv5s";
-        } else if (USE_MODEL == YOLOV4_TINY) {
-            modelName = "YOLOv4-tiny";
-        } else if (USE_MODEL == MOBILENETV2_YOLOV3_NANO) {
-            modelName = "MobileNetV2-YOLOv3-Nano";
-        } else if (USE_MODEL == SIMPLE_POSE) {
-            modelName = "Simple-Pose";
-        } else if (USE_MODEL == YOLACT) {
-            modelName = "Yolact";
-        } else if (USE_MODEL == ENET) {
-            modelName = "ENet";
-        } else if (USE_MODEL == FACE_LANDMARK) {
-            modelName = "YoloFace500k-landmark106";
-        } else if (USE_MODEL == DBFACE) {
-            modelName = "DBFace";
-        }
-        return modelName;
-    }
-
     protected Bitmap drawFaceLandmark(Bitmap mutableBitmap, FaceKeyPoint[] keyPoints) {
         if (keyPoints == null || keyPoints.length <= 0) {
             return mutableBitmap;
@@ -571,6 +559,27 @@ public class MainActivity extends AppCompatActivity {
         return mutableBitmap;
     }
 
+    protected String getModelName() {
+        String modelName = "ohhhhh";
+        if (USE_MODEL == YOLOV5S) {
+            modelName = "YOLOv5s";
+        } else if (USE_MODEL == YOLOV4_TINY) {
+            modelName = "YOLOv4-tiny";
+        } else if (USE_MODEL == MOBILENETV2_YOLOV3_NANO) {
+            modelName = "MobileNetV2-YOLOv3-Nano";
+        } else if (USE_MODEL == SIMPLE_POSE) {
+            modelName = "Simple-Pose";
+        } else if (USE_MODEL == YOLACT) {
+            modelName = "Yolact";
+        } else if (USE_MODEL == ENET) {
+            modelName = "ENet";
+        } else if (USE_MODEL == FACE_LANDMARK) {
+            modelName = "YoloFace500k-landmark106";
+        } else if (USE_MODEL == DBFACE) {
+            modelName = "DBFace";
+        }
+        return modelName;
+    }
 
     @Override
     protected void onDestroy() {

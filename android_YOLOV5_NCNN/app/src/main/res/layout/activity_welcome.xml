@@ -49,7 +49,7 @@
                 android:id="@+id/btn_start_detect1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="YoloV5s"
+                android:text="YOLOv5s"
                 android:textAllCaps="false"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -57,7 +57,7 @@
                 android:id="@+id/btn_start_detect2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="YoloV4_tiny"
+                android:text="YOLOv4_tiny"
                 android:textAllCaps="false"
                 app:layout_constraintTop_toBottomOf="@id/btn_start_detect1" />
 
@@ -65,7 +65,7 @@
                 android:id="@+id/btn_start_detect3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="MobileNetV2_YoloV3_nano"
+                android:text="MobileNetV2_YOLOv3_nano"
                 android:textAllCaps="false"
                 app:layout_constraintTop_toBottomOf="@id/btn_start_detect2" />
 

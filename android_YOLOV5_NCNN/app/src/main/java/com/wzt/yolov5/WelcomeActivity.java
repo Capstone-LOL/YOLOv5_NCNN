@@ -41,7 +41,7 @@ public class WelcomeActivity extends AppCompatActivity {
                 if (useGPU) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(WelcomeActivity.this);
                     builder.setTitle("Warning");
-                    builder.setMessage("May not run well in GPU mode");
+                    builder.setMessage("It may not work well in GPU mode, or errors may occur.");
                     builder.setCancelable(true);
                     builder.setPositiveButton("OK", null);
                     AlertDialog dialog = builder.create();

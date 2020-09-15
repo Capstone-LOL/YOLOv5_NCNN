@@ -9,7 +9,6 @@ public class ChineseOCRLite {
         System.loadLibrary("yolov5");
     }
 
-    public static native void init(AssetManager manager);
-
+    public static native void init(AssetManager manager, boolean useGPU);
     public static native OCRResult[] detect(Bitmap bitmap, int short_size);
 }
