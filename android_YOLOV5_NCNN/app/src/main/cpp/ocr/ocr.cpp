@@ -32,6 +32,37 @@ OCR::OCR(JNIEnv *env, jclass clazz, AAssetManager *mgr, bool useGPU) {
     angle_net->load_param(mgr, "ocr/angle_op.param");
     angle_net->load_model(mgr, "ocr/angle_op.bin");
 
+    /*获取文件名并打开*/
+    jboolean iscopy;
+    jstring filename = env->NewStringUTF("ocr/keys.txt");
+    const char *mfile = env->GetStringUTFChars(filename, &iscopy);
+    AAsset *asset = AAssetManager_open(mgr, mfile, AASSET_MODE_BUFFER);
+    env->ReleaseStringUTFChars(filename, mfile);
+    if (asset == nullptr) {
+        LOGE("%s", "asset == NULL");
+        return;
+    }
+
+    int len = AAsset_getLength(asset);
+    std::string words_buffer;
+    words_buffer.resize(len);
+    int ret = AAsset_read(asset, (void *)words_buffer.data(), len);
+    AAsset_close(asset);
+    if (ret != len) {
+        LOGE("%s", "read keys.txt failed");
+        return;
+    }
+    std::string::size_type pos = 0;
+    std::string::size_type prev = 0;
+    while ((pos = words_buffer.find("\r\n", prev)) != std::string::npos) {
+        alphabetChinese.push_back(words_buffer.substr(prev, pos - prev));
+        prev = pos + 1;
+    }
+    alphabetChinese.push_back(words_buffer.substr(prev));
+
+    alphabetChinese.push_back(" ");
+    alphabetChinese.push_back("·");
+
 //    //load keys
 //    ifstream in("/ocr/keys.txt");
 //    std::string filename;
@@ -48,65 +79,6 @@ OCR::OCR(JNIEnv *env, jclass clazz, AAssetManager *mgr, bool useGPU) {
 ////        std::cout << "no txt file" << std::endl;
 //    }
 
-    /*获取文件名并打开*/
-    jboolean iscopy;
-//    std::string filename = "/ocr/keys.txt";
-    jstring filename = env->NewStringUTF("ocr/keys.txt");
-    const char *mfile = env->GetStringUTFChars(filename, &iscopy);
-    AAsset *asset = AAssetManager_open(mgr, mfile, AASSET_MODE_UNKNOWN);
-    env->ReleaseStringUTFChars(filename, mfile);
-    if (asset == nullptr) {
-        LOGE("%s", "asset == NULL");
-        return;
-    }
-    /*获取文件大小*/
-    off_t bufferSize = AAsset_getLength(asset);
-//    LOGD("file size         : %d\n", bufferSize);
-    char *buffer = (char *) malloc(bufferSize + 1);
-    buffer[bufferSize] = 0;
-    int numBytesRead = AAsset_read(asset, buffer, bufferSize);
-//    LOGD(": %s", buffer);
-    // 感觉这样遍历不是个好方法，但目前没找到系统方法
-    for (int i = 0; i < numBytesRead - 1;) {
-        char a0 = buffer[i];
-        char a1 = buffer[i + 1];
-        if (i == 0) {  // 默认开头直接读取
-            char *b = (char *) malloc(2);
-            b[0] = buffer[i];
-            b[1] = '\0';
-            std::string s = b;
-            alphabetChinese.push_back(s);
-            free(b);
-            i = i + 1;
-        } else {
-            // 太菜暂时就这样吧
-            if (a0 == '\r' && a1 == '\n') {
-                int j = i + 2;
-                do {
-                    i = i + 1;
-                    a0 = buffer[i];
-                    a1 = buffer[i + 1];
-                } while (a0 != '\r' && a1 != '\n');
-                char *bb = (char *) malloc(i - j + 1);
-                int numx = i - j;
-                for (int n = 0; n < numx; n++) {
-                    bb[n] = buffer[j++];
-                }
-                bb[numx] = '\0';
-                std::string s = bb;
-                alphabetChinese.push_back(s);
-                free(bb);
-            } else {
-                i = i + 1;
-            }
-
-        }
-    }
-    alphabetChinese.push_back(" ");
-    alphabetChinese.push_back("·");
-    free(buffer);
-    /*关闭文件*/
-    AAsset_close(asset);
 }
 
 OCR::~OCR() {
