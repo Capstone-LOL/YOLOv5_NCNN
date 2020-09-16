@@ -587,7 +587,7 @@ public class MainActivity extends AppCompatActivity {
         } else if (USE_MODEL == DBFACE) {
             modelName = "DBFace";
         }
-        return modelName;
+        return USE_GPU ? "GPU: " + modelName : "CPU: " + modelName;
     }
 
     @Override
