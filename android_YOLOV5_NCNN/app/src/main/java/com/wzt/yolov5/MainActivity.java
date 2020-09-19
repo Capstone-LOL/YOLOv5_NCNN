@@ -415,17 +415,30 @@ public class MainActivity extends AppCompatActivity {
         if (results == null || results.length <= 0) {
             return mutableBitmap;
         }
+        // 0, "road" 1, "sidewalk" 2, "building" 3, "wall" 4, "fence" 5, "pole" 6, "traffic light" 7, "traffic sign" 8, "vegetation"
+        // 9, "terrain" 10, "sky" 11, "person" 12, "rider" 13, "car" 14, "truck" 15, "bus" 16, "train" 17, "motorcycle" 18, "bicycle"
+        int[][] cityspace_colormap = {
+                {128, 64, 128}, {244, 35, 232}, {70, 70, 70}, {102, 102, 156}, {190, 153, 153}, {153, 153, 153},
+                {250, 170, 30}, {220, 220, 0}, {107, 142, 35}, {152, 251, 152}, {70, 130, 180}, {220, 20, 60},
+                {255, 0, 0}, {0, 0, 142}, {0, 0, 70}, {0, 60, 100}, {0, 80, 100}, {0, 0, 230}, {119, 11, 32}
+        };
         Canvas canvas = new Canvas(mutableBitmap);
         final Paint maskPaint = new Paint();
         maskPaint.setStyle(Paint.Style.STROKE);
         maskPaint.setStrokeWidth(4 * mutableBitmap.getWidth() / 800.0f);
         maskPaint.setTextSize(40 * mutableBitmap.getWidth() / 800.0f);
         float mask = 0;
+        int color = 0;
         for (int y = 0; y < mutableBitmap.getHeight(); y++) {
             for (int x = 0; x < mutableBitmap.getWidth(); x++) {
                 mask = results[y * mutableBitmap.getWidth() + x];
-                Random random = new Random((long) (mask));
-                int color = Color.argb(255, random.nextInt(256), 125, random.nextInt(256));
+                if (mask >= 19) {
+                    continue;
+                }
+                color = Color.argb(255,
+                        cityspace_colormap[(int) mask][0],
+                        cityspace_colormap[(int) mask][1],
+                        cityspace_colormap[(int) mask][2]);
                 maskPaint.setColor(color);
                 maskPaint.setAlpha(100);
                 canvas.drawPoint(x, y, maskPaint);
