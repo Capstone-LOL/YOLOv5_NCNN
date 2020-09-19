@@ -432,7 +432,7 @@ public class MainActivity extends AppCompatActivity {
         for (int y = 0; y < mutableBitmap.getHeight(); y++) {
             for (int x = 0; x < mutableBitmap.getWidth(); x++) {
                 mask = results[y * mutableBitmap.getWidth() + x];
-                if (mask >= 19) {
+                if (mask >= cityspace_colormap.length) {
                     continue;
                 }
                 color = Color.argb(255,
