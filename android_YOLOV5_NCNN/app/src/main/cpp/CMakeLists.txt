@@ -34,6 +34,7 @@ add_library( # Sets the name of the library.
         ENet.cpp
         FaceLandmark.cpp
         DBFace.cpp
+        MbnFCN.cpp
         )
 
 include_directories(

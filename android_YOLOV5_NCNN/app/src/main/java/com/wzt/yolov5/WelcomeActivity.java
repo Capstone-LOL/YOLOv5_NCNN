@@ -24,6 +24,7 @@ public class WelcomeActivity extends AppCompatActivity {
     private Button enet;
     private Button faceLandmark;
     private Button dbface;
+    private Button mobilenetv2Fcn;
 
     private boolean useGPU = false;
 
@@ -135,6 +136,16 @@ public class WelcomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 MainActivity.USE_MODEL = MainActivity.DBFACE;
+                Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
+                WelcomeActivity.this.startActivity(intent);
+            }
+        });
+
+        mobilenetv2Fcn = findViewById(R.id.btn_start_detect10);
+        mobilenetv2Fcn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainActivity.USE_MODEL = MainActivity.MOBILENETV2_FCN;
                 Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
                 WelcomeActivity.this.startActivity(intent);
             }

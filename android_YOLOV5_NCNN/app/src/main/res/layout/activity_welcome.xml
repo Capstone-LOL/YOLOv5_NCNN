@@ -117,6 +117,14 @@
                 android:textAllCaps="false"
                 app:layout_constraintTop_toBottomOf="@id/btn_start_detect8" />
 
+            <Button
+                android:id="@+id/btn_start_detect10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="MobileNetV2_FCN"
+                android:textAllCaps="false"
+                app:layout_constraintTop_toBottomOf="@id/btn_start_detect9" />
+
         </LinearLayout>
     </ScrollView>
 
