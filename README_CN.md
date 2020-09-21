@@ -38,6 +38,7 @@ YOLOv3-nano: 由于时间关系需要自行修改一下代码：
 * ***ENet*** 暂时只写了安卓版本，iOS目前还没有增加。(由于模型太小所以分割效果比较差，可以自行更换更强的网络。但是效果太差了可能哪里有问题)
 * ***Landmark106*** 暂时只写了安卓版本，iOS目前还没有增加。内部原理是先检测脸再用脸的区域再次进行关键点检测，即2步过程。
 * ***DBFace*** 暂时只写了安卓版本，iOS目前还没有增加。
+* ***MBNv3-FCN*** 暂时只写了安卓版本，iOS目前还没有增加。(感谢网名Persistence提供帮助)
 
 ### Note：
 * 由于手机性能、图像尺寸等因素导致FPS在不同手机上相差比较大。该项目主要测试NCNN框架的使用，具体模型的转换可以去NCNN官方查看转换教程。<br/>
@@ -63,9 +64,9 @@ YOLOv3-nano: 由于时间关系需要自行修改一下代码：
 |-------------------|-------------|---------|
 |<img width="270" height="500" src="https://github.com/WZTENG/YOLOv5_NCNN/blob/master/Screenshots/Android_meizu16x_chineseocr_lite_02.jpg"/>|<img width="270" height="500" src="https://github.com/WZTENG/YOLOv5_NCNN/blob/master/Screenshots/Android_Meizu16x_ENet.jpg"/>|<img width="270" height="500" src="https://github.com/WZTENG/YOLOv5_NCNN/blob/master/Screenshots/Android_Meizu16x_yoloface500k-landmark106.jpg"/>|
 
-|  dbface |
-|-------------------|
-| <img width="270" height="500" src="https://github.com/WZTENG/YOLOv5_NCNN/blob/master/Screenshots/Android_Meizu16x_dbface.jpg"/>|
+|  dbface | mbnv2_fcn |
+|-------------------|-------------|
+| <img width="270" height="500" src="https://github.com/WZTENG/YOLOv5_NCNN/blob/master/Screenshots/Android_Meizu16x_dbface.jpg"/>|<img width="270" height="500" src="https://github.com/WZTENG/YOLOv5_NCNN/blob/master/Screenshots/Android_Meizu16x_MBNFCN.jpg"/>|
 
 > iOS
 
