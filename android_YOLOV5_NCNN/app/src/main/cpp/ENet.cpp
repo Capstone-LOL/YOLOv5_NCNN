@@ -32,8 +32,10 @@ ncnn::Mat ENet::detect_enet(JNIEnv *env, jobject image) {
     AndroidBitmap_getInfo(env, image, &img_size);
     ncnn::Mat in_net = ncnn::Mat::from_android_bitmap_resize(env, image, ncnn::Mat::PIXEL_RGBA2RGB, target_size_w,
                                                              target_size_h);
-    float norm[3] = {1 / 255.f, 1 / 255.f, 1 / 255.f};
-    float mean[3] = {0, 0, 0};
+//    float mean[3] = {0.0f, 0.0f, 0.0f};
+//    float norm[3] = {1.0 / 255.0f, 1.0 / 255.0f, 1.0 / 255.0f};
+    float mean[3] = {123.68f, 116.28f, 103.53f};
+    float norm[3] = {1.0 / 58.40f, 1.0 / 57.12f, 1.0 / 57.38f};
     in_net.substract_mean_normalize(mean, norm);
 
     ncnn::Mat maskout;
@@ -43,7 +45,7 @@ ncnn::Mat ENet::detect_enet(JNIEnv *env, jobject image) {
     ex.set_num_threads(4);
     hasGPU = ncnn::get_gpu_count() > 0;
     ex.set_vulkan_compute(hasGPU);
-    ex.input(0, in_net);
+    ex.input("input", in_net);
     ex.extract("output", maskout);
 
     int mask_c = maskout.c;
@@ -51,7 +53,7 @@ ncnn::Mat ENet::detect_enet(JNIEnv *env, jobject image) {
     int mask_h = maskout.h;
 //    LOGD("jni enet mask c:%d w:%d h:%d", mask_c, mask_w, mask_h);
 
-    cv::Mat prediction = cv::Mat::zeros(cv::Size(mask_w, mask_h), CV_8UC1);
+    cv::Mat prediction = cv::Mat::zeros(mask_h, mask_w, CV_8UC1);
     ncnn::Mat chn[mask_c];
     for (int i = 0; i < mask_c; i++) {
         chn[i] = maskout.channel(i);
@@ -86,6 +88,7 @@ ncnn::Mat ENet::detect_enet(JNIEnv *env, jobject image) {
                                             prediction.cols, prediction.rows,
                                             img_size.width, img_size.height);
 
+//    LOGD("jni enet maskMat 0:%f", maskMat.channel(0).row(0)[0]);
 //    LOGD("jni enet maskMat end w:%d h:%d", maskMat.w, maskMat.h);
 
     return maskMat;
