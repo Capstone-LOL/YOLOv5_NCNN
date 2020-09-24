@@ -2,7 +2,7 @@
 
 ## :rocket: If it helps you, click a star! :star: ##
 
-### Ncnn deployment on mobile,support:YOLOv5s,YOLOv4-tiny,MobileNetV2-YOLOv3-nano,Simple-Pose,Yolact,ChineseOCR-lite,ENet,Landmark106 and DBFace on camera.
+### Ncnn deployment on mobile,support:YOLOv5s,YOLOv4-tiny,MobileNetV2-YOLOv3-nano,Simple-Pose,Yolact,ChineseOCR-lite,ENet,Landmark106,DBFace,MBNv2-FCN and MBNv3-Seg-small on camera.
 
 ## iOS:
 - Xcode 11.5
