@@ -125,6 +125,14 @@
                 android:textAllCaps="false"
                 app:layout_constraintTop_toBottomOf="@id/btn_start_detect9" />
 
+            <Button
+                android:id="@+id/btn_start_detect11"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="MobileNetV3_Segmentation_small"
+                android:textAllCaps="false"
+                app:layout_constraintTop_toBottomOf="@id/btn_start_detect10" />
+
         </LinearLayout>
     </ScrollView>
 

@@ -12,6 +12,7 @@
 #include "FaceLandmark.h"
 #include "DBFace.h"
 #include "MbnFCN.h"
+#include "MobileNetV3Seg.h"
 
 
 JNIEXPORT jint JNI_OnLoad(JavaVM *vm, void *reserved) {
@@ -339,6 +340,39 @@ Java_com_wzt_yolov5_ENet_detect(JNIEnv *env, jclass, jobject image) {
     int output_w = result.w;
     int output_h = result.h;
 //    LOGD("jni enet output w:%d h:%d", output_w, output_h);
+    auto *output = new jfloat[output_w * output_h];
+    for (int h = 0; h < output_h; h++) {
+        for (int w = 0; w < output_w; w++) {
+            output[h * output_w + w] = result.row(h)[w];
+        }
+    }
+    jfloatArray jfloats = env->NewFloatArray(output_w * output_h);
+    if (jfloats == nullptr) {
+        return nullptr;
+    }
+    env->SetFloatArrayRegion(jfloats, 0, output_w * output_h, output);
+    delete[] output;
+    return jfloats;
+}
+
+/*********************************************************************************************
+                                        MobileNetv3_Seg
+ ********************************************************************************************/
+extern "C" JNIEXPORT void JNICALL
+Java_com_wzt_yolov5_MbnSeg_init(JNIEnv *env, jclass, jobject assetManager, jboolean useGPU) {
+    if (MBNV3Seg::detector == nullptr) {
+        AAssetManager *mgr = AAssetManager_fromJava(env, assetManager);
+        MBNV3Seg::detector = new MBNV3Seg(mgr, useGPU);
+    }
+}
+
+extern "C" JNIEXPORT jfloatArray JNICALL
+Java_com_wzt_yolov5_MbnSeg_detect(JNIEnv *env, jclass, jobject image) {
+    auto result = MBNV3Seg::detector->detect_mbnseg(env, image);
+
+    int output_w = result.w;
+    int output_h = result.h;
+//    LOGD("jni mbnv3seg output w:%d h:%d", output_w, output_h);
     auto *output = new jfloat[output_w * output_h];
     for (int h = 0; h < output_h; h++) {
         for (int w = 0; w < output_w; w++) {

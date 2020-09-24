@@ -35,6 +35,7 @@ add_library( # Sets the name of the library.
         FaceLandmark.cpp
         DBFace.cpp
         MbnFCN.cpp
+        MobileNetV3Seg.cpp
         )
 
 include_directories(

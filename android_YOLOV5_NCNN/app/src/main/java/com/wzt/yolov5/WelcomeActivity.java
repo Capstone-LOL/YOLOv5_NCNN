@@ -25,6 +25,7 @@ public class WelcomeActivity extends AppCompatActivity {
     private Button faceLandmark;
     private Button dbface;
     private Button mobilenetv2Fcn;
+    private Button mobilenetv3Seg;
 
     private boolean useGPU = false;
 
@@ -150,6 +151,17 @@ public class WelcomeActivity extends AppCompatActivity {
                 WelcomeActivity.this.startActivity(intent);
             }
         });
+
+        mobilenetv3Seg = findViewById(R.id.btn_start_detect11);
+        mobilenetv3Seg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainActivity.USE_MODEL = MainActivity.MOBILENETV3_SEG;
+                Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
+                WelcomeActivity.this.startActivity(intent);
+            }
+        });
+
     }
 
 

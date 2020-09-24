@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
     public static int FACE_LANDMARK = 7;
     public static int DBFACE = 8;
     public static int MOBILENETV2_FCN = 9;
+    public static int MOBILENETV3_SEG = 10;
 
     public static int USE_MODEL = MOBILENETV2_YOLOV3_NANO;
     public static boolean USE_GPU = false;
@@ -127,6 +128,8 @@ public class MainActivity extends AppCompatActivity {
             DBFace.init(getAssets(), USE_GPU);
         } else if (USE_MODEL == MOBILENETV2_FCN) {
             MbnFCN.init(getAssets(), USE_GPU);
+        } else if (USE_MODEL == MOBILENETV3_SEG) {
+            MbnSeg.init(getAssets(), USE_GPU);
         }
         resultImageView = findViewById(R.id.imageView);
         thresholdTextview = findViewById(R.id.valTxtView);
@@ -348,6 +351,8 @@ public class MainActivity extends AppCompatActivity {
                     keyPoints = DBFace.detect(bitmap, threshold, nms_threshold);
                 } else if (USE_MODEL == MOBILENETV2_FCN) {
                     enetMasks = MbnFCN.detect(bitmap);
+                } else if (USE_MODEL == MOBILENETV3_SEG) {
+                    enetMasks = MbnSeg.detect(bitmap);
                 }
                 if (result == null && keyPoints == null && yolactMasks == null && enetMasks == null && faceKeyPoints == null) {
                     detecting.set(false);
@@ -367,6 +372,8 @@ public class MainActivity extends AppCompatActivity {
                 } else if (USE_MODEL == DBFACE) {
                     mutableBitmap = drawDBFaceLandmark(mutableBitmap, keyPoints);
                 } else if (USE_MODEL == MOBILENETV2_FCN) {
+                    mutableBitmap = drawENetMask(mutableBitmap, enetMasks);  // 与 enet 相同
+                } else if (USE_MODEL == MOBILENETV3_SEG) {
                     mutableBitmap = drawENetMask(mutableBitmap, enetMasks);  // 与 enet 相同
                 }
                 runOnUiThread(new Runnable() {
@@ -608,6 +615,8 @@ public class MainActivity extends AppCompatActivity {
             modelName = "DBFace";
         } else if (USE_MODEL == MOBILENETV2_FCN) {
             modelName = "MobileNetV2-FCN";
+        } else if (USE_MODEL == MOBILENETV3_SEG) {
+            modelName = "MBNV3-Segmentation-small";
         }
         return USE_GPU ? "GPU: " + modelName : "CPU: " + modelName;
     }
@@ -669,6 +678,8 @@ public class MainActivity extends AppCompatActivity {
             keyPoints = DBFace.detect(image, threshold, nms_threshold);
         } else if (USE_MODEL == MOBILENETV2_FCN) {
             enetMasks = MbnFCN.detect(image);
+        } else if (USE_MODEL == MOBILENETV3_SEG) {
+            enetMasks = MbnSeg.detect(image);
         }
         if (USE_MODEL == YOLOV5S || USE_MODEL == YOLOV4_TINY || USE_MODEL == MOBILENETV2_YOLOV3_NANO) {
             mutableBitmap = drawBoxRects(mutableBitmap, result);
@@ -683,6 +694,8 @@ public class MainActivity extends AppCompatActivity {
         } else if (USE_MODEL == DBFACE) {
             mutableBitmap = drawDBFaceLandmark(mutableBitmap, keyPoints);
         } else if (USE_MODEL == MOBILENETV2_FCN) {
+            mutableBitmap = drawENetMask(mutableBitmap, enetMasks);
+        } else if (USE_MODEL == MOBILENETV3_SEG) {
             mutableBitmap = drawENetMask(mutableBitmap, enetMasks);
         }
         resultImageView.setImageBitmap(mutableBitmap);
