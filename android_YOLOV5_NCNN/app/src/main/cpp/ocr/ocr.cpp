@@ -340,11 +340,6 @@ std::vector<OCRResult> OCR::detect(JNIEnv *env, jobject image, int short_size) {
         float scale = crnn_h * 1.0 / part_im_h;
         crnn_w_target = int(part_im.cols * scale);
 
-//        char *svavePath = new char[25];
-//        sprintf( svavePath, "debug_im/%d.jpg", i);
-//        cv::imwrite(svavePath,part_im);
-        // part_im = cv::imread("test.jpg");
-
         cv::Mat img2 = part_im.clone();
 
         ncnn::Mat crnn_in = ncnn::Mat::from_pixels_resize(img2.data,
