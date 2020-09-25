@@ -24,6 +24,7 @@ MbnFCN::MbnFCN(AAssetManager *mgr, bool useGPU) {
 }
 
 MbnFCN::~MbnFCN() {
+    MBNFCNsim->clear();
     delete MBNFCNsim;
 }
 

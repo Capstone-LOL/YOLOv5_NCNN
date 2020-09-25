@@ -18,6 +18,7 @@ YoloV5::YoloV5(AAssetManager *mgr, const char *param, const char *bin, bool useG
 }
 
 YoloV5::~YoloV5() {
+    Net->clear();
     delete Net;
 }
 

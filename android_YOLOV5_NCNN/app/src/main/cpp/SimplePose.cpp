@@ -30,6 +30,8 @@ SimplePose::SimplePose(AAssetManager *mgr, bool useGPU) {
 }
 
 SimplePose::~SimplePose() {
+    PersonNet->clear();
+    PoseNet->clear();
     delete PersonNet;
     delete PoseNet;
 }

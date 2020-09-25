@@ -24,6 +24,7 @@ ENet::ENet(AAssetManager *mgr, bool useGPU) {
 }
 
 ENet::~ENet() {
+    ENetsim->clear();
     delete ENetsim;
 }
 

@@ -19,6 +19,7 @@ DBFace::DBFace(AAssetManager *mgr, bool useGPU) {
 }
 
 DBFace::~DBFace() {
+    DBFaceNet->clear();
     delete DBFaceNet;
 }
 

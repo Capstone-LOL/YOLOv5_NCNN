@@ -31,6 +31,7 @@ Yolact::Yolact(AAssetManager *mgr, bool useGPU) {
 }
 
 Yolact::~Yolact() {
+    YolactNet->clear();
     delete YolactNet;
 }
 

@@ -30,6 +30,8 @@ FaceLandmark::FaceLandmark(AAssetManager *mgr, bool useGPU) {
 }
 
 FaceLandmark::~FaceLandmark() {
+    FaceNet->clear();
+    LandmarkNet->clear();
     delete FaceNet;
     delete LandmarkNet;
 }

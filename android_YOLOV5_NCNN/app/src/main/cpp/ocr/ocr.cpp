@@ -82,6 +82,9 @@ OCR::OCR(JNIEnv *env, jclass clazz, AAssetManager *mgr, bool useGPU) {
 }
 
 OCR::~OCR() {
+    dbnet->clear();
+    crnn_net->clear();
+    angle_net->clear();
     delete dbnet;
     delete crnn_net;
     delete angle_net;

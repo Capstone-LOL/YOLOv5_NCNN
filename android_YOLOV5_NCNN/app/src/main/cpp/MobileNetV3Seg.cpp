@@ -24,6 +24,7 @@ MBNV3Seg::MBNV3Seg(AAssetManager *mgr, bool useGPU) {
 }
 
 MBNV3Seg::~MBNV3Seg() {
+    MBNSegsim->clear();
     delete MBNSegsim;
 }
 
