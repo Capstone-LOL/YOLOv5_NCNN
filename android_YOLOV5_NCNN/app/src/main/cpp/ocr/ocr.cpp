@@ -188,6 +188,10 @@ cv::Mat GetRotateCropImage(const cv::Mat &srcimage,
     int bottom = int(*std::max_element(y_collect, y_collect + 4));
 
     cv::Mat img_crop;
+    left = left > 0 ? left : 0;
+    top = top > 0 ? top : 0;
+    right = right > image.size().width - 1 ? image.size().width - 1 : right;
+    bottom = bottom > image.size().height - 1 ? image.size().height - 1 : bottom;
     image(cv::Rect(left, top, right - left, bottom - top)).copyTo(img_crop);
 
     for (int i = 0; i < points.size(); i++) {
