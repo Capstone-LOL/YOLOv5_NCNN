@@ -2,7 +2,7 @@
 
 ## :rocket: 如果有帮助，点个star！:star: ##
 
-### 移动端NCNN部署，项目支持YOLOv5s、YOLOv4-tiny、MobileNetV2-YOLOv3-nano、Simple-Pose、Yolact、ChineseOCR-lite、ENet、Landmark106与DBFace模型，摄像头实时捕获视频流进行检测。
+### 移动端NCNN部署，项目支持YOLOv5s、YOLOv4-tiny、MobileNetV2-YOLOv3-nano、Simple-Pose、Yolact、ChineseOCR-lite、ENet、Landmark106、DBFace、MBNv2-FCN与MBNv3-Seg-small模型，摄像头实时捕获视频流进行检测。
 
 ## iOS:
 - Xcode 11.5
@@ -39,6 +39,7 @@ YOLOv3-nano: 由于时间关系需要自行修改一下代码：
 * ***Landmark106*** 暂时只写了安卓版本，iOS目前还没有增加。内部原理是先检测脸再用脸的区域再次进行关键点检测，即2步过程。
 * ***DBFace*** 暂时只写了安卓版本，iOS目前还没有增加。
 * ***MBNv3-FCN*** 暂时只写了安卓版本，iOS目前还没有增加。(感谢网名Persistence提供帮助)
+* ***MBNv3-Seg-small*** 暂时只写了安卓版本，iOS目前还没有增加。
 
 ### Note：
 * 由于手机性能、图像尺寸等因素导致FPS在不同手机上相差比较大。该项目主要测试NCNN框架的使用，具体模型的转换可以去NCNN官方查看转换教程。<br/>
@@ -64,9 +65,9 @@ YOLOv3-nano: 由于时间关系需要自行修改一下代码：
 |-------------------|-------------|---------|
 |<img width="270" height="500" src="https://github.com/WZTENG/YOLOv5_NCNN/blob/master/Screenshots/Android_meizu16x_chineseocr_lite_02.jpg"/>|<img width="270" height="500" src="https://github.com/WZTENG/YOLOv5_NCNN/blob/master/Screenshots/Android_Meizu16x_ENet.jpg"/>|<img width="270" height="500" src="https://github.com/WZTENG/YOLOv5_NCNN/blob/master/Screenshots/Android_Meizu16x_yoloface500k-landmark106.jpg"/>|
 
-|  dbface | mbnv2_fcn |
-|-------------------|-------------|
-| <img width="270" height="500" src="https://github.com/WZTENG/YOLOv5_NCNN/blob/master/Screenshots/Android_Meizu16x_dbface.jpg"/>|<img width="270" height="500" src="https://github.com/WZTENG/YOLOv5_NCNN/blob/master/Screenshots/Android_Meizu16x_MBNFCN.jpg"/>|
+|  dbface | mbnv2_fcn | mbnv3_seg_small |
+|-------------------|-------------|---------|
+| <img width="270" height="500" src="https://github.com/WZTENG/YOLOv5_NCNN/blob/master/Screenshots/Android_Meizu16x_dbface.jpg"/>|<img width="270" height="500" src="https://github.com/WZTENG/YOLOv5_NCNN/blob/master/Screenshots/Android_Meizu16x_MBNFCN.jpg"/>|<img width="270" height="500" src="https://github.com/WZTENG/YOLOv5_NCNN/blob/master/Screenshots/Android_Meizu16x_MBNV3_Seg_small.jpg"/>|
 
 > iOS
 
