@@ -33,6 +33,7 @@ ncnn::Mat MBNV3Seg::detect_mbnseg(JNIEnv *env, jobject image) {
     AndroidBitmap_getInfo(env, image, &img_size);
     ncnn::Mat in_net = ncnn::Mat::from_android_bitmap_resize(env, image, ncnn::Mat::PIXEL_RGBA2RGB, target_size_w,
                                                              target_size_h);
+//    LOGD("info format RGBA ? %d", img_size.format == ANDROID_BITMAP_FORMAT_RGBA_8888);
 //    float mean[3] = {0.0f, 0.0f, 0.0f};
 //    float norm[3] = {1.0 / 255.0f, 1.0 / 255.0f, 1.0 / 255.0f};
     float mean[3] = {123.68f, 116.28f, 103.53f};
