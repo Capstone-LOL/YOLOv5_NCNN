@@ -60,6 +60,7 @@ private:
 public:
     static OCR *detector;
     static bool hasGPU;
+    static bool toUseGPU;
 
 };
 

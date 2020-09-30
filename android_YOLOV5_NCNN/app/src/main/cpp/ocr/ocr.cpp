@@ -8,6 +8,7 @@
 
 
 bool OCR::hasGPU = true;
+bool OCR::toUseGPU = true;
 OCR *OCR::detector = nullptr;
 
 OCR::OCR(JNIEnv *env, jclass clazz, AAssetManager *mgr, bool useGPU) {
@@ -32,6 +33,7 @@ OCR::OCR(JNIEnv *env, jclass clazz, AAssetManager *mgr, bool useGPU) {
     angle_net->load_param(mgr, "ocr/angle_op.param");
     angle_net->load_model(mgr, "ocr/angle_op.bin");
 
+    toUseGPU = hasGPU && useGPU;
     /*获取文件名并打开*/
     jboolean iscopy;
     jstring filename = env->NewStringUTF("ocr/keys.txt");
@@ -266,8 +268,9 @@ std::vector<OCRResult> OCR::detect(JNIEnv *env, jobject image, int short_size) {
     ncnn::Extractor ex = dbnet->create_extractor();
     ex.set_light_mode(true);
     ex.set_num_threads(num_thread);
-    hasGPU = ncnn::get_gpu_count() > 0;
-    ex.set_vulkan_compute(hasGPU);
+    if (toUseGPU) {  // 消除提示
+        ex.set_vulkan_compute(toUseGPU);
+    }
     ex.input("input0", in);
     ncnn::Mat dbnet_out;
     double time1 = static_cast<double>(cv::getTickCount());
@@ -363,8 +366,9 @@ std::vector<OCRResult> OCR::detect(JNIEnv *env, jobject image, int short_size) {
         ncnn::Extractor angle_ex = angle_net->create_extractor();
         angle_ex.set_light_mode(true);
         angle_ex.set_num_threads(num_thread);
-        hasGPU = ncnn::get_gpu_count() > 0;
-        angle_ex.set_vulkan_compute(hasGPU);
+        if (toUseGPU) {  // 消除提示
+            angle_ex.set_vulkan_compute(toUseGPU);
+        }
         angle_ex.input("input", angle_in);
         ncnn::Mat angle_preds;
 
@@ -388,8 +392,9 @@ std::vector<OCRResult> OCR::detect(JNIEnv *env, jobject image, int short_size) {
         ncnn::Extractor crnn_ex = crnn_net->create_extractor();
         crnn_ex.set_light_mode(true);
         crnn_ex.set_num_threads(num_thread);
-        hasGPU = ncnn::get_gpu_count() > 0;
-        crnn_ex.set_vulkan_compute(hasGPU);
+        if (toUseGPU) {  // 消除提示
+            crnn_ex.set_vulkan_compute(toUseGPU);
+        }
         crnn_ex.input("input", crnn_in);
 
 
@@ -402,8 +407,9 @@ std::vector<OCRResult> OCR::detect(JNIEnv *env, jobject image, int short_size) {
             ncnn::Extractor crnn_ex_2 = crnn_net->create_extractor();
             crnn_ex_2.set_light_mode(true);
             crnn_ex_2.set_num_threads(num_thread);
-            hasGPU = ncnn::get_gpu_count() > 0;
-            crnn_ex_2.set_vulkan_compute(hasGPU);
+            if (toUseGPU) {  // 消除提示
+                crnn_ex_2.set_vulkan_compute(toUseGPU);
+            }
             ncnn::Mat blob243_i = blob162.row_range(i, 1);
             crnn_ex_2.input("457", blob243_i);
 
