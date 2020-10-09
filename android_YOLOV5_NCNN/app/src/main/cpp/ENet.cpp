@@ -84,9 +84,12 @@ ncnn::Mat ENet::detect_enet(JNIEnv *env, jobject image) {
 //    ncnn::Mat maskMat;
 //    maskMat = ncnn::Mat::from_pixels(prediction.data, ncnn::Mat::PIXEL_GRAY, prediction.cols, prediction.rows);
 
+    cv::Mat pred_resize;
+    cv::resize(prediction, pred_resize, cv::Size(img_size.width, img_size.height), 0, 0, cv::INTER_NEAREST);
+
     ncnn::Mat maskMat;
-    maskMat = ncnn::Mat::from_pixels_resize(prediction.data, ncnn::Mat::PIXEL_GRAY,
-                                            prediction.cols, prediction.rows,
+    maskMat = ncnn::Mat::from_pixels_resize(pred_resize.data, ncnn::Mat::PIXEL_GRAY,
+                                            pred_resize.cols, pred_resize.rows,
                                             img_size.width, img_size.height);
 
 //    LOGD("jni enet maskMat 0:%f", maskMat.channel(0).row(0)[0]);
