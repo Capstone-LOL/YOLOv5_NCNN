@@ -2,7 +2,6 @@ package com.wzt.yolov5;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.camera.core.CameraX;
 import androidx.camera.core.ImageAnalysis;
@@ -29,12 +28,9 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.YuvImage;
 import android.media.ExifInterface;
-import android.media.MediaMetadataRetriever;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.util.Size;
 import android.view.TextureView;
 import android.view.View;
@@ -82,6 +78,8 @@ public class MainActivity extends AppCompatActivity {
     private SeekBar thresholdSeekBar;
     private TextView thresholdTextview;
     private TextView tvInfo;
+    private Button btnPhoto;
+    private Button btnVideo;
     private double threshold = 0.3, nms_threshold = 0.7;
     private TextureView viewFinder;
 
@@ -117,12 +115,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
         initModel();
+        initViewID();
+        initViewListener();
 
-        resultImageView = findViewById(R.id.imageView);
-        thresholdTextview = findViewById(R.id.valTxtView);
-        tvInfo = findViewById(R.id.tv_info);
-        nmsSeekBar = findViewById(R.id.nms_seek);
-        thresholdSeekBar = findViewById(R.id.threshold_seek);
+    }
+
+    protected void initViewListener() {
         if (USE_MODEL != YOLOV5S && USE_MODEL != DBFACE) {
             nmsSeekBar.setEnabled(false);
             thresholdSeekBar.setEnabled(false);
@@ -171,17 +169,24 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        Button inference = findViewById(R.id.button);
-        inference.setOnClickListener(new View.OnClickListener() {
+        btnPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_PICK);
-                intent.setType("image/*");
-                startActivityForResult(intent, REQUEST_PICK_IMAGE);
+                int permission = ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE);
+                if (permission != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(
+                            MainActivity.this,
+                            new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                            777
+                    );
+                } else {
+                    Intent intent = new Intent(Intent.ACTION_PICK);
+                    intent.setType("image/*");
+                    startActivityForResult(intent, REQUEST_PICK_IMAGE);
+                }
             }
         });
 
-        Button btnVideo = findViewById(R.id.btn_video);
         btnVideo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -202,7 +207,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        viewFinder = findViewById(R.id.view_finder);
         viewFinder.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
             @Override
             public void onLayoutChange(View view, int i, int i1, int i2, int i3, int i4, int i5, int i6, int i7) {
@@ -216,6 +220,17 @@ public class MainActivity extends AppCompatActivity {
                 startCamera();
             }
         });
+    }
+
+    protected void initViewID() {
+        resultImageView = findViewById(R.id.imageView);
+        thresholdTextview = findViewById(R.id.valTxtView);
+        tvInfo = findViewById(R.id.tv_info);
+        nmsSeekBar = findViewById(R.id.nms_seek);
+        thresholdSeekBar = findViewById(R.id.threshold_seek);
+        btnPhoto = findViewById(R.id.button);
+        btnVideo = findViewById(R.id.btn_video);
+        viewFinder = findViewById(R.id.view_finder);
     }
 
     protected void initModel() {

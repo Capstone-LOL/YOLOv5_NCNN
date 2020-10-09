@@ -27,12 +27,25 @@ JNIEXPORT jint JNI_OnLoad(JavaVM *vm, void *reserved) {
         FaceLandmark::hasGPU = true;
         DBFace::hasGPU = true;
         MbnFCN::hasGPU = true;
+        MBNV3Seg::hasGPU = true;
     }
+//    LOGD("jni onload");
     return JNI_VERSION_1_6;
 }
 
 JNIEXPORT void JNI_OnUnload(JavaVM *vm, void *reserved) {
     ncnn::destroy_gpu_instance();
+    delete YoloV5::detector;
+    delete YoloV4::detector;
+    delete SimplePose::detector;
+    delete Yolact::detector;
+    delete OCR::detector;
+    delete ENet::detector;
+    delete FaceLandmark::detector;
+    delete DBFace::detector;
+    delete MbnFCN::detector;
+    delete MBNV3Seg::detector;
+//    LOGD("jni onunload");
 }
 
 
